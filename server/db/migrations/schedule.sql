@@ -1,0 +1,1 @@
+CREATE TABLE schedule(id SERIAL PRIMARY KEY);

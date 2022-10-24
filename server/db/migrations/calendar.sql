@@ -1,0 +1,1 @@
+CREATE TABLE calendar(id SERIAL PRIMARY KEY);
