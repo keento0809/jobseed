@@ -1,1 +1,1 @@
-DROP TABLE test;
+-- DROP TABLE schedule;
