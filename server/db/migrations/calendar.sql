@@ -1,1 +1,1 @@
-CREATE TABLE calendar(id SERIAL PRIMARY KEY);
+CREATE TABLE calendar(calendar_id SERIAL PRIMARY KEY,date TEXT,schedule_id INTEGER REFERENCES schedule(schedule_id));
