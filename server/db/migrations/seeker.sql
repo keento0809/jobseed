@@ -1,0 +1,1 @@
+CREATE TABLE seeker(seeker_id SERIAL PRIMARY KEY,name TEXT,email TEXT,password TEXT);
