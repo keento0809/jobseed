@@ -5,7 +5,6 @@ seekerRouter.route("/").get(() => {}); // get all seekers
 seekerRouter
   .route("/:seeker_id")
   .get(() => {})
-  .put(() => {}); // get a seeker / update a seeker's info
-seekerRouter.route("/new").post(() => {}); // create a new seeker?
+  .put(() => {}); // get a seeker info / update a seeker's info
 
 export default seekerRouter;
