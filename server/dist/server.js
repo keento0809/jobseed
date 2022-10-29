@@ -7,7 +7,9 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT;
+const port = 8080;
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
     res.send("Express + Typescript server");
 });
