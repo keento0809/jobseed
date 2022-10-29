@@ -1,7 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -21,11 +23,11 @@ app.use("/companies", companyRoutes_1.default);
 app.use("/calenders", calendarRoutes_1.default);
 app.use("/schedules", scheduleRoutes_1.default);
 app.get("/", (req, res) => {
-    res.send("Express + Typescript server");
+  res.send("Express + Typescript server");
 });
 app.all("*", (req, res, next) => {
-    next();
+  next();
 });
 app.listen(port, () => {
-    console.log(`[server] server is listening on port ${port}`);
+  console.log(`[server] server is listening on port ${port}`);
 });
