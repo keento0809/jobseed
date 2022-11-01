@@ -18,29 +18,31 @@ const Login = () => {
 
     return (
         <section className="wrapper flex justify-center font-bold">
-            <div className="mt-12">
-                <h2 className="text-center">Log in</h2>
-                <form action="" method="post" className="">
-                    <Text_filed
-                        type={"text"}
-                        name={"name"}
-                        onChangeHandler={userHandler}
-                        value={loginUser.name}
-                    />
-                    <Text_filed
-                        type={"email"}
-                        name={"email"}
-                        onChangeHandler={userHandler}
-                        value={loginUser.email}
-                    />
-                    < Button_sm
-                        title={"log in"}
-                        color={"text-white"}
-                        bg_color={"bg-content-blue"}
-                        className={"mt-8"}
-                        width={"w-full"}
-                    />
-                </form>
+            <div className="h-[78vh] flex justify-center items-center">
+                <div>
+                    <h2 className="text-center">Log in</h2>
+                    <form action="" method="post" className="">
+                        <Text_filed
+                            type={"text"}
+                            name={"name"}
+                            onChangeHandler={userHandler}
+                            value={loginUser.name}
+                        />
+                        <Text_filed
+                            type={"email"}
+                            name={"email"}
+                            onChangeHandler={userHandler}
+                            value={loginUser.email}
+                        />
+                        < Button_sm
+                            title={"log in"}
+                            color={"text-white"}
+                            bg_color={"bg-content-blue"}
+                            className={"mt-8"}
+                            width={"w-full"}
+                        />
+                    </form>
+                </div>
             </div>
         </section>
     );

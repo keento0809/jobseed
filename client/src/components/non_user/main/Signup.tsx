@@ -16,42 +16,44 @@ const Signup: FC = () => {
     }
 
     return (
-        <section className="wrapper flex justify-center font-bold">
-            <div className="mt-12">
-                <h2 className="text-center">Sign up</h2>
-                <form action="" method="post" className="">
-                    <Text_filed
-                        type={"text"}
-                        name={"name"}
-                        onChangeHandler={userHandler}
-                        value={newUser.name}
-                    />
-                    <Text_filed
-                        type={"email"}
-                        name={"email"}
-                        onChangeHandler={userHandler}
-                        value={newUser.email}
-                    />
-                    <Text_filed
-                        type={"password"}
-                        name={"password"}
-                        onChangeHandler={userHandler}
-                        value={newUser.password}
-                    />
-                    <Text_filed
-                        type={"password"}
-                        name={"confirmPassword"}
-                        onChangeHandler={userHandler}
-                        value={newUser.confirmPassword}
-                    />
-                    < Button_sm
-                        title={"create"}
-                        color={"text-white"}
-                        bg_color={"bg-content-blue"}
-                        className={"mt-8"}
-                        width={"w-full"}
-                    />
-                </form>
+        <section className="wrapper flex justify-center">
+            <div className="h-[78vh] flex justify-center items-center">
+                <div>
+                    <h2 className="text-center">Sign up</h2>
+                    <form action="" method="post" className="">
+                        <Text_filed
+                            type={"text"}
+                            name={"name"}
+                            onChangeHandler={userHandler}
+                            value={newUser.name}
+                        />
+                        <Text_filed
+                            type={"email"}
+                            name={"email"}
+                            onChangeHandler={userHandler}
+                            value={newUser.email}
+                        />
+                        <Text_filed
+                            type={"password"}
+                            name={"password"}
+                            onChangeHandler={userHandler}
+                            value={newUser.password}
+                        />
+                        <Text_filed
+                            type={"password"}
+                            name={"confirmPassword"}
+                            onChangeHandler={userHandler}
+                            value={newUser.confirmPassword}
+                        />
+                        < Button_sm
+                            title={"create"}
+                            color={"text-white"}
+                            bg_color={"bg-content-blue"}
+                            className={"mt-8"}
+                            width={"w-full"}
+                        />
+                    </form>
+                </div>
             </div>
 
         </section>

@@ -1,4 +1,5 @@
-import React , {FC} from 'react';
+import React, {FC} from 'react';
+import {GrAnnounce} from "react-icons/gr";
 
 type description = {
     title: string;
@@ -7,9 +8,14 @@ type description = {
 
 const Description = (props: description) => {
     return (
-        <div>
-            <h4><span>☆</span> { props.title } </h4>
-            <p> { props.detail } </p>
+        <div className="py-8 px-8 flex items-start">
+            <div>
+                <GrAnnounce className="mr-4 -rotate-45 h-full pt-2 icon-fff"/>
+            </div>
+            <div className="w-4/5">
+                <h4 className="text-lg font-bold underline"> {props.title} </h4>
+                <p className="mt-6"> {props.detail} </p>
+            </div>
         </div>
     );
 };

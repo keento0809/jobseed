@@ -9,5 +9,9 @@
 }
 
 .wrapper {
-    @apply px-4 md:px-8 xl:px-28
+    @apply px-4 md:px-8 xl:px-28 2xl:px-40
+}
+
+.icon-fff path{
+    @apply stroke-white
 }
