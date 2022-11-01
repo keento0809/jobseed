@@ -1,2 +1,2 @@
--- DROP TABLE schedule;
-SELECT * FROM company; 
+-- CREATE TABLE seeker(seeker_id SIREAL PRIMARY KEY,);
+-- DROP TABLE seeker;
