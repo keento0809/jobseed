@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const authController_1 = require("../controllers/authController");
 const authRouter = express_1.default.Router();
-authRouter.route("/signup").post(() => { }); // register a new seeker
-authRouter.route("/login").post(() => { }); // login a seeker
-authRouter.route("/login/google").post(() => { }); // login with google account
-authRouter.route("/logout").post(() => { }); // logout a seeker
+authRouter.route("/signup").post(authController_1.signupSeeker); // register a new seeker
+authRouter.route("/login").post(authController_1.loginSeeker); // login a seeker
+authRouter.route("/logout").post(); // logout a seeker
 exports.default = authRouter;
