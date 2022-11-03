@@ -11,6 +11,7 @@ const seekerRoutes_1 = __importDefault(require("./routes/seekerRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const calendarRoutes_1 = __importDefault(require("./routes/calendarRoutes"));
 const scheduleRoutes_1 = __importDefault(require("./routes/scheduleRoutes"));
+// import
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 8080;
