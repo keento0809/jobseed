@@ -1,12 +1,12 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import pool from "./db/postgres";
 import companyRoutes from "./routes/companyRoutes";
 import seekerRoutes from "./routes/seekerRoutes";
 import authRoutes from "./routes/authRoutes";
 import calendarRoutes from "./routes/calendarRoutes";
 import scheduleRoutes from "./routes/scheduleRoutes";
+// import
 dotenv.config();
 
 const app: Express = express();
