@@ -16,8 +16,8 @@ const Header: FC = () => {
         <header className="h-24 border-b shadow-md wrapper flex justify-between items-center">
             <Link to={"/"} className="block">< AiOutlineRocket size="30"/></Link>
             {login ?
-                <section className="flex h-full">
-                    <div className="space-y-1 md:hidden">
+                <section className="flex h-full items-center">
+                    <div className="space-y-1 md:hidden ">
                         <span className="block w-4 h-0.5 bg-gray-600"></span>
                         <span className="block w-4 h-0.5 bg-gray-600"></span>
                         <span className="block w-4 h-0.5 bg-gray-600"></span>
