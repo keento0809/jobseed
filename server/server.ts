@@ -1,4 +1,5 @@
 import express, { Express, Request, Response, NextFunction } from "express";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
 import companyRoutes from "./routes/companyRoutes";
@@ -16,6 +17,7 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/seekers", seekerRoutes);
 app.use("/companies", companyRoutes);

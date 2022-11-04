@@ -13,6 +13,22 @@ const createToken = (_id: number) => {
   return jwt.sign({ _id }, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
 };
 
+// const authorization = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   const token = req.cookies.access_token;
+//   if (!token) return res.sendStatus(403);
+//   try {
+//     const data = await jwt.verify(token, JWT_SECRET_KEY);
+//     req._id = data._id;
+//     return next();
+//   } catch {
+//     return res.sendStatus(403);
+//   }
+// };
+
 export const loginSeeker = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
@@ -27,7 +43,13 @@ export const loginSeeker = catchAsync(
     if (!checkPassword) next(new Error("Password is not correct."));
     // create token
     const token = await createToken(loggingSeeker.rows[0].seeker_id);
-    res.json({ msg: "good login", token });
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .status(200)
+      .json({ msg: "good login" });
     next();
   }
 );
@@ -49,6 +71,13 @@ export const signupSeeker = catchAsync(
     // create token
     const token = await createToken(newSeeker.rows[0].seeker_id);
     res.json({ newSeeker: newSeeker.rows[0], token });
+    next();
+  }
+);
+
+export const logoutSeeker = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.clearCookie("access_token").status(200).json({ msg: "good logout" });
     next();
   }
 );
