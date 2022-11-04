@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signupSeeker = exports.loginSeeker = void 0;
+exports.logoutSeeker = exports.signupSeeker = exports.loginSeeker = void 0;
 const middlewares_1 = require("../helpers/middlewares");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const postgres_1 = __importDefault(require("../db/postgres"));
@@ -24,6 +24,21 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 const createToken = (_id) => {
     return jsonwebtoken_1.default.sign({ _id }, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
 };
+// const authorization = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   const token = req.cookies.access_token;
+//   if (!token) return res.sendStatus(403);
+//   try {
+//     const data = await jwt.verify(token, JWT_SECRET_KEY);
+//     req._id = data._id;
+//     return next();
+//   } catch {
+//     return res.sendStatus(403);
+//   }
+// };
 exports.loginSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     if (!email || !password)
@@ -37,7 +52,13 @@ exports.loginSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaite
         next(new Error("Password is not correct."));
     // create token
     const token = yield createToken(loggingSeeker.rows[0].seeker_id);
-    res.json({ msg: "good login", token });
+    res
+        .cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+    })
+        .status(200)
+        .json({ msg: "good login", token });
     next();
 }));
 exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -52,6 +73,19 @@ exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __await
     const newSeeker = yield postgres_1.default.query(`INSERT INTO seeker (name,email,password) VALUES($1,$2,$3) RETURNING *`, [name, email, hashedPassword]);
     // create token
     const token = yield createToken(newSeeker.rows[0].seeker_id);
-    res.json({ newSeeker: newSeeker.rows[0], token });
+    res
+        .cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+    })
+        .status(200)
+        .json({ msg: "good signup", token });
+    next();
+}));
+exports.logoutSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.cookies.access_token;
+    if (!token)
+        return res.sendStatus(403);
+    res.clearCookie("access_token").status(200).json({ msg: "good logout" });
     next();
 }));
