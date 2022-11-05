@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logoutSeeker = exports.signupSeeker = exports.loginSeeker = void 0;
+exports.testHandler = exports.authorization = exports.logoutSeeker = exports.signupSeeker = exports.loginSeeker = void 0;
 const middlewares_1 = require("../helpers/middlewares");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const postgres_1 = __importDefault(require("../db/postgres"));
@@ -24,21 +24,6 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 const createToken = (_id) => {
     return jsonwebtoken_1.default.sign({ _id }, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRES_IN });
 };
-// const authorization = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   const token = req.cookies.access_token;
-//   if (!token) return res.sendStatus(403);
-//   try {
-//     const data = await jwt.verify(token, JWT_SECRET_KEY);
-//     req._id = data._id;
-//     return next();
-//   } catch {
-//     return res.sendStatus(403);
-//   }
-// };
 exports.loginSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     if (!email || !password)
@@ -87,5 +72,30 @@ exports.logoutSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __await
     if (!token)
         return res.sendStatus(403);
     res.clearCookie("access_token").status(200).json({ msg: "good logout" });
+    next();
+}));
+exports.authorization = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    if (!req.headers.authorization ||
+        !((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.startsWith("Bearer")))
+        next(new Error("You're not authorized."));
+    const token = (_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.split(" ")[1];
+    if (!token)
+        next(new Error("No token found."));
+    try {
+        const jwtData = jsonwebtoken_1.default.verify(token, JWT_SECRET_KEY);
+        console.log(jwtData);
+        if (!jwtData)
+            next(new Error("Invalid token"));
+        return next();
+    }
+    catch (_c) {
+        return next(new Error("Invalid token"));
+    }
+}));
+exports.testHandler = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.cookies.access_token;
+    console.log(token);
+    res.json({ msg: "test is successfully done." });
     next();
 }));
