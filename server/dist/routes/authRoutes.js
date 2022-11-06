@@ -9,5 +9,5 @@ const authRouter = express_1.default.Router();
 authRouter.route("/signup").post(authController_1.signupSeeker); // register a new seeker
 authRouter.route("/login").post(authController_1.loginSeeker); // login a seeker
 authRouter.route("/logout").post(authController_1.logoutSeeker); // logout a seeker
-authRouter.route("/test").get(authController_1.authorization, authController_1.testHandler); // test authorization
+// authRouter.route("/test").get(authorization, testHandler); // test authorization
 exports.default = authRouter;
