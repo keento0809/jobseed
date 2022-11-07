@@ -85,7 +85,6 @@ export const authorization = catchAsync(
     if (!token) next(new Error("No token found."));
     try {
       const jwtData = jwt.verify(token!, JWT_SECRET_KEY);
-      console.log(jwtData);
       if (!jwtData) next(new Error("Invalid token"));
       return next();
     } catch {

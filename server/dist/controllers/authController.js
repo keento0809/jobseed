@@ -84,7 +84,6 @@ exports.authorization = (0, middlewares_1.catchAsync)((req, res, next) => __awai
         next(new Error("No token found."));
     try {
         const jwtData = jsonwebtoken_1.default.verify(token, JWT_SECRET_KEY);
-        console.log(jwtData);
         if (!jwtData)
             next(new Error("Invalid token"));
         return next();
