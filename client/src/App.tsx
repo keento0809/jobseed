@@ -1,35 +1,48 @@
 import React, {useEffect, useState, createContext} from 'react';
-import Header from "./components/non_user/header/Header";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Signup from "./components/non_user/main/Signup";
-import Login from "./components/non_user/main/Login";
-import Hero from "./components/non_user/main/Hero";
-import Footer from "./components/non_user/footer/Footer";
-import UserHome from "./components/user/my_page_home/UserHome";
-import Interested from "./components/user/my_page_home/Interested";
-import Applied from "./components/user/my_page_home/Applied";
-import OnGoing from "./components/user/my_page_home/OnGoing";
-import Rejected from "./components/user/my_page_home/Rejected";
-import {screen_global_content} from './components/state/screen_context';
+import Header from "./components/pages/non_user/header/Header";
+import {Route, Routes} from "react-router-dom";
+import Signup from "./components/pages/non_user/main/Signup";
+import Login from "./components/pages/non_user/main/Login";
+import Hero from "./components/pages/non_user/main/Hero";
+import Footer from "./components/pages/non_user/footer/Footer";
+import CompanyMap from "./components/pages/user/my_page_map/Map";
+import Calendar from "./components/pages/user/my_page_calender/Calendar";
+import TopPage from "./components/pages/user/my_page_home/Top";
+import Interested from "./components/pages/user/my_page_home/Interested";
+import Applied from "./components/pages/user/my_page_home/Applied";
+import Interview from "./components/pages/user/my_page_home/Interview";
+import Rejected from "./components/pages/user/my_page_home/Rejected";
+
 
 function App() {
-    const [loggedIn, setLoggedIn] = useState(false);
+
+    const [loggedIn, setLoggedIn] = useState<boolean>(true);
 
     return (
         <div className="App font-Inter">
-            <BrowserRouter>
-                <Header/>
-                <Routes>
-                    <Route path="/" element={loggedIn ? <UserHome/> : <Hero/>}/>
-                    <Route path="/signup" element={<Signup/>}/>
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/user/interested" element={<Interested/>}/>
-                    <Route path="/user/applied" element={<Applied/>}/>
-                    <Route path="/user/on_going" element={<OnGoing/>}/>
-                    <Route path="/user/rejected" element={<Rejected/>}/>
-                </Routes>
-                < Footer/>
-            </BrowserRouter>
+            <Header/>
+            {!loggedIn ?
+                <>
+                    < Routes>
+                        <Route path="/" element=<Hero/>/>
+                        <Route path="/signup" element={<Signup/>}/>
+                        <Route path="/login" element={<Login login={loggedIn} setLoggedIn={setLoggedIn}/>}/>
+                    </Routes>
+                    < Footer/>
+                </> :
+                <>
+                    < Routes>
+                        <Route path="/" element={<TopPage/>}>
+                            < Route path="interested" element={<Interested/>}/>
+                            < Route path="applied" element={<Applied/>}/>
+                            < Route path="interview" element={<Interview/>}/>
+                            < Route path="Rejected" element={<Rejected/>}/>
+                        </Route>
+                        <Route path="/calendar" element={<Calendar/>}/>
+                        <Route path="/map" element={<CompanyMap/>}/>
+                    </Routes>
+                </>
+            }
         </div>
     );
 }

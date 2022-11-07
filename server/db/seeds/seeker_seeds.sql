@@ -1,0 +1,2 @@
+-- INSERT INTO seeker(seeker_id,name,email,password) VALUES (1,'Ken','kensiro@hotmail.com','password');
+INSERT INTO seeker(seeker_id,name,email,password) VALUES (2,'Bob','bobniyan@hotmail.com','bobkkkk');
