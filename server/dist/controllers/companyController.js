@@ -26,7 +26,10 @@ exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __aw
     next();
 }));
 exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, link, jobType, company_size, salary, location, description, status, interest, } = req.body;
+    const { name, link, jobType, company_size, salary, location, // latlng
+    description, status, // interest,applied,progress,rejected
+    interest, // need to delete
+     } = req.body;
     if (!name ||
         !link ||
         !jobType ||

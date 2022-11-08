@@ -17,23 +17,33 @@ export const loginSeeker = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email || !password) next(new Error("Invalid inputs"));
-    const loggingSeeker = await pool.query(
+    const loginSeeker = await pool.query(
       `SELECT * FROM seeker WHERE email = $1`,
       [email]
     );
-    if (!loggingSeeker) next(new Error("Seeker not found."));
-    const hashedPassword = loggingSeeker.rows[0].password;
+    if (!loginSeeker) next(new Error("Seeker not found."));
+    const hashedPassword = loginSeeker.rows[0].password;
     const checkPassword = await bcrypt.compare(password, hashedPassword);
     if (!checkPassword) next(new Error("Password is not correct."));
     // create token
-    const token = await createToken(loggingSeeker.rows[0].seeker_id);
+    const token = await createToken(loginSeeker.rows[0].seeker_id);
+    // retrieve seeker info form db
+    const loginSeekerName = loginSeeker.rows[0].name;
+    const loginSeekerEmail = loginSeeker.rows[0].email;
+    const loginSeekerPassword = loginSeeker.rows[0].password;
+    const loginSeekerInfo = await pool.query(
+      "SELECT * FROM seeker WHERE seeker.name = $1 AND seeker.email = $2 AND seeker.password = $3",
+      [loginSeekerName, loginSeekerEmail, loginSeekerPassword]
+    );
+    if (!loginSeekerInfo) next(new Error("No seeker found"));
+    const seeker = loginSeekerInfo.rows[0];
     res
       .cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
-      .json({ msg: "good login", token });
+      .json({ msg: "good login", seeker });
     next();
   }
 );
