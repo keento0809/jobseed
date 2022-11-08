@@ -24,10 +24,10 @@ export const createNewCompany = catchAsync(
       jobType,
       company_size,
       salary,
-      location,
+      location, // latlng
       description,
-      status,
-      interest,
+      status, // interest,applied,progress,rejected
+      interest, // need to delete
     } = req.body;
     if (
       !name ||
