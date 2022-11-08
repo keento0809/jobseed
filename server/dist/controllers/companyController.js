@@ -50,6 +50,6 @@ exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __a
     ]);
     if (!newCompany)
         next(new Error("Failed to create company"));
-    res.status(200).json({ msg: "Company successfully created" });
+    res.status(200).json({ msg: "Company successfully created", newCompany });
     next();
 }));
