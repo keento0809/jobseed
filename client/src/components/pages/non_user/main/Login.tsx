@@ -1,50 +1,39 @@
 import React, {useEffect, useState} from 'react';
 import Text_filed from "../../../models/Text_filed";
 import Button_sm from "../../../models/Button_sm";
-import {GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline} from "react-google-login";
+import {GoogleLogin} from "react-google-login";
+import {useTokenContext} from "../../../context/TokenContext";
 import {gapi} from "gapi-script";
+import {useCookies} from "react-cookie";
+import {Navigate, useNavigate} from "react-router-dom";
 
-type login = {
-    login: boolean,
-    setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
-}
+const Login = () => {
 
-type user = {
-    name: string,
-    email: string
-}
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const [cookie, setCookie, removeCookie] = useCookies();
+    const { user, setUser } = useTokenContext();
+    const navigate = useNavigate();
 
-// type IGoogleSuccess = GoogleLoginResponse | GoogleLoginResponseOffline
+    useEffect(() => {
+        function start () {
+            gapi.client.init({
+                clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+                scope: ""
+            })
+        }
+    }, [])
 
+    const OnSuccess = (res: any) => {
+        console.log("Successfully logged in", res.accessToken);
+        setCookie("JWT_TOKEN", res.accessToken);
+        setUser(res.profileObj);
+        navigate("/user", { replace: true });
+    }
 
-const Login = ( props : login) => {
-
-    const [loginUser, setLoginUser] = useState<user>({
-        name: "",
-        email: ""
-    })
-
-    // const onSuccess = (res:IGoogleSuccess) => {
-    //     console.log("Successfully logged in", res)
-    //     console.log(props.login)
-    //     props.setLoggedIn(true)
-    // }
-    //
-    // const onFailure = (res: IGoogleSuccess) => {
-    //     console.log("Successfully logged in", res)
-    // }
-
-    const userHandler = () => {}
-
-    // useEffect(() => {
-    //     function start() {
-    //         gapi.client.init({
-    //             clientId: "128872325253-3t5riu3tn94hr1rv7bam3uuoboemj59e.apps.googleusercontent.com",
-    //             scope:""
-    //         })
-    //     }
-    //     gapi.load("client:auth2", start)
-    // }, [])
+    const onFailure = (res: any) => {
+        console.log("Fail to login", res)
+    }
 
     return (
         <section className="wrapper flex justify-center font-bold">
@@ -53,16 +42,16 @@ const Login = ( props : login) => {
                     <h2 className="text-center">Log in</h2>
                     <form action="src/components/pages/non_user/main/Login" method="post" className="">
                         <Text_filed
-                            type={"text"}
-                            name={"name"}
-                            onChangeHandler={userHandler}
-                            value={loginUser.name}
-                        />
-                        <Text_filed
                             type={"email"}
                             name={"email"}
-                            onChangeHandler={userHandler}
-                            value={loginUser.email}
+                            onChangeHandler={(e)=>{setEmail(e.target.value)}}
+                            value={email}
+                        />
+                        <Text_filed
+                            type={"password"}
+                            name={"password"}
+                            onChangeHandler={(e)=>{setPassword(e.target.value)}}
+                            value={password}
                         />
                         < Button_sm
                             title={"log in"}
@@ -72,18 +61,20 @@ const Login = ( props : login) => {
                             width={"w-full"}
                         />
                     </form>
+                    <div id="signInButton" className="">
+                        < GoogleLogin
+                            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}
+                            buttonText="Login"
+                            onSuccess={OnSuccess}
+                            onFailure={onFailure}
+                            cookiePolicy={"single_host_origin"}
+                            isSignedIn={true}
+                            className="w-full flex justify-center mt-4"
+                        />
+                    </div>
                 </div>
             </div>
-            <div id="signInButton">
-                {/*< GoogleLogin*/}
-                {/*    clientId={"128872325253-3t5riu3tn94hr1rv7bam3uuoboemj59e.apps.googleusercontent.com"}*/}
-                {/*    buttonText="Login"*/}
-                {/*    onSuccess={onSuccess}*/}
-                {/*    onFailure={onFailure}*/}
-                {/*    cookiePolicy={"single_host_origin"}*/}
-                {/*    isSignedIn={true}*/}
-                {/*/>*/}
-            </div>
+
         </section>
     );
 };

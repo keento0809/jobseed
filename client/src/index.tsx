@@ -3,18 +3,21 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import {BrowserRouter} from "react-router-dom";
+import {TokenProvider} from "./components/context/TokenContext";
+import {CookiesProvider} from "react-cookie";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 
-const [loggedIn, setLoggedIn] = useState<boolean>(true);
-
-
 root.render(
     <React.StrictMode>
         < BrowserRouter>
-            <App/>
+            <CookiesProvider>
+                <TokenProvider>
+                    <App/>
+                </TokenProvider>
+            </CookiesProvider>
         </BrowserRouter>
     </React.StrictMode>
 );

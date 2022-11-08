@@ -16,34 +16,31 @@ const Signup: FC = () => {
         password: "",
         confirmPassword: ""
     })
+    const [token , setToken] = useState<string>("")
 
     const userHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewUser({...newUser, [e.target.name]: e.target.value});
     }
 
-    const createUser = (e: React.SyntheticEvent) => {
+    const createUser = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         if(!newUser.name) {
             console.log("no user")
             return;
         }
-        axios.post("http://localhost:8080/signup", {newUser})
-            .then(response => {
-                console.log(response.data)
+        try {
+            let res = await axios({
+                method: "post",
+                url: "http://localhost:8080/users/register",
+                data: newUser
             })
-            .catch(err => {
-                console.log(err)
-            })
+            console.log(res.data.token)
+            setToken(res.data.token);
+            console.log("token:" , token)
+        } catch (e: any) {
+            console.log(e)
+        }
     }
-
-    function handleCallback(response: any) {
-        console.log(response.data)
-    }
-
-    useEffect(()=>{
-
-    },[])
-
     return (
         <section className="wrapper flex justify-center">
             <div className="h-[78vh] flex justify-center items-center">

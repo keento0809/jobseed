@@ -1,7 +1,16 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useCookies} from "react-cookie";
 
 const Footer = () => {
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const navigate = useNavigate();
+
+    const logout = () => {
+        removeCookie("JWT_TOKEN");
+        navigate("/home", { replace: true });
+    }
+
     return (
         <footer className="wrapper bg-content-blue text-white py-12">
             <div className="flex justify-between items-center">
@@ -13,18 +22,11 @@ const Footer = () => {
                 <div>
                     <h2 className="text-lg font-bold">How to use</h2>
                     < Link to={"/login"}><h2 className="text-lg font-bold">Log in</h2></Link>
-                    < Link to={"/signup"}> <h2 className="text-lg font-bold">Sign in</h2></Link>
+                    < Link to={"/signup"}><h2 className="text-lg font-bold">Sign in</h2></Link>
+                    <div onClick={logout}>
+                        <h2 className="text-lg font-bold">Log out</h2>
+                    </div>
                 </div>
-
-                {/*<div>*/}
-                {/*    <h2>How to use</h2>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                {/*    <h2>Let's discuss with us</h2>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                {/*    <h2>Visit our websites</h2>*/}
-                {/*</div>*/}
 
             </div>
         </footer>
