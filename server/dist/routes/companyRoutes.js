@@ -8,5 +8,5 @@ const companyController_1 = require("../controllers/companyController");
 const authController_1 = require("../controllers/authController");
 const companyRouter = express_1.default.Router();
 companyRouter.route("/:seeker_id").get(authController_1.authorization, companyController_1.getAllCompanies); // get all interesting companies
-companyRouter.route("/new").post(() => { }); // add a new interesting company
+companyRouter.route("/new").post(authController_1.authorization, companyController_1.createNewCompany); // add a new interesting company
 exports.default = companyRouter;
