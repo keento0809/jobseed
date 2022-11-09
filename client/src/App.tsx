@@ -20,7 +20,7 @@ function App() {
         <div className="App">
             <Header/>
             <Routes>
-                <Route path="/home" element={<Hero/>}/>
+                <Route path="/" element={<Hero/>}/>
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route element={<ProtectRoutes/>}>

@@ -8,7 +8,7 @@ const Footer = () => {
 
     const logout = () => {
         removeCookie("JWT_TOKEN");
-        navigate("/home", { replace: true });
+        navigate("/", { replace: true });
     }
 
     return (

@@ -32,6 +32,7 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+
 app.listen(port, () => {
   console.log(`[server] server is listening on port ${port}`);
 });
