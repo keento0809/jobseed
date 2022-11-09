@@ -62,6 +62,7 @@ export const signupSeeker = catchAsync(
       `INSERT INTO seeker (name,email,password) VALUES($1,$2,$3) RETURNING *`,
       [name, email, hashedPassword]
     );
+    if (!newSeeker) next(new Error("Failed to register new seeker"));
     // create token
     const token = await createToken(newSeeker.rows[0].seeker_id);
     res
@@ -70,7 +71,7 @@ export const signupSeeker = catchAsync(
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
-      .json({ msg: "good signup", token });
+      .json({ msg: "good signup", token, newSeeker });
     next();
   }
 );
