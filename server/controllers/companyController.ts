@@ -24,10 +24,9 @@ export const createNewCompany = catchAsync(
       jobType,
       company_size,
       salary,
-      location, // latlng
+      location,
       description,
-      status, // interest,applied,progress,rejected
-      interest, // need to delete
+      status,
     } = req.body;
     if (
       !name ||
@@ -37,23 +36,12 @@ export const createNewCompany = catchAsync(
       !salary ||
       !location ||
       !description ||
-      !status ||
-      !interest
+      !status
     )
       next(new Error("Invalid input values"));
     const newCompany = await pool.query(
       "INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
-      [
-        name,
-        link,
-        jobType,
-        company_size,
-        salary,
-        location,
-        description,
-        status,
-        interest,
-      ]
+      [name, link, jobType, company_size, salary, location, description, status]
     );
     if (!newCompany) next(new Error("Failed to create company"));
     res.status(200).json({ msg: "Company successfully created", newCompany });
