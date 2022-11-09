@@ -48,3 +48,17 @@ export const createNewCompany = catchAsync(
     next();
   }
 );
+
+export const deleteCompany = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { company_id } = req.body;
+    if (!company_id) next(new Error("Invalid request"));
+    const deletingCompany = await pool.query(
+      "SELECT * FROM company WHERE company.company_id = $1",
+      [company_id]
+    );
+    if (!deletingCompany) next(new Error("Company not found"));
+    res.status(200).json({ msg: "company deleted", deletingCompany });
+    next();
+  }
+);
