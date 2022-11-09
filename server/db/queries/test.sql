@@ -1,3 +1,5 @@
 -- CREATE TABLE seeker(seeker_id SIREAL PRIMARY KEY,);
--- DROP TABLE company;
--- SELECT * FROM seeker;
+-- ALTER TABLE company DROP COLUMN interest;
+-- SELECT * FROM schedule;
+-- SELECT * FROM company;
+-- DELETE FROM company WHERE company.company_id = 3;

@@ -64,6 +64,8 @@ exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __await
     const salt = yield bcrypt_1.default.genSalt(10);
     const hashedPassword = yield bcrypt_1.default.hash(password, salt);
     const newSeeker = yield postgres_1.default.query(`INSERT INTO seeker (name,email,password) VALUES($1,$2,$3) RETURNING *`, [name, email, hashedPassword]);
+    if (!newSeeker)
+        next(new Error("Failed to register new seeker"));
     // create token
     const token = yield createToken(newSeeker.rows[0].seeker_id);
     res
@@ -72,7 +74,7 @@ exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __await
         secure: process.env.NODE_ENV === "production",
     })
         .status(200)
-        .json({ msg: "good signup", token });
+        .json({ msg: "good signup", token, newSeeker });
     next();
 }));
 exports.logoutSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
