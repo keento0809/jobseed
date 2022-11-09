@@ -2,6 +2,8 @@ import React, {FC, useState, useEffect} from 'react';
 import Text_filed from "../../../models/Text_filed";
 import Button_sm from "../../../models/Button_sm";
 import axios from "axios";
+import {useCookies} from "react-cookie";
+import {useNavigate} from "react-router-dom";
 
 /**
  * TODO :
@@ -14,9 +16,11 @@ const Signup: FC = () => {
         name: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        passwordConfirmation: ""
     })
-    const [token , setToken] = useState<string>("")
+
+    const [cookie, setCookie] = useCookies();
+    const navigate = useNavigate();
 
     const userHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewUser({...newUser, [e.target.name]: e.target.value});
@@ -31,12 +35,13 @@ const Signup: FC = () => {
         try {
             let res = await axios({
                 method: "post",
-                url: "http://localhost:8080/users/register",
+                url: "http://localhost:8080/auth/signup",
                 data: newUser
             })
-            console.log(res.data.token)
-            setToken(res.data.token);
-            console.log("token:" , token)
+            console.log(res.data.token);
+            setCookie("JWT_TOKEN", res.data.token);
+            navigate("/user", { replace: true });
+
         } catch (e: any) {
             console.log(e)
         }
@@ -67,9 +72,9 @@ const Signup: FC = () => {
                         />
                         <Text_filed
                             type={"password"}
-                            name={"confirmPassword"}
+                            name={"passwordConfirmation"}
                             onChangeHandler={userHandler}
-                            value={newUser.confirmPassword}
+                            value={newUser.passwordConfirmation}
                         />
                         < Button_sm
                             title={"Sign up"}
