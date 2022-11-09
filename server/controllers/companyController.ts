@@ -24,10 +24,9 @@ export const createNewCompany = catchAsync(
       jobType,
       company_size,
       salary,
-      location, // latlng
+      location,
       description,
-      status, // interest,applied,progress,rejected
-      interest, // need to delete
+      status,
     } = req.body;
     if (
       !name ||
@@ -37,26 +36,29 @@ export const createNewCompany = catchAsync(
       !salary ||
       !location ||
       !description ||
-      !status ||
-      !interest
+      !status
     )
       next(new Error("Invalid input values"));
     const newCompany = await pool.query(
       "INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
-      [
-        name,
-        link,
-        jobType,
-        company_size,
-        salary,
-        location,
-        description,
-        status,
-        interest,
-      ]
+      [name, link, jobType, company_size, salary, location, description, status]
     );
     if (!newCompany) next(new Error("Failed to create company"));
     res.status(200).json({ msg: "Company successfully created", newCompany });
+    next();
+  }
+);
+
+export const deleteCompany = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { company_id } = req.body;
+    if (!company_id) next(new Error("Invalid request"));
+    const deletingCompany = await pool.query(
+      "SELECT * FROM company WHERE company.company_id = $1",
+      [company_id]
+    );
+    if (!deletingCompany) next(new Error("Company not found"));
+    res.status(200).json({ msg: "company deleted", deletingCompany });
     next();
   }
 );
