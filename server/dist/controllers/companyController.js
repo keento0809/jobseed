@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNewCompany = exports.getAllCompanies = void 0;
+exports.deleteCompany = exports.createNewCompany = exports.getAllCompanies = void 0;
 const middlewares_1 = require("../helpers/middlewares");
 const postgres_1 = __importDefault(require("../db/postgres"));
 exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,10 +26,7 @@ exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __aw
     next();
 }));
 exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, link, jobType, company_size, salary, location, // latlng
-    description, status, // interest,applied,progress,rejected
-    interest, // need to delete
-     } = req.body;
+    const { name, link, jobType, company_size, salary, location, description, status, } = req.body;
     if (!name ||
         !link ||
         !jobType ||
@@ -37,22 +34,21 @@ exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __a
         !salary ||
         !location ||
         !description ||
-        !status ||
-        !interest)
+        !status)
         next(new Error("Invalid input values"));
-    const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", [
-        name,
-        link,
-        jobType,
-        company_size,
-        salary,
-        location,
-        description,
-        status,
-        interest,
-    ]);
+    const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", [name, link, jobType, company_size, salary, location, description, status]);
     if (!newCompany)
         next(new Error("Failed to create company"));
     res.status(200).json({ msg: "Company successfully created", newCompany });
+    next();
+}));
+exports.deleteCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { company_id } = req.body;
+    if (!company_id)
+        next(new Error("Invalid request"));
+    const deletingCompany = yield postgres_1.default.query("SELECT * FROM company WHERE company.company_id = $1", [company_id]);
+    if (!deletingCompany)
+        next(new Error("Company not found"));
+    res.status(200).json({ msg: "company deleted", deletingCompany });
     next();
 }));

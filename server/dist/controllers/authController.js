@@ -51,7 +51,7 @@ exports.loginSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaite
         secure: process.env.NODE_ENV === "production",
     })
         .status(200)
-        .json({ msg: "good login", seeker });
+        .json({ msg: "good login", token, seeker });
     next();
 }));
 exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
