@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signupSeeker = exports.loginSeeker = void 0;
+exports.testHandler = exports.authorization = exports.logoutSeeker = exports.signupSeeker = exports.loginSeeker = void 0;
 const middlewares_1 = require("../helpers/middlewares");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const postgres_1 = __importDefault(require("../db/postgres"));
@@ -28,16 +28,30 @@ exports.loginSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaite
     const { email, password } = req.body;
     if (!email || !password)
         next(new Error("Invalid inputs"));
-    const loggingSeeker = yield postgres_1.default.query(`SELECT * FROM seeker WHERE email = $1`, [email]);
-    if (!loggingSeeker)
+    const loginSeeker = yield postgres_1.default.query(`SELECT * FROM seeker WHERE email = $1`, [email]);
+    if (!loginSeeker)
         next(new Error("Seeker not found."));
-    const hashedPassword = loggingSeeker.rows[0].password;
+    const hashedPassword = loginSeeker.rows[0].password;
     const checkPassword = yield bcrypt_1.default.compare(password, hashedPassword);
     if (!checkPassword)
         next(new Error("Password is not correct."));
     // create token
-    const token = yield createToken(loggingSeeker.rows[0].seeker_id);
-    res.json({ msg: "good login", token });
+    const token = yield createToken(loginSeeker.rows[0].seeker_id);
+    // retrieve seeker info form db
+    const loginSeekerName = loginSeeker.rows[0].name;
+    const loginSeekerEmail = loginSeeker.rows[0].email;
+    const loginSeekerPassword = loginSeeker.rows[0].password;
+    const loginSeekerInfo = yield postgres_1.default.query("SELECT * FROM seeker WHERE seeker.name = $1 AND seeker.email = $2 AND seeker.password = $3", [loginSeekerName, loginSeekerEmail, loginSeekerPassword]);
+    if (!loginSeekerInfo)
+        next(new Error("No seeker found"));
+    const seeker = loginSeekerInfo.rows[0];
+    res
+        .cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+    })
+        .status(200)
+        .json({ msg: "good login", seeker });
     next();
 }));
 exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -52,6 +66,43 @@ exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __await
     const newSeeker = yield postgres_1.default.query(`INSERT INTO seeker (name,email,password) VALUES($1,$2,$3) RETURNING *`, [name, email, hashedPassword]);
     // create token
     const token = yield createToken(newSeeker.rows[0].seeker_id);
-    res.json({ newSeeker: newSeeker.rows[0], token });
+    res
+        .cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+    })
+        .status(200)
+        .json({ msg: "good signup", token });
+    next();
+}));
+exports.logoutSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.cookies.access_token;
+    if (!token)
+        return res.sendStatus(403);
+    res.clearCookie("access_token").status(200).json({ msg: "good logout" });
+    next();
+}));
+exports.authorization = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    if (!req.headers.authorization ||
+        !((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.startsWith("Bearer")))
+        next(new Error("You're not authorized."));
+    const token = (_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.split(" ")[1];
+    if (!token)
+        next(new Error("No token found."));
+    try {
+        const jwtData = jsonwebtoken_1.default.verify(token, JWT_SECRET_KEY);
+        if (!jwtData)
+            next(new Error("Invalid token"));
+        return next();
+    }
+    catch (_c) {
+        return next(new Error("Invalid token"));
+    }
+}));
+exports.testHandler = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.cookies.access_token;
+    console.log(token);
+    res.json({ msg: "test is successfully done." });
     next();
 }));
