@@ -43,7 +43,7 @@ export const loginSeeker = catchAsync(
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
-      .json({ msg: "good login", seeker });
+      .json({ msg: "good login", token, seeker });
     next();
   }
 );
