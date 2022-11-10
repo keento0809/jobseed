@@ -1,1 +1,1 @@
-CREATE TABLE schedule(schedule_id SERIAL PRIMARY KEY,title TEXT,date TEXT,time TEXT,importance INTEGER, memo TEXT,seeker_id INTEGER REFERENCES seeker(seeker_id),company_id INTEGER REFERENCES company(company_id));
+CREATE TABLE schedule(schedule_id SERIAL PRIMARY KEY,title TEXT,date TEXT,time TEXT,importance INTEGER, memo TEXT,seeker_id INTEGER REFERENCES seeker(seeker_id),company_id INTEGER REFERENCES company(company_id),time TEXT);
