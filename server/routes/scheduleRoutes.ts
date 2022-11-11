@@ -2,6 +2,7 @@ import express from "express";
 import { authorization } from "../controllers/authController";
 import {
   getSchedules,
+  getOneSchedule,
   getSchedulesSortedByCategory,
   createSchedule,
   updateSchedule,
@@ -19,12 +20,18 @@ scheduleRouter
   .route("/in-progress")
   .get(authorization, getSchedulesSortedByCategory); // get a seeker's schedules sorted by in progress
 scheduleRouter.route("/past").get(authorization, getSchedulesSortedByCategory); // get a seeker's schedules sorted by past
+scheduleRouter.route("/new").post(authorization, createSchedule); // add a new schedule
 // scheduleRouter.route("/other").get(() => {}); // get a seeker's schedules sorted by other
 scheduleRouter
   .route("/:seeker_id")
   .get(authorization, getSchedules)
   .put(authorization, updateSchedule)
   .delete(authorization, deleteSchedule);
-scheduleRouter.route("/new").post(() => {}); // add a new schedule
+
+scheduleRouter
+  .route("/:schedule_id")
+  .get(authorization, getOneSchedule)
+  .put(authorization, updateSchedule)
+  .delete(authorization, deleteSchedule);
 
 export default scheduleRouter;

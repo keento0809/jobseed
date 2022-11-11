@@ -17,6 +17,21 @@ export const getSchedules = catchAsync(
   }
 );
 
+export const getOneSchedule = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { schedule_id } = req.params;
+    if (!schedule_id) next(new Error("Invalid request"));
+    const scheduleData = await pool.query(
+      "SELECT * FROM schedule WHERE schedule.schedule_id = $1",
+      [schedule_id]
+    );
+    if (!scheduleData) next(new Error("No schedule found"));
+    const schedule = scheduleData.rows[0];
+    res.status(200).json({ msg: "good schedule", schedule });
+    next();
+  }
+);
+
 export const getSchedulesSortedByCategory = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const params = req.params;
@@ -47,24 +62,44 @@ export const createSchedule = catchAsync(
       !company_id
     )
       next(new Error("Invalid input data"));
-    const newSchedule = await pool.query(
-      "INSERT INTO schedule (title,date,importance,memo,seeker_id,company_id,time) VALUES ($1,$2,$3,$4,$5,$6)",
+    const newScheduleData = await pool.query(
+      "INSERT INTO schedule (title,date,importance,memo,seeker_id,company_id,time) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
       [title, date, importance, memo, seeker_id, company_id, time]
     );
-    if (!newSchedule) next(new Error("Failed to create schedule"));
-    res.status(200).json({ msg: "created schedule" });
+    if (!newScheduleData) next(new Error("Failed to create schedule"));
+    const newSchedule = newScheduleData.rows[0];
+    res.status(200).json({ msg: "created schedule", newSchedule });
     next();
   }
 );
 
 export const updateSchedule = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { schedule_id } = req.params;
+    const { title, date, importance, memo, seeker_id, company_id, time } =
+      req.body;
+    if (!schedule_id) next(new Error("Invalid request"));
+    const updatingScheduleData = await pool.query(
+      "UPDATE schedule SET title = $1,date = $2,importance = $3,memo = $4,seeker_id = $5,company_id = $6,time = $7 WHERE schedule.schedule_id = $8",
+      [title, date, importance, memo, seeker_id, company_id, time, schedule_id]
+    );
+    if (!updatingScheduleData) next(new Error("Failed to update schedule"));
+    const updatingSchedule = updatingScheduleData.rows[0];
+    res.status(200).json({ msg: "update schedule", updatingSchedule });
     next();
   }
 );
 
 export const deleteSchedule = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { schedule_id } = req.params;
+    if (!schedule_id) next(new Error("Invalid request"));
+    const deletingSchedule = await pool.query(
+      "DELETE FROM schedule WHERE schedule.schedule_id = $1",
+      [schedule_id]
+    );
+    if (!deletingSchedule) next(new Error("Failed to create schedule"));
+    res.status(200).json({ msg: "delete schedule" });
     next();
   }
 );
