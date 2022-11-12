@@ -38,7 +38,6 @@ const Signup: FC = () => {
                 url: "http://localhost:8080/auth/signup",
                 data: newUser
             })
-            console.log(res.data.token);
             setCookie("JWT_TOKEN", res.data.token);
             navigate("/user", { replace: true });
 

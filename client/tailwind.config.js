@@ -7,7 +7,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'content-blue': '#0079BD'
+        'content-blue': '#0079BD',
+        'modal-wrapper-color': "rgb(88,86,86,0.8)",
+        'modal-bg-color': "rgba(255,255,255,1.0)"
       },
       fontFamily: {
         Inter: ['Inter', "sans-serif"]

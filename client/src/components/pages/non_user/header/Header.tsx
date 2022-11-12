@@ -10,7 +10,11 @@ const Header: FC = () => {
 
     return (
         <header className="h-24 border-b shadow-md wrapper flex justify-between items-center">
-            <Link to={"/"} className="block">< AiOutlineRocket size="30"/></Link>
+            {cookie ?
+                <Link to={"/user"} className="block">< AiOutlineRocket size="30"/></Link> :
+                <Link to={"/"} className="block">< AiOutlineRocket size="30"/></Link>
+            }
+
             {cookie ?
                 <section className="flex h-full items-center">
                     <div className="space-y-1 md:hidden ">

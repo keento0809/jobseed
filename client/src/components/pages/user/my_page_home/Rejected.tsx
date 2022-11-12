@@ -1,9 +1,10 @@
 import React from 'react';
+import CompanyCard from "./CompanyCard";
 
 const Rejected = () => {
     return (
-        <section className="rejected lg:ml-[15%]">
-            Rejected
+        <section className="rejected">
+            < CompanyCard name={"RRRRR"} position={"Developer"} currentStatus={"Applied"} />
         </section>
     );
 };
