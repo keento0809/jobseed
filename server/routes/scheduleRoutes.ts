@@ -2,6 +2,7 @@ import express from "express";
 import { authorization } from "../controllers/authController";
 import {
   getSchedules,
+  getSchedulesByDate,
   getOneSchedule,
   getSchedulesSortedByCategory,
   createSchedule,
@@ -27,6 +28,10 @@ scheduleRouter
   .get(authorization, getSchedules)
   .put(authorization, updateSchedule)
   .delete(authorization, deleteSchedule);
+
+scheduleRouter
+  .route("/:seeker_id/calendar")
+  .get(authorization, getSchedulesByDate);
 
 scheduleRouter
   .route("/:schedule_id")

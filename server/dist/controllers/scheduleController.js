@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteSchedule = exports.updateSchedule = exports.createSchedule = exports.getSchedulesSortedByCategory = exports.getOneSchedule = exports.getSchedules = void 0;
+exports.deleteSchedule = exports.updateSchedule = exports.createSchedule = exports.getSchedulesSortedByCategory = exports.getOneSchedule = exports.getSchedulesByDate = exports.getSchedules = void 0;
 const postgres_1 = __importDefault(require("../db/postgres"));
 const middlewares_1 = require("../helpers/middlewares");
 exports.getSchedules = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -24,6 +24,17 @@ exports.getSchedules = (0, middlewares_1.catchAsync)((req, res, next) => __await
         next(new Error("No schedule found"));
     const schedules = schedulesData.rows;
     res.status(200).json({ msg: "good schedule", schedules });
+    next();
+}));
+exports.getSchedulesByDate = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { date } = req.body;
+    if (!date)
+        next(new Error("Invalid request"));
+    const schedulesData = yield postgres_1.default.query("SELECT * FROM schedule JOIN seeker ON schedule.seeker_id = seeker.seeker_id WHERE schedule.date = $1", [date]);
+    if (!schedulesData)
+        next(new Error("No schedule found"));
+    const schedules = schedulesData.rows;
+    res.status(200).json({ msg: "good schedule by date", schedules });
     next();
 }));
 exports.getOneSchedule = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
