@@ -17,6 +17,21 @@ export const getSchedules = catchAsync(
   }
 );
 
+export const getSchedulesByDate = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { date } = req.body;
+    if (!date) next(new Error("Invalid request"));
+    const schedulesData = await pool.query(
+      "SELECT * FROM schedule JOIN seeker ON schedule.seeker_id = seeker.seeker_id WHERE schedule.date = $1",
+      [date]
+    );
+    if (!schedulesData) next(new Error("No schedule found"));
+    const schedules = schedulesData.rows;
+    res.status(200).json({ msg: "good schedule by date", schedules });
+    next();
+  }
+);
+
 export const getOneSchedule = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { schedule_id } = req.params;

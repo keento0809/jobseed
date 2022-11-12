@@ -25,6 +25,9 @@ scheduleRouter
     .put(authController_1.authorization, scheduleController_1.updateSchedule)
     .delete(authController_1.authorization, scheduleController_1.deleteSchedule);
 scheduleRouter
+    .route("/:seeker_id/calendar")
+    .get(authController_1.authorization, scheduleController_1.getSchedulesByDate);
+scheduleRouter
     .route("/:schedule_id")
     .get(authController_1.authorization, scheduleController_1.getOneSchedule)
     .put(authController_1.authorization, scheduleController_1.updateSchedule)
