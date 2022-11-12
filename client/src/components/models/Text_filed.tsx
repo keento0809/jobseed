@@ -4,7 +4,7 @@ type CustomTextField = {
     type: string
     name: string;
     value?: string;
-    onChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
+    onChangeHandler?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Text_filed = (props: CustomTextField) => {

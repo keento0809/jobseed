@@ -1,9 +1,13 @@
 import React from 'react';
+import GoogleMapReact from 'google-map-react';
 
 const CompanyMap = () => {
+
     return (
-        <div>
-            <h1>Map</h1>
+        <div className="wrapper">
+
+
+
         </div>
     );
 };

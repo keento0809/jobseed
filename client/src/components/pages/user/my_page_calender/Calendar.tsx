@@ -1,11 +1,54 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import format from "date-fns/format";
+import parse from "date-fns/parse";
+import startOfWeek from "date-fns/startOfWeek";
+import getDay from "date-fns/getDay";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import DatePicker from "react-datepicker";
 
-const Calendar = () => {
+const locales = {
+    "en-US": require("date-fns/locale/en-US/index")
+}
+
+const localize = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+    locales
+})
+
+const events = [
+    {
+        title: "Big day",
+        allDay: true,
+        start: new Date(2022,11,1),
+        end:new Date(2022,11,3)
+    }
+]
+
+
+const CalendarPage = () => {
+
+    const [newEvent, sstNewEvent] = useState();
+    const [allEvents, setAllEvents] = useState(events);
+
+    const handleAddEvent = () => {
+        setAllEvents([...allEvents, newEvent!])
+    }
+
     return (
         <div>
-            <h1>Calender</h1>
+            <Calendar
+                localizer={localize}
+                events={allEvents}
+                startAccessor="start"
+                endAccessor={"end"}
+                style={{height: "500px", margin: "50px"}}
+            />
         </div>
     );
 };
 
-export default Calendar;
+export default CalendarPage;

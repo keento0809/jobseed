@@ -4,7 +4,7 @@ import CompanyCard from "./CompanyCard";
 
 const Interested = () => {
     return (
-        <section className="interested lg:ml-[15%]">
+        <section className="interested">
             < CompanyCard name={"CICCC"} position={"Developer"} currentStatus={"Applied"} />
         </section>
     );

@@ -1,11 +1,8 @@
-import React, {useState} from 'react';
-import {Link} from "react-router-dom";
-import UserProfile from "./UserProfile";
-import human from "../../../../images/human.png";
+import React from 'react';
 
 type nav = {
     showPage: string | null;
-    setShowPage: (showPage: string) => void
+    setShowPage: (showPage: string) => void;
 }
 
 const UserNav = (props: nav) => {
@@ -17,25 +14,16 @@ const UserNav = (props: nav) => {
     }
 
     const links = [
-        {id:1, name: "Interested"},
-        {id:2, name: "Applied"},
-        {id:3, name: "Interview"},
-        {id:4, name: "Rejected"}
+        {id: 1, name: "interested"},
+        {id: 2, name: "applied"},
+        {id: 3, name: "interview"},
+        {id: 4, name: "rejected"}
     ]
     return (
-        <div className="lg:flex">
-            < UserProfile
-                name={"Misato Tanno"}
-                email={"misato@gmail.com"}
-                avatar={human}
-            />
-            <div className="lg:ml-[15%] w-full py-6">
-                <div className="user_nav">
-                    <ul className="grid grid-cols-4 text-center font-bold">
-                        { links.map(link => <button key={link.id} onClick={clickHandler}>{ link.name }</button>) }
-                    </ul>
-                </div>
-            </div>
+        <div className="user_nav">
+            <ul className="grid grid-cols-4 text-center font-bold">
+                {links.map(link => <button key={link.id} onClick={clickHandler}>{link.name}</button>)}
+            </ul>
         </div>
     );
 };

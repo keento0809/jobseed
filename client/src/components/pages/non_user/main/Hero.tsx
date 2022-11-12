@@ -8,8 +8,6 @@ import Button_link from "../../../models/Button_link";
 
 const Hero: React.FunctionComponent<{}> = () => {
 
-    const [language, setLanguage] = useState("English")
-
     return (
         <main className="wrapper">
             <div className="lg:grid lg:grid-cols-2 p-6 items-centers mt-32">
