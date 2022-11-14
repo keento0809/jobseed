@@ -12,7 +12,7 @@ type InputProps = {
 
 const InputField = ({type, title,name, placeholder, value, onChange} : InputProps) => {
     return (
-        <label className="block text-gray-700 mt-6 text-sm font-medium mb-2" htmlFor={name}>
+        <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor={name}>
             {title}
             <input
                 type={type}

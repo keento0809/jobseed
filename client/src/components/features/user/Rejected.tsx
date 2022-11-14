@@ -3,7 +3,11 @@ import CompanyCard from "./CompanyCard";
 
 const Rejected = () => {
     return (
-        <section className="rejected">
+        <section className="rejected card-container">
+            < CompanyCard name={"RRRRR"} position={"Developer"} currentStatus={"Applied"} />
+            < CompanyCard name={"RRRRR"} position={"Developer"} currentStatus={"Applied"} />
+            < CompanyCard name={"RRRRR"} position={"Developer"} currentStatus={"Applied"} />
+            < CompanyCard name={"RRRRR"} position={"Developer"} currentStatus={"Applied"} />
             < CompanyCard name={"RRRRR"} position={"Developer"} currentStatus={"Applied"} />
         </section>
     );

@@ -109,23 +109,24 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                     name={"description"}
                     onChange={companyDataHandler}
                 />
-                <Button_sm
-                    title={"create"}
-                    color={"text-white"}
-                    bg_color={"bg-content-blue"}
-                    width={"w-24"}
-                    onClick={sendCompany}
-                />
-                <Button_sm
-                    title={"close"}
-                    color={"bg-content-blue"}
-                    bg_color={"bg-white"}
-                    width={"w-24"}
-                    onClick={() => setShowModal(false)}
-                    className={"border-2"}
-                />
+                <div className="flex justify-end gap-2 mt-4">
+                    <Button_sm
+                        title={"create"}
+                        color={"text-white"}
+                        bg_color={"bg-content-blue"}
+                        width={"w-24"}
+                        onClick={sendCompany}
+                    />
+                    <Button_sm
+                        title={"close"}
+                        color={"bg-content-blue"}
+                        bg_color={"bg-white"}
+                        width={"w-24"}
+                        onClick={() => setShowModal(false)}
+                        className={"border-2"}
+                    />
+                </div>
             </div>
-
         </div>
     );
 };

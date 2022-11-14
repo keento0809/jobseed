@@ -15,7 +15,7 @@ interface Company {
 
 const CompanyCard = ({name, position, currentStatus, link}: Company) => {
     return (
-        <div className="flex rounded-md w-4/5 justify-between m-auto border p-6 my-4">
+        <div className="flex rounded-md w-full justify-between  border p-6">
             <div className="card-left flex flex-wrap flex-col justify-between">
                 <div>
                     <h3 className="font-bold">{name}</h3>
