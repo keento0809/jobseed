@@ -16,7 +16,7 @@ type User = {
 type tokenContext = {
     user: User | null,
     setUser: (user:User) => void,
-    GLogin:() => void,
+    GLogin:(user:User) => void,
     GLogout:() => void,
     login:(token:Token) => void,
     logout:() => void,
@@ -40,7 +40,7 @@ export const TokenProvider = ({children}: Props) => {
     };
 
     const GLogout = () => {
-        setToken(null)
+
     }
 
     const login = () => {

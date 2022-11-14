@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import Dropdown from "../../../models/Dropdown";
-import Button_sm from "../../../models/Button_sm";
-import Text_field_lg from "../../../models/Text_field_lg";
-import InputField from "../../../models/InputField";
+import Dropdown from "../../components/models/Dropdown";
+import Button_sm from "../../components/models/Button_sm";
+import Text_field_lg from "../../components/models/Text_field_lg";
+import InputField from "../../components/models/InputField";
 import {BsBuilding} from "react-icons/bs"
-import {Company, useCompanyContext} from "../../../context/companyContext";
+import {Company, useCompanyContext} from "../../components/context/companyContext";
 
 type modalProps = {
     showModal: boolean;
@@ -38,7 +38,6 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
 
     const sendCompany = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log(companyData)
         // createCompany(companyData)
         setShowModal(false)
     }

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import Text_filed from "../../../models/Text_filed";
-import Button_sm from "../../../models/Button_sm";
+import Text_filed from "../components/models/Text_filed";
+import Button_sm from "../components/models/Button_sm";
 import {GoogleLogin} from "react-google-login";
-import {useTokenContext} from "../../../context/TokenContext";
+import {useTokenContext} from "../components/context/TokenContext";
 import {gapi} from "gapi-script";
 import {useCookies} from "react-cookie";
 import {Navigate, useNavigate} from "react-router-dom";
@@ -12,7 +12,7 @@ const Login = () => {
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [cookie, setCookie, removeCookie] = useCookies();
-    const { user, setUser } = useTokenContext();
+    const { user, setUser,GLogin } = useTokenContext();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const Login = () => {
     const OnSuccess = (res: any) => {
         console.log("Successfully logged in", res.accessToken);
         setCookie("JWT_TOKEN", res.accessToken);
-        setUser(res.profileObj);
+        // GLogin()
         navigate("/user", { replace: true });
     }
 

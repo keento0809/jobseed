@@ -1,6 +1,6 @@
 import React, {FC, useState, useEffect} from 'react';
-import Text_filed from "../../../models/Text_filed";
-import Button_sm from "../../../models/Button_sm";
+import Text_filed from "../components/models/Text_filed";
+import Button_sm from "../components/models/Button_sm";
 import axios from "axios";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router-dom";

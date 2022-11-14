@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import UserNav from "./UserNav";
-import Interested from "./Interested";
-import Applied from "./Applied";
-import Rejected from "./Rejected";
-import Interview from "./Interview";
-import UserProfile from "./UserProfile";
-import human from "../../../../images/human.png";
-import Button_sm from "../../../models/Button_sm";
-import {useCompanyContext} from "../../../context/companyContext";
-import CompanyModal from "../modalPages/CompanyModal";
+import UserNav from "../../components/features/user/UserNav";
+import Interested from "../../components/features/user/Interested";
+import Applied from "../../components/features/user/Applied";
+import Rejected from "../../components/features/user/Rejected";
+import Interview from "../../components/features/user/Interview";
+import UserProfile from "../../components/features/user/UserProfile";
+import human from "../../images/human.png";
+import Button_sm from "../../components/models/Button_sm";
+import {useCompanyContext} from "../../components/context/companyContext";
+import CompanyModal from "./CompanyModal";
 
 const TopPage = () => {
     const [showPage, setShowPage] = useState<string>("interested")
@@ -26,8 +26,6 @@ const TopPage = () => {
                 return < Rejected/>
         }
     }
-
-    console.log(showModal)
 
     const modalHandler = (e:React.MouseEvent<HTMLElement>) => {
         e.preventDefault();

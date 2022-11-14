@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
-import Button_sm from "../../../models/Button_sm";
+import Button_sm from "../models/Button_sm";
 import {AiOutlineRocket} from "react-icons/ai"
 import {Link, Navigate} from 'react-router-dom';
-import {useTokenContext} from "../../../context/TokenContext";
+import {useTokenContext} from "../context/TokenContext";
 import {useCookies} from "react-cookie";
 
 const Header: FC = () => {
@@ -10,12 +10,12 @@ const Header: FC = () => {
 
     return (
         <header className="h-24 border-b shadow-md wrapper flex justify-between items-center">
-            {cookie ?
+            {cookie.JWT_TOKEN ?
                 <Link to={"/user"} className="block">< AiOutlineRocket size="30"/></Link> :
                 <Link to={"/"} className="block">< AiOutlineRocket size="30"/></Link>
             }
 
-            {cookie ?
+            {cookie.JWT_TOKEN ?
                 <section className="flex h-full items-center">
                     <div className="space-y-1 md:hidden ">
                         <span className="block w-4 h-0.5 bg-gray-600"></span>
