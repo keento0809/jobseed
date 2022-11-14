@@ -18,16 +18,8 @@ export const getAllCompanies = catchAsync(
 
 export const createNewCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const {
-      name,
-      link,
-      jobType,
-      company_size,
-      salary,
-      location,
-      description,
-      status,
-    } = req.body;
+    const { name, link, jobType, company_size, salary, location, description } =
+      req.body;
     if (
       !name ||
       !link ||
@@ -35,13 +27,21 @@ export const createNewCompany = catchAsync(
       !company_size ||
       !salary ||
       !location ||
-      !description ||
-      !status
+      !description
     )
       next(new Error("Invalid input values"));
     const newCompany = await pool.query(
       "INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
-      [name, link, jobType, company_size, salary, location, description, status]
+      [
+        name,
+        link,
+        jobType,
+        company_size,
+        salary,
+        location,
+        description,
+        "Interested",
+      ]
     );
     if (!newCompany) next(new Error("Failed to create company"));
     res.status(200).json({ msg: "Company successfully created", newCompany });
