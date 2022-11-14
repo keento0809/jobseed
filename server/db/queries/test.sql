@@ -1,6 +1,6 @@
 -- CREATE TABLE seeker(seeker_id SIREAL PRIMARY KEY,);
--- ALTER TABLE company DROP COLUMN interest;
-SELECT * FROM schedule;
--- SELECT * FROM company;
+-- ALTER TABLE seeker ADD COLUMN avatar TEXT DEFAULT NULL
+-- SELECT * FROM schedule;
+SELECT * FROM seeker;
 -- DROP TABLE company;
 -- DELETE FROM company WHERE company.company_id = 3;
