@@ -39,13 +39,13 @@ const CalendarPage = () => {
     }
 
     return (
-        <div>
+        <div className="">
             <Calendar
                 localizer={localize}
                 events={allEvents}
                 startAccessor="start"
                 endAccessor={"end"}
-                style={{height: "500px", margin: "50px"}}
+                style={{height: "500px", margin: "50px", zIndex:"-100", position:"relative"}}
             />
         </div>
     );

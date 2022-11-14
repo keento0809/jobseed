@@ -27,7 +27,6 @@ const Footer = () => {
                         <h2 className="text-lg font-bold">Log out</h2>
                     </div>
                 </div>
-
             </div>
         </footer>
     );

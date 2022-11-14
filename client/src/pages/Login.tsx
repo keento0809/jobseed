@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Text_filed from "../components/models/Text_filed";
 import Button_sm from "../components/models/Button_sm";
 import {GoogleLogin} from "react-google-login";
-import {useTokenContext} from "../components/context/TokenContext";
 import {gapi} from "gapi-script";
 import {useCookies} from "react-cookie";
 import {Navigate, useNavigate} from "react-router-dom";
@@ -11,8 +10,7 @@ const Login = () => {
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [cookie, setCookie, removeCookie] = useCookies();
-    const { user, setUser,GLogin } = useTokenContext();
+    const [cookies, setCookie, removeCookie] = useCookies();
     const navigate = useNavigate();
 
     useEffect(() => {
