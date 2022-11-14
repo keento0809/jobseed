@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import Description from "./Description";
-import hero_top from "../../../../images/hero_top.jpg";
-import calender from "../../../../images/calender.jpg"
-import Button_sm from "../../../models/Button_sm";
-import {Link} from "react-router-dom";
-import Button_link from "../../../models/Button_link";
+import Description from "../components/features/Description";
+import hero_top from "../images/hero_top.jpg";
+import calender from "../images/calender.jpg"
+import Button_link from "../components/models/Button_link";
 
-const Hero: React.FunctionComponent<{}> = () => {
+const Hero: React.FunctionComponent = () => {
 
     return (
         <main className="wrapper">
