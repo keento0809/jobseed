@@ -15,6 +15,9 @@ module.exports = {
         Inter: ['Inter', "sans-serif"]
       }
     },
+    animation: {
+
+    }
   },
   plugins: [],
 }
