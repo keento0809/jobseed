@@ -13,8 +13,21 @@ dotenv.config();
 const app: Express = express();
 const port = 8080;
 
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
 // middleware
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(function (req: Request, res: Response, next: NextFunction) {
+  res.header("Content-Type", "application/json;charset=UTF-8");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
