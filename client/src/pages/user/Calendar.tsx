@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import {Calendar, dateFnsLocalizer, globalizeLocalizer} from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import DatePicker from "react-datepicker";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
 const locales = {
     "en-US": require("date-fns/locale/en-US/index")
 }
+
+const DnDCalendar = withDragAndDrop(Calendar);
 
 const localize = dateFnsLocalizer({
     format,
@@ -23,15 +26,16 @@ const events = [
     {
         title: "Big day",
         allDay: true,
-        start: new Date(2022,11,1),
-        end:new Date(2022,11,3)
+        start: new Date(2022, 11, 17, 12, 0, 0),
+        end:new Date(2022, 11, 18, 11, 0, 0)
     }
 ]
 
 
+
 const CalendarPage = () => {
 
-    const [newEvent, sstNewEvent] = useState();
+    const [newEvent, setNewEvent] = useState();
     const [allEvents, setAllEvents] = useState(events);
 
     const handleAddEvent = () => {
@@ -44,8 +48,9 @@ const CalendarPage = () => {
                 localizer={localize}
                 events={allEvents}
                 startAccessor="start"
-                endAccessor={"end"}
-                style={{height: "500px", margin: "50px", zIndex:"-100", position:"relative"}}
+                endAccessor="end"
+                selectable
+                style={{height: "500px", margin: "50px", zIndex:"-100"}}
             />
         </div>
     );

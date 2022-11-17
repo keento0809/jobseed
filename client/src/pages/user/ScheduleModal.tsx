@@ -4,6 +4,7 @@ import InputField from "../../components/models/InputField";
 import Dropdown from "../../components/models/Dropdown";
 import Text_field_lg from "../../components/models/Text_field_lg";
 import Button_sm from "../../components/models/Button_sm";
+import DatePicker from "react-datepicker";
 
 type Props = {
     showScheduleModal: boolean;
@@ -45,30 +46,12 @@ const ScheduleModal = ({showScheduleModal, setShowScheduleModal}: Props) => {
                     <BsBuilding size={20} className="mr-4"/>
                     <h1 className="text-lg font-bold">Add company</h1>
                 </div>
-                <div className="flex">
-                    <InputField
-                        type={"text"}
-                        title={"company name"}
-                        name={"name"}
-                        value={newSchedule.title}
-                        placeholder={"company name"}
-                        onChange={companyDataHandler}
-                    />
-                    <div>
-                        <InputField
-                            type={"text"}
-                            title={"company size"}
-                            name={"size"}
-                            value={newSchedule.startDate}
-                            placeholder={"company size"}
-                            onChange={companyDataHandler}
-                        />
-                    </div>
+
+                <div>
+                    {/*<DatePicker onChange={}/>*/}
                 </div>
-                <Text_field_lg
-                    name={"description"}
-                    onChange={companyDataHandler}
-                />
+
+
                 <div className="flex justify-end gap-2 mt-4">
                     <Button_sm
                         title={"create"}

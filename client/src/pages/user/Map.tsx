@@ -24,8 +24,6 @@ const CompanyMap = () => {
                 >
                 </GoogleMap>
             </LoadScript>
-
-
         </div>
     );
 };

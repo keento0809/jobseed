@@ -5,6 +5,7 @@ import {GoogleLogin} from "react-google-login";
 import {gapi} from "gapi-script";
 import {useCookies} from "react-cookie";
 import {Navigate, useNavigate} from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
 
@@ -12,6 +13,22 @@ const Login = () => {
     const [password, setPassword] = useState<string>("")
     const [cookies, setCookie, removeCookie] = useCookies();
     const navigate = useNavigate();
+
+    const loginUser = async (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        console.log(email)
+        try {
+            let res = await axios({
+                method: "post",
+                url: "http://localhost:8080/auth/login",
+                data: {email, password}
+            })
+            console.log(res)
+        } catch (e: any) {
+            console.log(e)
+        }
+    }
+
 
     useEffect(() => {
         function start () {
@@ -57,6 +74,7 @@ const Login = () => {
                             bg_color={"bg-content-blue"}
                             className={"mt-8"}
                             width={"w-full"}
+                            onClick={loginUser}
                         />
                     </form>
                     <div id="signInButton" className="">
@@ -72,7 +90,6 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-
         </section>
     );
 };

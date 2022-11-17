@@ -49,7 +49,7 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                     <BsBuilding size={20} className="mr-4"/>
                     <h1 className="text-lg font-bold">Add company</h1>
                 </div>
-                <div className="flex">
+                <div className="grid grid-cols-2 gap-2 mt-8">
                     <InputField
                         type={"text"}
                         title={"company name"}
@@ -85,7 +85,7 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                     onChange={companyDataHandler}
                 />
 
-                <div className="flex">
+                <div className="grid grid-cols-2 gap-2">
                     <InputField
                         type={"text"}
                         title={"salary"}
