@@ -19,11 +19,13 @@ export const getSeekerInfo = catchAsync(
 
 export const updateSeekerInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { seeker_id } = req.params;
+    if (!seeker_id) next(new Error("Invalid request"));
     const { name, email } = req.body;
     if (!name || !email) next(new Error("Invalid inputs"));
     const updatingSeeker = await pool.query(
-      "UPDATE seeker SET name = $1, email = $2 RETURNING *",
-      [name, email]
+      "UPDATE seeker SET name = $1, email = $2 WHERE seeker.seeker_id = $3 RETURNING *",
+      [name, email, seeker_id]
     );
     if (!updatingSeeker) next(new Error("Failed to update seeker"));
     res.status(200).json({ msg: "Good seeker update", updatingSeeker });

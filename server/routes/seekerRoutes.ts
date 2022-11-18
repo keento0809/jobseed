@@ -10,7 +10,7 @@ const seekerRouter = express.Router();
 seekerRouter
   .route("/:seeker_id")
   .get(authorization, getSeekerInfo)
-  .put(authorization, updateSeekerInfo);
+  .patch(authorization, updateSeekerInfo);
 seekerRouter.route("/:seeker_id/avatar").put(authorization, addAvatar);
 
 export default seekerRouter;
