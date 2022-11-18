@@ -33,9 +33,7 @@ export const getCompaniesWithStatus = catchAsync(
     );
     if (!companiesWithStatusInfo) next(new Error("No companies found"));
     const companiesWithStatus = companiesWithStatusInfo.rows;
-    res
-      .status(200)
-      .json({ msg: "good companies with status", companiesWithStatus });
+    res.status(200).json({ companiesWithStatus });
     next();
   }
 );
@@ -68,7 +66,7 @@ export const createNewCompany = catchAsync(
       ]
     );
     if (!newCompany) next(new Error("Failed to create company"));
-    res.status(200).json({ msg: "Company successfully created", newCompany });
+    res.status(200).json({ newCompany });
     next();
   }
 );
@@ -84,8 +82,8 @@ export const updateCompany = catchAsync(
       "UPDATE company SET name = $1,link = $2,location = $3,jobType = $4,description = $5,status = $6,interest = $7  WHERE company.company_id = $8",
       [name, link, location, jobType, description, status, interest, company_id]
     );
-    if (!updatingCompany) next(new Error("No company found"));
-    res.status(200).json({ msg: "Company updated" });
+    if (!updatingCompany) next(new Error("Failed to update company"));
+    res.status(200).json({ updatingCompany });
     next();
   }
 );
@@ -98,8 +96,8 @@ export const deleteCompany = catchAsync(
       "SELECT * FROM company WHERE company.company_id = $1",
       [company_id]
     );
-    if (!deletingCompany) next(new Error("Company not found"));
-    res.status(200).json({ msg: "company deleted", deletingCompany });
+    if (!deletingCompany) next(new Error("Failed to delete company"));
+    res.status(200).json({ deletingCompany });
     next();
   }
 );

@@ -37,9 +37,7 @@ exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) 
     if (!companiesWithStatusInfo)
         next(new Error("No companies found"));
     const companiesWithStatus = companiesWithStatusInfo.rows;
-    res
-        .status(200)
-        .json({ msg: "good companies with status", companiesWithStatus });
+    res.status(200).json({ companiesWithStatus });
     next();
 }));
 exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -64,7 +62,7 @@ exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __a
     ]);
     if (!newCompany)
         next(new Error("Failed to create company"));
-    res.status(200).json({ msg: "Company successfully created", newCompany });
+    res.status(200).json({ newCompany });
     next();
 }));
 exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -75,8 +73,8 @@ exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
     const { name, link, location, jobType, description, status, interest } = companyObj;
     const updatingCompany = yield postgres_1.default.query("UPDATE company SET name = $1,link = $2,location = $3,jobType = $4,description = $5,status = $6,interest = $7  WHERE company.company_id = $8", [name, link, location, jobType, description, status, interest, company_id]);
     if (!updatingCompany)
-        next(new Error("No company found"));
-    res.status(200).json({ msg: "Company updated" });
+        next(new Error("Failed to update company"));
+    res.status(200).json({ updatingCompany });
     next();
 }));
 exports.deleteCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -85,7 +83,7 @@ exports.deleteCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
         next(new Error("Invalid request"));
     const deletingCompany = yield postgres_1.default.query("SELECT * FROM company WHERE company.company_id = $1", [company_id]);
     if (!deletingCompany)
-        next(new Error("Company not found"));
-    res.status(200).json({ msg: "company deleted", deletingCompany });
+        next(new Error("Failed to delete company"));
+    res.status(200).json({ deletingCompany });
     next();
 }));
