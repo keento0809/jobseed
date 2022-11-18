@@ -21,8 +21,14 @@ const UserNav = (props: nav) => {
     ]
     return (
         <div className="user_nav">
-            <ul className="grid grid-cols-4 text-center font-bold">
-                {links.map(link => <button key={link.id} onClick={clickHandler}>{link.name}</button>)}
+            <ul className="grid grid-cols-4 text-center font-normal py-6 border-b-2">
+                {links.map(link =>
+                    <button
+                        key={link.id}
+                        onClick={clickHandler}
+                        className={props.showPage === link.name ? "font-bold" : ""}
+                    >{link.name}
+                    </button>)}
             </ul>
         </div>
     );
