@@ -1,59 +1,52 @@
-import React, {useState} from 'react';
-import {Calendar, dateFnsLocalizer, globalizeLocalizer} from "react-big-calendar";
-import format from "date-fns/format";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import DatePicker from "react-datepicker";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+import React from 'react';
+import FullCalendar, {EventClickArg} from "@fullcalendar/react"
+import dayGridPlugin from '@fullcalendar/daygrid'
+import listPlugin from '@fullcalendar/list';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin, {DateClickArg} from "@fullcalendar/interaction";
+import eventList from "../../data/events"
 
-const locales = {
-    "en-US": require("date-fns/locale/en-US/index")
-}
-
-const DnDCalendar = withDragAndDrop(Calendar);
-
-const localize = dateFnsLocalizer({
-    format,
-    parse,
-    startOfWeek,
-    getDay,
-    locales
-})
-
-const events = [
-    {
-        title: "Big day",
-        allDay: true,
-        start: new Date(2022, 11, 17, 12, 0, 0),
-        end:new Date(2022, 11, 18, 11, 0, 0)
-    }
-]
-
-
-
-const CalendarPage = () => {
-
-    const [newEvent, setNewEvent] = useState();
-    const [allEvents, setAllEvents] = useState(events);
-
-    const handleAddEvent = () => {
-        setAllEvents([...allEvents, newEvent!])
+const Calendar = () => {
+    const handleClick = (arg: EventClickArg) => {
+        console.log(arg)
     }
 
     return (
-        <div className="">
-            <Calendar
-                localizer={localize}
-                events={allEvents}
-                startAccessor="start"
-                endAccessor="end"
-                selectable
-                style={{height: "500px", margin: "50px", zIndex:"-100"}}
+        <div className="relative z-0 ">
+            <FullCalendar
+                locale={"en"}
+                plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                slotDuration="00:30:00"
+                weekends={true}
+                selectable={true}
+                allDayContent={true}
+                buttonIcons={false}
+                titleFormat={{
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                }}
+                headerToolbar={{
+                    left: "prev,next,today",
+                    center: "title",
+                    right: 'dayGridMonth,timeGridWeek,listWeek'
+                }}
+                businessHours={{
+                    daysOfWeek: [1, 2, 3, 4, 5],
+                    startTime: "0:00",
+                    endTime: "24:00",
+                }}
+                eventTimeFormat={{hour: "numeric", minute: "2-digit"}}
+                handleWindowResize={true}
+                eventClick={handleClick}
+                events={eventList}
             />
+            <div>
+
+            </div>
         </div>
     );
 };
 
-export default CalendarPage;
+export default Calendar;

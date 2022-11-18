@@ -16,8 +16,18 @@ const scheduleRoutes_1 = __importDefault(require("./routes/scheduleRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 8080;
+const corsOptions = {
+    origin: "http://localhost:3000",
+    credentials: true,
+};
 // middleware
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)(corsOptions));
+app.use(function (req, res, next) {
+    res.header("Content-Type", "application/json;charset=UTF-8");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());

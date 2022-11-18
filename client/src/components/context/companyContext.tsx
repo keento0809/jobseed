@@ -46,7 +46,7 @@ export const CompanyProvider = ({children}: Props) => {
         try {
             let res = await axios({
                 method: "get",
-                url: `http://localhost:8080/companies${seeker_id}`
+                url: `http://localhost:8080/companies/${seeker_id}`
             })
             setCompanies(res.data);
         } catch (err: any) {

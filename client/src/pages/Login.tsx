@@ -14,22 +14,26 @@ const Login = () => {
     const [cookies, setCookie, removeCookie] = useCookies();
     const navigate = useNavigate();
 
+    let axiosConfig = {
+        withCredentials : true
+    }
+
     const loginUser = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         console.log(email)
         try {
-            let res = await axios({
-                method: "post",
-                url: "http://localhost:8080/auth/login",
-                data: {email, password}
-            })
+            let res = await axios.post(
+                "http://localhost:8080/auth/login",
+                {email, password},
+                axiosConfig
+            )
             console.log(res)
+
+
         } catch (e: any) {
             console.log(e)
         }
     }
-
-
     useEffect(() => {
         function start () {
             gapi.client.init({

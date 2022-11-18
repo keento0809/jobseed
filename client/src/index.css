@@ -27,3 +27,15 @@
 .card-container {
     @apply grid my-4 md:grid-cols-2 gap-3
 }
+
+.fc  {
+    @apply w-[80%] h-[90%] mx-auto mt-12
+}
+
+.fc-toolbar-chunk {
+    @apply text-sm my-2
+}
+
+.fc-day {
+    @apply cursor-pointer
+}
