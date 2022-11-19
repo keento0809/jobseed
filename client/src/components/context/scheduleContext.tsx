@@ -1,22 +1,14 @@
-import React, {createContext, ReactNode, useState} from 'react';
+import React, {createContext, ReactNode, useContext, useState} from 'react';
 import axios from "axios";
+import {Schedule} from "../../types/Schedule";
 
 
 type Props = {
     children: ReactNode
 };
 
-export type Schedule = {
-    title: string;
-    date: string;
-    allDay: boolean;
-    start?: string;
-    end?: string;
-    backendColor?: string;
-    description: string;
-}
-
 type scheduleContext = {
+    events: Schedule[],
     getSchedule: (id: string) => void,
     createSchedule: (schedule: Schedule) => void,
     editSchedule: (id: string, data: Schedule) => void,
@@ -25,7 +17,12 @@ type scheduleContext = {
 
 const scheduleContext = createContext({} as scheduleContext);
 
-export const useScheduleContext = ({children}: Props) => {
+export const useScheduleContext = () => {
+    return useContext(scheduleContext)
+}
+
+export const ScheduleProvider = ({children}: Props) => {
+
     const [events, setEvents] = useState<Schedule[]>([]);
 
     const getSchedule = async (seeker_id: string) => {
@@ -67,7 +64,7 @@ export const useScheduleContext = ({children}: Props) => {
     }
 
     return(
-        <scheduleContext.Provider value={{getSchedule, createSchedule, editSchedule,deleteSchedule}}>
+        <scheduleContext.Provider value={{events,getSchedule, createSchedule, editSchedule,deleteSchedule}}>
             {children}
         </scheduleContext.Provider>
     )

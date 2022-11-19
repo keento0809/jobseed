@@ -4,17 +4,9 @@ import {AiOutlineLink} from "react-icons/ai";
 import {IoMdCreate} from "react-icons/io";
 import{ BsCalendarPlus} from "react-icons/bs"
 import ScheduleModal from "../../../pages/user/ScheduleModal";
+import {Company} from "../../../types/Company";
 
-type status = "Interested" | "Applied" | "Interview" | "Rejected"
-
-interface Company {
-    name: string,
-    position: string,
-    currentStatus: status,
-    link?: string
-}
-
-const CompanyCard = ({name, position, currentStatus, link}: Company) => {
+const CompanyCard = ({name, jobTitle, status, link}: Company) => {
     const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false)
     const scheduleModalHandler = (e:React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
@@ -26,10 +18,10 @@ const CompanyCard = ({name, position, currentStatus, link}: Company) => {
             <div className="card-left flex flex-wrap flex-col justify-between">
                 <div>
                     <h3 className="font-bold">{name}</h3>
-                    <h2 className="font-thin">{position}</h2>
+                    <h2 className="font-thin">{jobTitle}</h2>
                 </div>
                 <div className="flex items-center cursor-pointer mt-6">
-                    <h2 className="bg-slate-300 px-4 rounded-md">{currentStatus}</h2>
+                    <h2 className="bg-slate-300 px-4 rounded-md">{status}</h2>
                 </div>
             </div>
             <ul className="">
@@ -38,7 +30,7 @@ const CompanyCard = ({name, position, currentStatus, link}: Company) => {
                 <li className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer">< IoMdCreate /></li>
                 <li className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer" onClick={scheduleModalHandler}>< BsCalendarPlus /></li>
             </ul>
-            {showScheduleModal && <ScheduleModal showScheduleModal = {showScheduleModal} setShowScheduleModal={setShowScheduleModal}/>}
+            { showScheduleModal && <ScheduleModal showScheduleModal = {showScheduleModal} setShowScheduleModal={setShowScheduleModal}/>}
         </div>
     );
 };

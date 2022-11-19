@@ -1,29 +1,10 @@
 import {createContext, ReactNode, useContext, useState} from "react";
 import axios from "axios";
+import {Company} from "../../types/Company";
 
 type Props = {
     children: ReactNode
 };
-
-enum Status {
-    interested,
-    applied,
-    interview,
-    rejected
-}
-
-export type Company = {
-    company_id: string;
-    name: string;
-    size: string;
-    link: string;
-    location: string;
-    jobType: string;
-    salary: string;
-    description: string;
-    status: Status;
-    interest: number;
-}
 
 type companyContext = {
     companies: Company[] | null,

@@ -44,9 +44,7 @@ const Login = () => {
     }, [])
 
     const OnSuccess = (res: any) => {
-        console.log("Successfully logged in", res.accessToken);
         setCookie("JWT_TOKEN", res.accessToken);
-        // GLogin()
         navigate("/user", { replace: true });
     }
 
