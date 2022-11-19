@@ -9,7 +9,7 @@ type CustomTextField = {
 const TextFieldLg = ({name, value, onChange} : CustomTextField) => {
 
     return (
-        <label className="block text-gray-700 mt-6 text-sm font-light mb-2" htmlFor={name}>
+        <label className="block text-gray-700 mt-2 text-sm font-semibold mb-2" htmlFor={name}>
             {name}
             <textarea
                 name={name}
