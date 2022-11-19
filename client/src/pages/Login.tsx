@@ -5,6 +5,7 @@ import {GoogleLogin} from "react-google-login";
 import {gapi} from "gapi-script";
 import {useCookies} from "react-cookie";
 import {Navigate, useNavigate} from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
 
@@ -13,6 +14,26 @@ const Login = () => {
     const [cookies, setCookie, removeCookie] = useCookies();
     const navigate = useNavigate();
 
+    let axiosConfig = {
+        withCredentials : true
+    }
+
+    const loginUser = async (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        console.log(email)
+        try {
+            let res = await axios.post(
+                "http://localhost:8080/auth/login",
+                {email, password},
+                axiosConfig
+            )
+            console.log(res)
+
+
+        } catch (e: any) {
+            console.log(e)
+        }
+    }
     useEffect(() => {
         function start () {
             gapi.client.init({
@@ -23,9 +44,7 @@ const Login = () => {
     }, [])
 
     const OnSuccess = (res: any) => {
-        console.log("Successfully logged in", res.accessToken);
         setCookie("JWT_TOKEN", res.accessToken);
-        // GLogin()
         navigate("/user", { replace: true });
     }
 
@@ -57,6 +76,7 @@ const Login = () => {
                             bg_color={"bg-content-blue"}
                             className={"mt-8"}
                             width={"w-full"}
+                            onClick={loginUser}
                         />
                     </form>
                     <div id="signInButton" className="">
@@ -72,7 +92,6 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-
         </section>
     );
 };

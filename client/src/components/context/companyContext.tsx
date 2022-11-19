@@ -1,29 +1,10 @@
 import {createContext, ReactNode, useContext, useState} from "react";
 import axios from "axios";
+import {Company} from "../../types/Company";
 
 type Props = {
     children: ReactNode
 };
-
-enum Status {
-    interested,
-    applied,
-    interview,
-    rejected
-}
-
-export type Company = {
-    company_id: string;
-    name: string;
-    size: string;
-    link: string;
-    location: string;
-    jobType: string;
-    salary: string;
-    description: string;
-    status: Status;
-    interest: number;
-}
 
 type companyContext = {
     companies: Company[] | null,
@@ -46,7 +27,7 @@ export const CompanyProvider = ({children}: Props) => {
         try {
             let res = await axios({
                 method: "get",
-                url: `http://localhost:8080/companies${seeker_id}`
+                url: `http://localhost:8080/companies/${seeker_id}`
             })
             setCompanies(res.data);
         } catch (err: any) {
