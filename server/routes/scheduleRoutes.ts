@@ -26,9 +26,11 @@ scheduleRouter
 scheduleRouter.route("/new").post(authorization, createSchedule); // add a new schedule
 // scheduleRouter.route("/other").get(() => {}); // get a seeker's schedules sorted by other
 scheduleRouter
-  .route("/:seeker_id")
-  .get(authorization, getSchedules)
-  .put(authorization, updateSchedule)
+  .route("/allSchedules/:seeker_id")
+  .get(authorization, getSchedules);
+scheduleRouter
+  .route("/allSchedules/:seeker_id/:schedule_id")
+  .patch(authorization, updateSchedule)
   .delete(authorization, deleteSchedule);
 
 scheduleRouter
