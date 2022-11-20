@@ -66,10 +66,10 @@ export const signupSeeker = catchAsync(
     // create token
     const token = await createToken(newSeeker.rows[0].seeker_id);
     res
-      .cookie("access_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-      })
+      // .cookie("access_token", token, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === "production",
+      // })
       .status(200)
       .json({ msg: "good signup", token, newSeeker });
     next();

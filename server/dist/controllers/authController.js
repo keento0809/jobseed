@@ -69,10 +69,10 @@ exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __await
     // create token
     const token = yield createToken(newSeeker.rows[0].seeker_id);
     res
-        .cookie("access_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-    })
+        // .cookie("access_token", token, {
+        //   httpOnly: true,
+        //   secure: process.env.NODE_ENV === "production",
+        // })
         .status(200)
         .json({ msg: "good signup", token, newSeeker });
     next();
