@@ -65,7 +65,7 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
             <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="location">
                 location
                 <input
-                    className="font-thin shadow appearance-none border rounded w-half py-2 px-3 mt-2 text-gray-700 leading-tight block focus:outline-none focus:shadow-outline"
+                    className="font-thin shadow appearance-none border rounded w-full py-2 px-3 mt-2 text-gray-700 leading-tight block focus:outline-none focus:shadow-outline"
                     value={value}
                     onChange={handleInput}
                     disabled={!ready}

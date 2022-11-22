@@ -1,6 +1,7 @@
 import {createContext, ReactNode, useContext, useState} from "react";
 import axios from "axios";
 import {Company} from "../../types/Company";
+import Companies_data from "../../data/Companies_data";
 
 type Props = {
     children: ReactNode
@@ -9,6 +10,7 @@ type Props = {
 type companyContext = {
     companies: Company[] | null,
     getCompanies: (id: string) => void,
+    getCompaniesByStatus:(seeker_id: string, status: string) => void,
     createCompany: (data: Company) => void,
     editCompany: (id: string, data: Company) => void,
     deleteCompany: (id: string) => void
@@ -21,13 +23,25 @@ export const useCompanyContext = () => {
 }
 
 export const CompanyProvider = ({children}: Props) => {
-    const [companies, setCompanies] = useState<Company[] | null>([]);
+    const [companies, setCompanies] = useState<Company[] | null>(Companies_data);
 
     const getCompanies = async (seeker_id: string) => {
         try {
             let res = await axios({
                 method: "get",
                 url: `http://localhost:8080/companies/${seeker_id}`
+            })
+            setCompanies(res.data);
+        } catch (err: any) {
+            console.log(err.message)
+        }
+    }
+
+    const getCompaniesByStatus = async (seeker_id: string, status: string) => {
+        try {
+            let res = await axios({
+                method: "get",
+                url: `http://localhost:8080/companies/${seeker_id}/${status}`
             })
             setCompanies(res.data);
         } catch (err: any) {
@@ -72,7 +86,7 @@ export const CompanyProvider = ({children}: Props) => {
     }
 
     return (
-        <companyContext.Provider value={{companies, getCompanies, createCompany, editCompany, deleteCompany}}>
+        <companyContext.Provider value={{companies, getCompanies, getCompaniesByStatus,createCompany, editCompany, deleteCompany}}>
             {children}
         </companyContext.Provider>
     )

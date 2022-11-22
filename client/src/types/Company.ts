@@ -9,7 +9,6 @@ export enum Status {
 export type Company = {
     company_id: string;
     name: string;
-    size: string;
     link: string;
     location?: Object ;
     jobTitle: string;

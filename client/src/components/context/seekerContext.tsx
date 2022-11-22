@@ -1,5 +1,6 @@
 import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useState} from "react";
 import {Seeker} from "../../types/Seeker";
+import Seeker1 from "../../data/Seeker"
 
 type Props = {
     children: ReactNode
@@ -17,7 +18,7 @@ export const useSeekerContext = () => {
 }
 
 export const SeekerProvider = ({children} :Props) => {
-    const [seeker, setSeeker] = useState<Seeker | undefined>();
+    const [seeker, setSeeker] = useState<Seeker | undefined>(Seeker1);
     return(
         <seekerContext.Provider value={{seeker, setSeeker}}>
             {children}

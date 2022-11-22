@@ -1,9 +1,8 @@
 export type Schedule = {
     title: string;
-    date: string;
-    allDay: boolean;
-    start?: Date|null;
-    end?: string;
+    date: {startDate?: string, startTime?: string};
+    timeInclude: boolean;
+    endDate: {endDate?: string, endTime?: string};
     backendColor?: string;
-    description: string;
+    description?: string;
 }

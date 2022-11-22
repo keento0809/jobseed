@@ -12,7 +12,7 @@ const Calendar = () => {
     }
 
     return (
-        <div className="relative z-0 ">
+        <div className="relative z-0 h-screen">
             <FullCalendar
                 locale={"en"}
                 plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}

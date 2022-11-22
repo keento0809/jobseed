@@ -15,12 +15,10 @@ type modalProps = {
 
 const CompanyModal = ({showModal, setShowModal}: modalProps) => {
     const {createCompany} = useCompanyContext();
-    const [showDropDown, setShowDropDown] = useState<boolean>(false);
     const [location, setLocation] = useState<{}>()
     const [companyData, setCompanyData] = useState<Company>({
         company_id: "",
         name: "",
-        size: "1-10",
         link: "",
         location,
         jobTitle: "",
@@ -90,27 +88,17 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                         placeholder={"salary"}
                         onChange={companyDataHandler}
                     />
-                    <div>
-                        <InputField
-                            type={"text"}
-                            title={"company size"}
-                            name={"size"}
-                            value={companyData.size}
-                            placeholder={"company size"}
-                            onChange={companyDataHandler}
-                        />
-                    </div>
+                    <GooglePlace
+                        location={location}
+                        companyData={companyData}
+                        setLocation={setLocation}
+                        setCompanyData = {setCompanyData}
+
+                    />
                 </div>
                 <Text_field_lg
                     name={"description"}
                     onChange={companyDataHandler}
-                />
-                <GooglePlace
-                    location={location}
-                    companyData={companyData}
-                    setLocation={setLocation}
-                    setCompanyData = {setCompanyData}
-
                 />
                 <div className="flex justify-end gap-2 mt-4">
                     <Button_sm
