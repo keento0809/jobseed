@@ -68,7 +68,7 @@ const CompanyCard = ({name, jobTitle, status, link, company_id, description, loc
                     onClick={()=> setShowStatusDropDown(!showStatusDropDown)}
                 >
                     <h2
-                        className="bg-slate-300 px-4 rounded-md"
+                        className="bg-slate-300 px-4 rounded-md z-0"
                     >
                         {getStatus(status)}
                     </h2>
