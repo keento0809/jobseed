@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Button_sm from "../../components/models/Button_sm";
 import Text_field_lg from "../../components/models/Text_field_lg";
 import InputField from "../../components/models/InputField";
@@ -9,33 +9,38 @@ import GooglePlace from "../../components/features/user/GooglePlace";
 
 
 type modalProps = {
-    showModal: boolean;
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    name: string,
+    jobTitle: string,
+    link: string,
+    description: string,
+    company_id: string,
+    location: marker
 }
 
-const CompanyModal = ({showModal, setShowModal}: modalProps) => {
-    const {createCompany} = useCompanyContext();
-    const [location, setLocation] = useState<marker>({lat: 49.246292, lng: -123.116226})
-    const [companyData, setCompanyData] = useState<Company>({
-        company_id: "",
-        name: "",
-        link: "",
-        location,
-        jobTitle: "",
+const CompanyEditModal = ({setShowModal, name,jobTitle,link,description,company_id,location}: modalProps) => {
+
+    const [searchPlace, setSearchPlace] = useState<marker>(location)
+
+    const [editCompanyData, setEditCompanyData] = useState<Company>({
+        company_id: company_id,
+        name: name,
+        link: link,
+        location: searchPlace,
+        jobTitle: jobTitle,
         salary: "",
-        description: "",
+        description: description,
         status: 0,
         interest: 0
     })
 
     const companyDataHandler = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setCompanyData({...companyData, [e.target.name]: e.target.value});
+        setEditCompanyData({...editCompanyData, [e.target.name]: e.target.value});
     }
 
-    const sendCompany = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const sendEditData = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        // createCompany(companyData)
-        console.log(companyData)
+        console.log(editCompanyData)
         setShowModal(false)
     }
 
@@ -44,14 +49,14 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
             <div className="modal-container wrapper py-6">
                 <div className="flex items-center">
                     <BsBuilding size={20} className="mr-4"/>
-                    <h1 className="text-lg font-bold">Add company</h1>
+                    <h1 className="text-lg font-bold">Edit company</h1>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mt-8">
                     <InputField
                         type={"text"}
                         title={"company name"}
                         name={"name"}
-                        value={companyData.name}
+                        value={editCompanyData.name}
                         placeholder={"company name"}
                         onChange={companyDataHandler}
                     />
@@ -60,17 +65,18 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                             type={"text"}
                             title={"job title"}
                             name={"jobTitle"}
-                            value={companyData.jobTitle}
+                            value={editCompanyData.jobTitle}
                             placeholder={"job title"}
                             onChange={companyDataHandler}
                         />
+
                     </div>
                 </div>
                 <InputField
                     type={"text"}
                     title={"job post link"}
                     name={"link"}
-                    value={companyData.link}
+                    value={editCompanyData.link}
                     placeholder={"job post link"}
                     onChange={companyDataHandler}
                 />
@@ -80,20 +86,21 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                         type={"text"}
                         title={"salary"}
                         name={"salary"}
-                        value={companyData.salary}
+                        value={editCompanyData.salary}
                         placeholder={"salary"}
                         onChange={companyDataHandler}
                     />
                     <GooglePlace
-                        location={location!}
-                        companyData={companyData}
-                        setLocation={setLocation}
-                        setCompanyData = {setCompanyData}
+                        location={searchPlace}
+                        companyData={editCompanyData}
+                        setLocation={setSearchPlace}
+                        setCompanyData={setEditCompanyData}
                     />
                 </div>
                 <Text_field_lg
                     name={"description"}
                     onChange={companyDataHandler}
+                    value={editCompanyData.description}
                 />
                 <div className="flex justify-end gap-2 mt-4">
                     <Button_sm
@@ -101,7 +108,7 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                         color={"text-white"}
                         bg_color={"bg-content-blue"}
                         width={"w-24"}
-                        onClick={sendCompany}
+                        onClick={sendEditData}
                     />
                     <Button_sm
                         title={"close"}
@@ -117,4 +124,4 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
     );
 };
 
-export default CompanyModal;
+export default CompanyEditModal;
