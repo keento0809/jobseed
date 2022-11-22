@@ -1,19 +1,20 @@
-import React, {Dispatch, SetStateAction, useEffect, useRef} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from 'react';
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng,
 } from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
-import {Company, marker} from "../../../types/Company";
+import {Company, Location} from "../../../types/Company";
 
 type locationProps = {
-    location: marker
+    location: Location;
     companyData: Company;
-    setLocation: Dispatch<SetStateAction<marker>>;
+    setLocation: Dispatch<SetStateAction<Location>>;
     setCompanyData: React.Dispatch<React.SetStateAction<Company>>;
 }
 
 const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locationProps) => {
+
     const {
         ready,
         value,
@@ -40,8 +41,9 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
                 clearSuggestions();
                 getGeocode({address: description}).then((results) => {
                     const {lat, lng} = getLatLng(results[0]);
-                    setLocation({...location, [lat]: lat, [lng]: lng})
+                    setLocation({lat, lng})
                     setCompanyData({...companyData, location});
+                    console.log("📍 Coordinates: ", { lat, lng });
                 });
             };
     const renderSuggestions = () =>
@@ -52,7 +54,11 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
             } = suggestion;
 
             return (
-                <li key={place_id} onClick={handleSelect(suggestion)}>
+                <li
+                    key={place_id}
+                    onClick={handleSelect(suggestion)}
+                    className="py-2 px-3"
+                >
                     <strong>{main_text}</strong> <small>{secondary_text}</small>
                 </li>
             );
@@ -60,10 +66,10 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
 
     return (
         <div ref={ref} className="">
-            <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="location">
+            <label className="block text-gray-700 text-sm font-medium mb-2 relative" htmlFor="location">
                 location
                 <input
-                    className="font-thin shadow appearance-none border rounded w-full py-2 px-3 mt-2 text-gray-700 leading-tight block focus:outline-none focus:shadow-outline"
+                    className=" font-thin shadow appearance-none border rounded w-full py-2 px-3 mt-2 text-gray-700 leading-tight block focus:outline-none focus:shadow-outline"
                     value={value}
                     onChange={handleInput}
                     disabled={!ready}
@@ -71,7 +77,7 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
                     name="location"
                 />
                 {/* We can use the "status" to decide whether we should display the dropdown or not */}
-                {status === "OK" && <ul className="font-thin">{renderSuggestions()}</ul>}
+                {status === "OK" && <ul className="font-thin absolute top-[-10] bg-sky-50">{renderSuggestions()}</ul>}
             </label>
         </div>
     );

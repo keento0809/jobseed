@@ -4,7 +4,7 @@ import Text_field_lg from "../../components/models/Text_field_lg";
 import InputField from "../../components/models/InputField";
 import {BsBuilding} from "react-icons/bs"
 import {useCompanyContext} from "../../components/context/companyContext";
-import {Company, marker} from "../../types/Company";
+import {Company, Location} from "../../types/Company";
 import GooglePlace from "../../components/features/user/GooglePlace";
 
 
@@ -15,7 +15,7 @@ type modalProps = {
 
 const CompanyModal = ({showModal, setShowModal}: modalProps) => {
     const {createCompany} = useCompanyContext();
-    const [location, setLocation] = useState<marker>({lat: 49.246292, lng: -123.116226})
+    const [location, setLocation] = useState<Location>({lat: 49.246292, lng: -123.116226})
     const [companyData, setCompanyData] = useState<Company>({
         company_id: "",
         name: "",
@@ -40,7 +40,7 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
     }
 
     return (
-        <div className="bg-modal">
+        <div className="bg-modal relative z-[1001]">
             <div className="modal-container wrapper py-6">
                 <div className="flex items-center">
                     <BsBuilding size={20} className="mr-4"/>
@@ -85,7 +85,7 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                         onChange={companyDataHandler}
                     />
                     <GooglePlace
-                        location={location!}
+                        location={companyData.location}
                         companyData={companyData}
                         setLocation={setLocation}
                         setCompanyData = {setCompanyData}

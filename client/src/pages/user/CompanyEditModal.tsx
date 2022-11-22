@@ -4,7 +4,7 @@ import Text_field_lg from "../../components/models/Text_field_lg";
 import InputField from "../../components/models/InputField";
 import {BsBuilding} from "react-icons/bs"
 import {useCompanyContext} from "../../components/context/companyContext";
-import {Company, marker} from "../../types/Company";
+import {Company, Location} from "../../types/Company";
 import GooglePlace from "../../components/features/user/GooglePlace";
 
 
@@ -15,12 +15,12 @@ type modalProps = {
     link: string,
     description: string,
     company_id: string,
-    location: marker
+    location: Location
 }
 
 const CompanyEditModal = ({setShowModal, name,jobTitle,link,description,company_id,location}: modalProps) => {
 
-    const [searchPlace, setSearchPlace] = useState<marker>(location)
+    const [searchPlace, setSearchPlace] = useState<Location>(location)
 
     const [editCompanyData, setEditCompanyData] = useState<Company>({
         company_id: company_id,
@@ -45,7 +45,7 @@ const CompanyEditModal = ({setShowModal, name,jobTitle,link,description,company_
     }
 
     return (
-        <div className="bg-modal">
+        <div className="bg-modal relative z-[1001]">
             <div className="modal-container wrapper py-6">
                 <div className="flex items-center">
                     <BsBuilding size={20} className="mr-4"/>

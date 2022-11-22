@@ -48,7 +48,7 @@ const ScheduleModal = ({setShowScheduleModal}: Props) => {
     }
 
     return (
-        <div className="bg-modal">
+        <div className="bg-modal relative z-[1001]">
             <div className="modal-container wrapper py-6">
                 <div className="flex items-center">
                     <SlCalender size={20} className="mr-4"/>

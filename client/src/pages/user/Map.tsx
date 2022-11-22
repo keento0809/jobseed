@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {LoadScript, GoogleMap, Marker} from "@react-google-maps/api";
 import {useCompanyContext} from "../../components/context/companyContext";
+import {Location} from "../../types/Company";
 
 const CompanyMap = () => {
 
@@ -13,13 +14,8 @@ const CompanyMap = () => {
         lat: 49.246292, lng: -123.116226
     }
 
-    type marker = {
-        lat: number,
-        lng: number
-    }
-
     const { companies } = useCompanyContext();
-    const [ markers, setMakers ] = useState< Array<marker> | undefined>([defaultCenter])
+    const [ markers, setMakers ] = useState< Array<Location> | undefined>([defaultCenter])
 
     useEffect(() => {
         companies?.map(company => {
