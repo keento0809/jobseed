@@ -17,7 +17,7 @@ const Header: FC = () => {
     }
 
     return (
-        <header className="h-24 border-b shadow-md wrapper flex justify-between items-center">
+        <header className="h-24 border-b shadow-md wrapper flex justify-between items-center relative z-[1000]">
             {cookie.JWT_TOKEN ?
                 <Link to={"/user"} className="block">< AiOutlineRocket size="30"/></Link> :
                 <Link to={"/"} className="block">< AiOutlineRocket size="30"/></Link>
@@ -32,7 +32,7 @@ const Header: FC = () => {
                         <span className="block w-4 h-0.5 bg-gray-600"></span>
                         <span className="block w-4 h-0.5 bg-gray-600"></span>
                     </nav>
-                    <nav className="hidden md:block h-full">
+                    <nav className="hidden md:block h-full ">
                         <ul className="flex h-full">
                             <Link to="/user"
                                   className="block h-full w-32 flex justify-center items-center group relative">

@@ -6,11 +6,16 @@ export enum Status {
     rejected
 }
 
+export type marker = {
+    lat: number,
+    lng: number
+}
+
 export type Company = {
     company_id: string;
     name: string;
     link: string;
-    location?: Object ;
+    location: marker;
     jobTitle: string;
     salary: string;
     description: string;

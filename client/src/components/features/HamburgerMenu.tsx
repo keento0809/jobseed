@@ -67,8 +67,8 @@ const HamburgerMenu = ({isOpen, setMenuOpen}: Props) => {
 
     return (
         <div
-            className={`transition-all ease-linear top-0 left-0 fixed w-screen h-screen bg-content-blue text-white z-100 ${isOpen ? "translate-x-[0vw]" : "translate-x-[100vw]"}`}>
-            <div className="flex justify-start py-10 pl-8 relative z-100">
+            className={`transition-all ease-linear top-0 left-0 fixed w-screen h-screen bg-content-blue text-white ${isOpen ? "translate-x-[0vw]" : "translate-x-[100vw]"}`}>
+            <div className="flex justify-start py-10 pl-8 ">
                 <div
                     className="absolute right-8 cursor-pointer"
                     onClick={() => setMenuOpen(false)}

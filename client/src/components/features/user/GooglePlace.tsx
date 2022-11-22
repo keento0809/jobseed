@@ -4,12 +4,12 @@ import usePlacesAutocomplete, {
     getLatLng,
 } from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
-import {Company} from "../../../types/Company";
+import {Company, marker} from "../../../types/Company";
 
 type locationProps = {
-    location?: {}
+    location: marker
     companyData: Company;
-    setLocation: Dispatch<SetStateAction<{} | undefined>>;
+    setLocation: Dispatch<SetStateAction<marker>>;
     setCompanyData: React.Dispatch<React.SetStateAction<Company>>;
 }
 
@@ -33,7 +33,6 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
         setValue(e.currentTarget.value);
     };
 
-
     const handleSelect =
         ({description}: { description: string }) =>
             () => {
@@ -41,9 +40,8 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
                 clearSuggestions();
                 getGeocode({address: description}).then((results) => {
                     const {lat, lng} = getLatLng(results[0]);
-                    setLocation({lat, lng})
+                    setLocation({...location, [lat]: lat, [lng]: lng})
                     setCompanyData({...companyData, location});
-                    console.log(companyData)
                 });
             };
     const renderSuggestions = () =>
@@ -70,6 +68,7 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
                     onChange={handleInput}
                     disabled={!ready}
                     placeholder="location"
+                    name="location"
                 />
                 {/* We can use the "status" to decide whether we should display the dropdown or not */}
                 {status === "OK" && <ul className="font-thin">{renderSuggestions()}</ul>}
