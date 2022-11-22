@@ -13,6 +13,19 @@ const CompanyCard = ({name, jobTitle, status, link}: Company) => {
         showScheduleModal === true ? setShowScheduleModal(false) : setShowScheduleModal(true)
     }
 
+    const getStatus = (status: number) => {
+        switch (status) {
+            case 0:
+                return "Interested"
+            case 1:
+                return "Applied"
+            case 2:
+                return "Interview"
+            case 3:
+                return "Rejected"
+        }
+    }
+
     return (
         <div className="flex rounded-md w-full justify-between border p-6">
             <div className="card-left flex flex-wrap flex-col justify-between">
@@ -21,7 +34,7 @@ const CompanyCard = ({name, jobTitle, status, link}: Company) => {
                     <h2 className="font-thin">{jobTitle}</h2>
                 </div>
                 <div className="flex items-center cursor-pointer mt-6">
-                    <h2 className="bg-slate-300 px-4 rounded-md">{status}</h2>
+                    <h2 className="bg-slate-300 px-4 rounded-md">{getStatus(status)}</h2>
                 </div>
             </div>
             <ul className="">
@@ -30,7 +43,7 @@ const CompanyCard = ({name, jobTitle, status, link}: Company) => {
                 <li className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer">< IoMdCreate /></li>
                 <li className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer" onClick={scheduleModalHandler}>< BsCalendarPlus /></li>
             </ul>
-            { showScheduleModal && <ScheduleModal showScheduleModal = {showScheduleModal} setShowScheduleModal={setShowScheduleModal}/>}
+            { showScheduleModal && <ScheduleModal setShowScheduleModal={setShowScheduleModal}/>}
         </div>
     );
 };

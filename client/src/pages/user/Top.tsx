@@ -9,20 +9,28 @@ import human from "../../images/human.png";
 import Button_sm from "../../components/models/Button_sm";
 import CompanyModal from "./CompanyModal";
 import Search from "../../components/models/Search";
+import {useCompanyContext} from "../../components/context/companyContext";
+import {useSeekerContext} from "../../components/context/seekerContext";
 
 const TopPage = () => {
     const [showPage, setShowPage] = useState<string>("interested")
     const [showModal, setShowModal] = useState<boolean>(false);
+    const { getCompaniesByStatus } = useCompanyContext();
+    const { seeker } = useSeekerContext()
 
     const pageRender = (showPage: string) => {
         switch (showPage) {
             case "interested":
+                // getCompaniesByStatus(seeker!.seeker_id, "Interested")
                 return < Interested/>
             case "applied":
+                // getCompaniesByStatus(seeker!.seeker_id, "Applied")
                 return < Applied/>
             case "interview":
+                // getCompaniesByStatus(seeker!.seeker_id, "Interview")
                 return < Interview/>
             case "rejected":
+                // getCompaniesByStatus(seeker!.seeker_id, "Rejected")
                 return < Rejected/>
         }
     }
