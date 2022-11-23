@@ -28,8 +28,6 @@ const Login = () => {
                 axiosConfig
             )
             console.log(res)
-
-
         } catch (e: any) {
             console.log(e)
         }

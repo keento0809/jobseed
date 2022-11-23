@@ -93,7 +93,7 @@ const CompanyCard = ({name, jobTitle, status, link, company_id, description, loc
                     jobTitle={jobTitle}
                     link={link}
                     description={description}
-                    company_id={company_id}
+                    company_id={company_id!}
                     location={location}
                 />}
         </div>

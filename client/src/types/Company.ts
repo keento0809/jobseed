@@ -12,7 +12,7 @@ export type Location = {
 }
 
 export type Company = {
-    company_id: string;
+    company_id?: string;
     name: string;
     link: string;
     location: Location;

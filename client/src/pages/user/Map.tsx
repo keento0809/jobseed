@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {LoadScript, GoogleMap, Marker} from "@react-google-maps/api";
+import React from 'react';
+import { GoogleMap, Marker} from "@react-google-maps/api";
+import {useJsApiLoader} from "@react-google-maps/api";
 import {useCompanyContext} from "../../components/context/companyContext";
-import {Location} from "../../types/Company";
 
 const CompanyMap = () => {
-
+    /**
+     * TODO: Loading Page / 404 Page
+     *
+     */
     const mapStyles = {
         height: "100%",
         width: "100%"
@@ -13,32 +16,28 @@ const CompanyMap = () => {
     const defaultCenter = {
         lat: 49.246292, lng: -123.116226
     }
+    const {isLoaded} = useJsApiLoader({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_APIKEY!
+    })
 
-    const { companies } = useCompanyContext();
-    const [ markers, setMakers ] = useState< Array<Location> | undefined>([defaultCenter])
+    const {companies} = useCompanyContext();
 
-    useEffect(() => {
-        companies?.map(company => {
-            setMakers([...markers!, company.location])
-        })
-    }, [companies])
+    const renderMap = () => (
+        <GoogleMap
+            mapContainerStyle={mapStyles}
+            zoom={13}
+            center={defaultCenter}
+        >
+            {
+                companies?.map(company => <Marker key={company.company_id} position={company.location}/>)
+            }
+        </GoogleMap>)
 
     return (
-        <div className="wrapper relative my-6 z-5" style={{ height: '80vh', width: '100%'}}>
-            <LoadScript
-                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_APIKEY!}
-            >
-                <GoogleMap
-                    mapContainerStyle={mapStyles}
-                    zoom={13}
-                    center={defaultCenter}
-                >
-                </GoogleMap>
-            </LoadScript>
+        <div className="wrapper relative my-6 z-5" style={{height: '80vh', width: '100%'}}>
+            {isLoaded ? renderMap() : <h1>Loading...</h1>}
         </div>
     );
 };
-
-CompanyMap.defaltProps = {}
 
 export default CompanyMap;
