@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { catchAsync } from "../helpers/middlewares";
 import pool from "../db/postgres";
+import multer from "multer";
+import sharp from "sharp";
+import { uploadFile } from "../s3";
 
 export const getSeekerInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -35,10 +38,62 @@ export const updateSeekerInfo = catchAsync(
 
 export const addAvatar = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { avatar } = req.body;
-    if (!avatar) next(new Error("No avatar attached"));
+    const { seeker_id } = req.params;
+    const file = req.file;
+    const caption = req.body.caption;
+    if (!file || !caption) next(new Error("No avatar attached"));
     // Need to add functions sending avatar to S3
-    res.status(200).json({ msg: "Good avatar" });
+    const fileBuffer = sharp(file?.buffer)
+      .resize({ height: 1920, width: 1080, fit: "contain" })
+      .toBuffer();
+    const result = await uploadFile(fileBuffer, caption, file?.mimetype);
+    // add data to DB
+    const updatingSeekerData = await pool.query(
+      "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2",
+      [caption, seeker_id]
+    );
+    const updatingSeeker = updatingSeekerData.rows[0];
+    res.status(200).json({ msg: "Good avatar", updatingSeeker });
     next();
   }
 );
+
+export const updateAvatar = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).json({ msg: "good updating avatar" });
+    next();
+  }
+);
+
+// Front side
+
+// const [file, setFile] = useState();
+// const [caption, setCaption] = useState("");
+
+// const handleSubmit = async (event) => {
+//   event.preventDefault();
+//   // Create form data
+//   const formData = new FormData();
+//   formData.append("image", file);
+//   formData.append("caption", caption);
+//   await axios.post("http://localhost:8080/seekers/avatar/:seeker_id", formData, {
+//     headers: { "Content-Type": "multipart/form-data" },
+//   });
+//   navigate("/")
+// };
+
+// const fileSelected = (event) => {
+//   const file = event.target.files[0];
+//   setFile(file);
+// };
+
+// <form onSubmit={handleSubmit}>
+//    <input onChange={fileSelected} type="file" accept="image/*"></input>
+//    <input
+//           value={caption}
+//           onChange={(e) => setCaption(e.target.value)}
+//           type="text"
+//           placeholder="Caption"
+//         ></input>
+//         <button type="submit">Submit</button>
+// </form>
