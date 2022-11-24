@@ -7,8 +7,6 @@ import seekerRoutes from "./routes/seekerRoutes";
 import authRoutes from "./routes/authRoutes";
 import calendarRoutes from "./routes/calendarRoutes";
 import scheduleRoutes from "./routes/scheduleRoutes";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client, bucketName } from "./s3";
 import multer from "multer";
 // import
 dotenv.config();
