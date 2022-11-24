@@ -2,10 +2,15 @@ import {createContext, ReactNode, useContext, useState} from "react";
 import axios from "axios";
 import {Company} from "../../types/Company";
 import Companies_data from "../../data/Companies_data";
+import {useCookies} from "react-cookie";
 
 type Props = {
     children: ReactNode
 };
+
+/**
+ * TODO: separate company data to show and get all companis
+ */
 
 type companyContext = {
     companies: Company[] | null,
@@ -24,6 +29,7 @@ export const useCompanyContext = () => {
 
 export const CompanyProvider = ({children}: Props) => {
     const [companies, setCompanies] = useState<Company[] | null>(Companies_data);
+    const [cookies] = useCookies();
 
     const getCompanies = async (seeker_id: string) => {
         try {
@@ -51,11 +57,17 @@ export const CompanyProvider = ({children}: Props) => {
 
     const createCompany = async (company: Company) => {
         try {
+            console.log(`Bearer ${cookies.JWT_TOKEN}`)
             let res = await axios({
                 method: "post",
                 url: "http://localhost:8080/companies/new",
-                data: company
+                data: company,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
             })
+            console.log(res)
             setCompanies([...companies!, res.data])
         } catch (err: any) {
             console.log(err.message);

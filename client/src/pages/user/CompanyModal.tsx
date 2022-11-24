@@ -16,8 +16,8 @@ type modalProps = {
 const CompanyModal = ({showModal, setShowModal}: modalProps) => {
     const {createCompany} = useCompanyContext();
     const [location, setLocation] = useState<Location>({lat: 49.246292, lng: -123.116226})
+    const [gmapLoaded, setGmapLoaded] = useState(false)
     const [companyData, setCompanyData] = useState<Company>({
-        company_id: "",
         name: "",
         link: "",
         location,
@@ -34,10 +34,11 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
 
     const sendCompany = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        // createCompany(companyData)
+        createCompany(companyData)
         console.log(companyData)
         setShowModal(false)
     }
+
 
     return (
         <div className="bg-modal relative z-[1001]">
