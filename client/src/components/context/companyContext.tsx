@@ -8,6 +8,9 @@ type Props = {
     children: ReactNode
 };
 
+/**
+ * TODO: separate company data to show and get all companis
+ */
 
 type companyContext = {
     companies: Company[] | null,
@@ -26,7 +29,7 @@ export const useCompanyContext = () => {
 
 export const CompanyProvider = ({children}: Props) => {
     const [companies, setCompanies] = useState<Company[] | null>(Companies_data);
-    const [cookies, setCookie, removeCookie] = useCookies();
+    const [cookies] = useCookies();
 
     const getCompanies = async (seeker_id: string) => {
         try {

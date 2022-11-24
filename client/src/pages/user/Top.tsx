@@ -22,7 +22,7 @@ const TopPage = () => {
         switch (showPage) {
             case "interested":
                 // getCompaniesByStatus(seeker!.seeker_id, "Interested")
-                return < Interested/>
+                return < Interested />
             case "applied":
                 // getCompaniesByStatus(seeker!.seeker_id, "Applied")
                 return < Applied/>

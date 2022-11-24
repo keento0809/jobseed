@@ -11,8 +11,8 @@ import Interested from "./components/features/user/Interested";
 import Applied from "./components/features/user/Applied";
 import Interview from "./components/features/user/Interview";
 import Rejected from "./components/features/user/Rejected";
-import ProtectRoutes from "./components/features/ProtectRoutes";
 import CompanyMap from "./pages/user/Map";
+import ProtectRoutes from "./components/features/ProtectRoutes";
 
 function App() {
     return (
