@@ -13,6 +13,7 @@ import Interview from "./components/features/user/Interview";
 import Rejected from "./components/features/user/Rejected";
 import CompanyMap from "./pages/user/Map";
 import ProtectRoutes from "./components/features/ProtectRoutes";
+import Documents from "./pages/user/Documents";
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                         </Route>
                         <Route path="/calendar" element={<Calendar/>}/>
                         <Route path="/map" element={<CompanyMap/>}/>
+                        <Route path="/documents" element={<Documents/>}/>
                     </Route>
             </Routes>
             <Footer/>

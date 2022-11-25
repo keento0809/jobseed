@@ -12,25 +12,19 @@ const seekerRoutes_1 = __importDefault(require("./routes/seekerRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const calendarRoutes_1 = __importDefault(require("./routes/calendarRoutes"));
 const scheduleRoutes_1 = __importDefault(require("./routes/scheduleRoutes"));
+const multer_1 = __importDefault(require("multer"));
 // import
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 8080;
+const storage = multer_1.default.memoryStorage();
+const upload = (0, multer_1.default)({ storage });
 const corsOptions = {
     origin: "http://localhost:3000",
     credentials: true,
 };
 // middleware
 app.use((0, cors_1.default)(corsOptions));
-// app.use(function (req: Request, res: Response, next: NextFunction) {
-//   res.header("Content-Type", "application/json;charset=UTF-8");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());

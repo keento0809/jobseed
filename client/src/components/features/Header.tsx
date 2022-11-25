@@ -61,7 +61,7 @@ const Header: FC = () => {
                                     className="absolute -bottom-1 left-0 w-0 h-2 bg-content-blue transition-all group-hover:w-full">
                             </span>
                             </Link>
-                            <Link to="/map"
+                            <Link to="/documents"
                                   className="block h-full w-32 flex justify-center items-center group relative">
                                 <li className="">Documentations</li>
                                 <span
