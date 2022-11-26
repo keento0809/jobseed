@@ -9,5 +9,33 @@
 }
 
 .wrapper {
-    @apply px-4 md:px-8 xl:px-28
+    @apply px-4 md:px-8 xl:px-28 2xl:px-40
+}
+
+.icon-fff path{
+    @apply stroke-white
+}
+
+.bg-modal {
+    @apply w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-modal-wrapper-color
+}
+
+.modal-container {
+    @apply w-[80%] h-[80%] bg-modal-bg-color rounded-lg
+}
+
+.card-container {
+    @apply grid my-4 md:grid-cols-2 gap-3
+}
+
+.fc  {
+    @apply w-[80%] h-[75%] mx-auto mt-6
+}
+
+.fc-toolbar-chunk {
+    @apply text-sm my-2
+}
+
+.fc-day {
+    @apply cursor-pointer
 }

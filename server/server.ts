@@ -1,21 +1,31 @@
 import express, { Express, Request, Response, NextFunction } from "express";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
-import pool from "./db/postgres";
 import companyRoutes from "./routes/companyRoutes";
 import seekerRoutes from "./routes/seekerRoutes";
 import authRoutes from "./routes/authRoutes";
 import calendarRoutes from "./routes/calendarRoutes";
 import scheduleRoutes from "./routes/scheduleRoutes";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client, bucketName } from "./s3";
+import multer from "multer";
+// import
 dotenv.config();
 
 const app: Express = express();
 const port = 8080;
-
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
 // middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/seekers", seekerRoutes);
 app.use("/companies", companyRoutes);

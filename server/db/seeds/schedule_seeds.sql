@@ -1,0 +1,1 @@
+INSERT INTO schedule(schedule_id,title,date,time,importance,memo,seeker_id,company_id) VALUES(1,'Phone interview','2022-12-01','AM 10:00',4,'Prepare the script',2,3);

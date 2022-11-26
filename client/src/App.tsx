@@ -1,20 +1,41 @@
-import React, {useEffect, useState} from 'react';
-import Header from "./components/models/Header";
-import Signup from "./components/non_user/main/Signup"
-import Login from "./components/non_user/main/Login";
-import Hero from "./components/non_user/main/Hero";
-import Footer from "./components/non_user/footer/Footer";
+import React from "react";
+import Header from "./components/features/Header";
+import {Outlet, Route, Routes} from "react-router-dom";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import Hero from "./pages/Hero";
+import Footer from "./components/features/Footer";
+import Calendar from "./pages/user/Calendar";
+import TopPage from "./pages/user/Top";
+import Interested from "./components/features/user/Interested";
+import Applied from "./components/features/user/Applied";
+import Interview from "./components/features/user/Interview";
+import Rejected from "./components/features/user/Rejected";
+import CompanyMap from "./pages/user/Map";
+import ProtectRoutes from "./components/features/ProtectRoutes";
+import Documents from "./pages/user/Documents";
 
 function App() {
-    const [loggedIn, setLoggedIn] = useState(false);
-
     return (
-        <div className="App font-Inter">
-            <Header />
-            {/*<Signup/>*/}
-            {/*< Login />*/}
-            {/*< Hero />*/}
-            {/*< Footer />*/}
+        <div className="App">
+            <Header/>
+            <Routes>
+                <Route path="/" element={<Hero/>}/>
+                <Route path="/signup" element={<Signup/>}/>
+                <Route path="/login" element={<Login/>}/>
+                    <Route element={<ProtectRoutes/>}>
+                        <Route path="/user" element={<><TopPage/><Outlet/></>}>
+                            <Route path="interested" element={<Interested/>}/>
+                            <Route path="applied" element={<Applied/>}/>
+                            <Route path="interview" element={<Interview/>}/>
+                            <Route path="rejected" element={<Rejected/>}/>
+                        </Route>
+                        <Route path="/calendar" element={<Calendar/>}/>
+                        <Route path="/map" element={<CompanyMap/>}/>
+                        <Route path="/documents" element={<Documents/>}/>
+                    </Route>
+            </Routes>
+            <Footer/>
         </div>
     );
 }
