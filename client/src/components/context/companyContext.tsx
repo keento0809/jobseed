@@ -3,6 +3,7 @@ import axios from "axios";
 import {Company} from "../../types/Company";
 import Companies_data from "../../data/Companies_data";
 import {useCookies} from "react-cookie";
+import {useSeekerContext} from "./seekerContext";
 
 type Props = {
     children: ReactNode
@@ -47,11 +48,17 @@ export const CompanyProvider = ({children}: Props) => {
         try {
             let res = await axios({
                 method: "get",
-                url: `http://localhost:8080/companies/${seeker_id}/${status}`
+                url: `http://localhost:8080/companies/${seeker_id}/${status}`,
+                headers: {
+                    authorization:`Bearer ${cookies.JWT_TOKEN}`
+                },
+                withCredentials : true
             })
-            setCompanies(res.data);
+            console.log("this", res.data.companiesWithStatus)
+            await setCompanies(res.data);
+            console.log(companies)
         } catch (err: any) {
-            console.log(err.message)
+            console.log(err)
         }
     }
 
@@ -67,8 +74,7 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log(res)
-            setCompanies([...companies!, res.data])
+            setCompanies([...companies!, res.data.companiesWithStatus])
         } catch (err: any) {
             console.log(err.message);
         }

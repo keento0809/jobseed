@@ -15,24 +15,24 @@ const CompanyCard = ({name, jobTitle, status, link, company_id, description, loc
 
     const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        showScheduleModal === true ? setShowScheduleModal(false) : setShowScheduleModal(true)
+        showScheduleModal ? setShowScheduleModal(false) : setShowScheduleModal(true)
     }
 
     const showEditModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
-        showEditModal === true ? setShowEditModal(false) : setShowEditModal(true)
+        showEditModal ? setShowEditModal(false) : setShowEditModal(true)
     }
 
     const getStatus = (status: number) => {
         switch (status) {
             case 0:
-                return "interested"
+                return "Interested"
             case 1:
-                return "applied"
+                return "Applied"
             case 2:
-                return "interview"
+                return "Interview"
             case 3:
-                return "rejected"
+                return "Rejected"
         }
     }
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import UserNav from "../../components/features/user/UserNav";
 import Interested from "../../components/features/user/Interested";
 import Applied from "../../components/features/user/Applied";
@@ -13,34 +13,44 @@ import {useCompanyContext} from "../../components/context/companyContext";
 import {useSeekerContext} from "../../components/context/seekerContext";
 
 const TopPage = () => {
-    const [showPage, setShowPage] = useState<string>("interested")
+    const [showPage, setShowPage] = useState<string>("Interested");
     const [showModal, setShowModal] = useState<boolean>(false);
-    const { getCompaniesByStatus } = useCompanyContext();
-    const { seeker } = useSeekerContext()
+    const {getCompaniesByStatus} = useCompanyContext();
+    const [childComponent, setChildComponent] = useState<ReactNode>(<Interested/>)
+    const {seeker} = useSeekerContext()
 
-    const pageRender = (showPage: string) => {
-        switch (showPage) {
-            case "interested":
-                // getCompaniesByStatus(seeker!.seeker_id, "Interested")
-                return < Interested />
-            case "applied":
-                // getCompaniesByStatus(seeker!.seeker_id, "Applied")
-                return < Applied/>
-            case "interview":
-                // getCompaniesByStatus(seeker!.seeker_id, "Interview")
-                return < Interview/>
-            case "rejected":
-                // getCompaniesByStatus(seeker!.seeker_id, "Rejected")
-                return < Rejected/>
+    useEffect(() => {
+        const pageRender = (showPage: string) => {
+            if (seeker!.seeker_id) {
+                switch (showPage) {
+                    case "Interested":
+                        getCompaniesByStatus(seeker!.seeker_id, "Interested")
+                        setChildComponent(<Interested/>)
+                        break;
+                    case "Applied":
+                        getCompaniesByStatus(seeker!.seeker_id, "Applied")
+                        setChildComponent(<Applied/>)
+                        break;
+                    case "Interview":
+                        getCompaniesByStatus(seeker!.seeker_id, "Interview")
+                        setChildComponent(<Interview/>)
+                        break;
+                    case "Rejected":
+                        getCompaniesByStatus(seeker!.seeker_id, "Rejected")
+                        setChildComponent(<Rejected/>)
+                        break;
+                    default:
+                }
+            } else return null
         }
-    }
+        pageRender(showPage)
+        console.log("Changed")
+    }, [showPage])
 
-    const modalHandler = (e:React.MouseEvent<HTMLElement>) => {
+    const modalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        showModal === true ? setShowModal(false) : setShowModal(true)
+        showModal ? setShowModal(false) : setShowModal(true)
     }
-
-
 
     return (
         <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
@@ -55,7 +65,7 @@ const TopPage = () => {
                     setShowPage={setShowPage}
                 />
                 <div className="lg:grid lg:grid-cols-9 lg:gap-4 mt-4">
-                    < Search />
+                    < Search/>
                     <Button_sm
                         title={"New"}
                         color={"text-white"}
@@ -65,8 +75,8 @@ const TopPage = () => {
                         onClick={modalHandler}
                     />
                 </div>
-                {pageRender(showPage)}
             </div>
+            {childComponent}
             {showModal && < CompanyModal showModal={showModal} setShowModal={setShowModal}/>}
         </div>
     );

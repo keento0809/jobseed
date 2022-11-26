@@ -19,14 +19,15 @@ export const getAllCompanies = catchAsync(
 export const getCompaniesWithStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { status } = req.params;
+    console.log(status)
     if (
       !status ||
-      (status != "Interested" &&
-        status != "Applied" &&
+      (status !== "Interested" &&
+        status !== "Applied" &&
         status !== "Interview" &&
         status !== "Rejected")
     )
-      next(new Error("Invalid request"));
+      return next(new Error("Invalid request"));
     const companiesWithStatusInfo = await pool.query(
       "SELECT * FROM company WHERE company.status = $1",
       [status]

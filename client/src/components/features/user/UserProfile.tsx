@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {BiEditAlt} from "react-icons/bi"
 import InputField from "../../models/InputField";
+import {useSeekerContext} from "../../context/seekerContext";
 
 type User = {
     name: string;
@@ -14,7 +15,8 @@ type User = {
  */
 const UserProfile = (props: User) => {
 
-    const [wannaEdit, setWannaEdit] = useState<boolean>(false)
+    const [wannaEdit, setWannaEdit] = useState<boolean>(false);
+    const {seeker} = useSeekerContext();
 
     return (
         <div className="user-profile my-4 flex lg:flex-col lg:col-span-1 ">
@@ -44,8 +46,8 @@ const UserProfile = (props: User) => {
                     </div>
                 </div> :
                 <div className="w-full py-4">
-                    <h3 className="font-bold text-md">{props.name}</h3>
-                    <p className="text-sm">{props.email}</p>
+                    <h3 className="font-bold text-md">{seeker!.name}</h3>
+                    <p className="text-sm">{seeker!.email}</p>
                     <div
                         onClick={() => {
                             setWannaEdit(true)

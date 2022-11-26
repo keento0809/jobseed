@@ -42,6 +42,7 @@ const Signup: FC = () => {
                 newUser,
                 axiosConfig
             );
+            console.log(res.data)
             setCookie("JWT_TOKEN", res.data.token);
             setSeeker(newUser!)
             navigate("/user", {replace: true});
