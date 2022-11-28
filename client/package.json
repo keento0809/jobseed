@@ -21,6 +21,8 @@
     "@types/react-datepicker": "^4.8.0",
     "@types/react-dom": "^18.0.6",
     "axios": "^1.1.3",
+    "contentful": "^9.2.13",
+    "contentful-typescript-codegen": "^3.3.0",
     "daisyui": "^2.33.0",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
