@@ -44,16 +44,7 @@ export const createNewCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, link, jobType, company_size, salary, location, description } =
       req.body;
-    if (
-      !name ||
-      !link ||
-      !jobType ||
-      !company_size ||
-      !salary ||
-      !location ||
-      !description
-    )
-      next(new Error("Invalid input values"));
+    if (!name || !jobType) next(new Error("Invalid input values"));
     const newCompany = await pool.query(
       "INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
       [
