@@ -1,9 +1,9 @@
 
 export enum Status {
-    interested,
-    applied,
-    interview,
-    rejected
+    Interested,
+    Applied,
+    Interview,
+    Rejected
 }
 
 export type Location = {
