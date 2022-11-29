@@ -27,12 +27,13 @@ exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __aw
 }));
 exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { status } = req.params;
+    console.log(status);
     if (!status ||
-        (status != "Interested" &&
-            status != "Applied" &&
+        (status !== "Interested" &&
+            status !== "Applied" &&
             status !== "Interview" &&
             status !== "Rejected"))
-        next(new Error("Invalid request"));
+        return next(new Error("Invalid request"));
     const companiesWithStatusInfo = yield postgres_1.default.query("SELECT * FROM company WHERE company.status = $1", [status]);
     if (!companiesWithStatusInfo)
         next(new Error("No companies found"));
@@ -44,13 +45,7 @@ exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) 
 }));
 exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, link, jobType, company_size, salary, location, description } = req.body;
-    if (!name ||
-        !link ||
-        !jobType ||
-        !company_size ||
-        !salary ||
-        !location ||
-        !description)
+    if (!name || !jobType)
         next(new Error("Invalid input values"));
     const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", [
         name,

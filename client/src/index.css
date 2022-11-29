@@ -29,7 +29,7 @@
 }
 
 .fc  {
-    @apply w-[80%] h-[90%] mx-auto mt-12
+    @apply w-[80%] h-[75%] mx-auto mt-6
 }
 
 .fc-toolbar-chunk {

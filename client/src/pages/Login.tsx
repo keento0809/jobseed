@@ -6,6 +6,7 @@ import {gapi} from "gapi-script";
 import {useCookies} from "react-cookie";
 import {Navigate, useNavigate} from "react-router-dom";
 import axios from "axios";
+import {useSeekerContext} from "../components/context/seekerContext";
 
 const Login = () => {
 
@@ -13,6 +14,7 @@ const Login = () => {
     const [password, setPassword] = useState<string>("")
     const [cookies, setCookie, removeCookie] = useCookies();
     const navigate = useNavigate();
+    const {setSeeker} = useSeekerContext()
 
     let axiosConfig = {
         withCredentials : true
@@ -27,19 +29,14 @@ const Login = () => {
                 {email, password},
                 axiosConfig
             )
-            console.log(res)
+            console.log(res.data.seeker)
+            setCookie("JWT_TOKEN", res.data.token);
+            setSeeker(res.data.seeker)
+            navigate("/user", { replace: true });
         } catch (e: any) {
             console.log(e)
         }
     }
-    useEffect(() => {
-        function start () {
-            gapi.client.init({
-                clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-                scope: ""
-            })
-        }
-    }, [])
 
     const OnSuccess = (res: any) => {
         setCookie("JWT_TOKEN", res.accessToken);
@@ -78,15 +75,15 @@ const Login = () => {
                         />
                     </form>
                     <div id="signInButton" className="">
-                        < GoogleLogin
-                            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}
-                            buttonText="Login"
-                            onSuccess={OnSuccess}
-                            onFailure={onFailure}
-                            cookiePolicy={"single_host_origin"}
-                            isSignedIn={true}
-                            className="w-full flex justify-center mt-4"
-                        />
+                        {/*< GoogleLogin*/}
+                        {/*    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}*/}
+                        {/*    buttonText="Login"*/}
+                        {/*    onSuccess={OnSuccess}*/}
+                        {/*    onFailure={onFailure}*/}
+                        {/*    cookiePolicy={"single_host_origin"}*/}
+                        {/*    isSignedIn={true}*/}
+                        {/*    className="w-full flex justify-center mt-4"*/}
+                        {/*/>*/}
                     </div>
                 </div>
             </div>

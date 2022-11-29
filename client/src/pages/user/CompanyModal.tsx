@@ -16,7 +16,6 @@ type modalProps = {
 const CompanyModal = ({showModal, setShowModal}: modalProps) => {
     const {createCompany} = useCompanyContext();
     const [location, setLocation] = useState<Location>({lat: 49.246292, lng: -123.116226})
-    const [gmapLoaded, setGmapLoaded] = useState(false)
     const [companyData, setCompanyData] = useState<Company>({
         name: "",
         link: "",
@@ -91,6 +90,9 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                         setLocation={setLocation}
                         setCompanyData = {setCompanyData}
                     />
+                </div>
+                <div>
+
                 </div>
                 <Text_field_lg
                     name={"description"}
