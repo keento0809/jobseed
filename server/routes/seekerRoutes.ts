@@ -4,6 +4,8 @@ import {
   getSeekerInfo,
   updateSeekerInfo,
   addAvatar,
+  getAvatar,
+  updateAvatar,
 } from "../controllers/seekerController";
 const seekerRouter = express.Router();
 
@@ -11,6 +13,10 @@ seekerRouter
   .route("/:seeker_id")
   .get(authorization, getSeekerInfo)
   .patch(authorization, updateSeekerInfo);
-seekerRouter.route("/:seeker_id/avatar").put(authorization, addAvatar);
+seekerRouter
+  .route("/avatar/:seeker_id")
+  .get(authorization, getAvatar)
+  .post(authorization, addAvatar)
+  .put(authorization, updateAvatar);
 
 export default seekerRouter;

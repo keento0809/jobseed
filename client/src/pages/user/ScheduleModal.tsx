@@ -1,73 +1,101 @@
 import React, {useState} from 'react';
-import {BsBuilding} from "react-icons/bs";
+import {SlCalender} from "react-icons/sl";
 import InputField from "../../components/models/InputField";
-import Dropdown from "../../components/models/Dropdown";
 import Text_field_lg from "../../components/models/Text_field_lg";
 import Button_sm from "../../components/models/Button_sm";
+import {Schedule} from "../../types/Schedule";
+import DateTimePicker from "../../components/models/DateTimePicker";
 
 type Props = {
-    showScheduleModal: boolean;
-    setShowScheduleModal : React.Dispatch<React.SetStateAction<boolean>>;
+    setShowScheduleModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ScheduleModal = ({showScheduleModal, setShowScheduleModal}: Props) => {
 
-    type Schedule = {
-        title: string,
-        startDate: string;
-        endDate: string;
-        location?: string;
-        description: string;
-        completed: boolean
-    }
-
-    const [newSchedule, setNewSchedule] = useState<Schedule>({
-        title: "",
-        startDate: "",
-        endDate: "",
-        location: "",
-        description: "",
-        completed: false
-    })
+const ScheduleModal = ({setShowScheduleModal}: Props) => {
     const companyDataHandler = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setNewSchedule({...newSchedule!, [e.target.name]: e.target.value});
+        setNewSchedule({...newSchedule, [e.target.name]: e.target.value});
     }
 
-    const createSchedule = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        setShowScheduleModal(false);
+    const date = new Date()
+    let day = date.getDate();
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
+    let today = `${year}-${month}-${day}`
+
+    const [newSchedule, setNewSchedule] = useState<Schedule>(
+        {
+            title: "",
+            date: {startDate: today, startTime: "00:00"},
+            endDate: {endDate: today, endTime: "00:00"},
+            timeInclude: false,
+        }
+    )
+
+    const startDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewSchedule({...newSchedule, date: {...newSchedule.date, [e.target.name]: e.target.value}})
+    }
+
+    const endDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewSchedule({...newSchedule, date: {...newSchedule.date, [e.target.name]: e.target.value}})
+    }
+
+    const handleAllDay = () => {
+        setNewSchedule({...newSchedule, "timeInclude": !newSchedule.timeInclude})
+    }
+
+    const createSchedule = () => {
+        console.log(newSchedule)
     }
 
     return (
-        <div className="bg-modal">
+        <div className="bg-modal relative z-[1001]">
             <div className="modal-container wrapper py-6">
                 <div className="flex items-center">
-                    <BsBuilding size={20} className="mr-4"/>
-                    <h1 className="text-lg font-bold">Add company</h1>
+                    <SlCalender size={20} className="mr-4"/>
+                    <h1 className="text-lg font-bold">Add schedule</h1>
                 </div>
-                <div className="flex">
-                    <InputField
-                        type={"text"}
-                        title={"company name"}
-                        name={"name"}
-                        value={newSchedule.title}
-                        placeholder={"company name"}
-                        onChange={companyDataHandler}
+                <InputField
+                    type={"text"}
+                    title={"title"}
+                    name={"title"}
+                    value={newSchedule.title}
+                    placeholder={"title"}
+                    onChange={companyDataHandler}
+                    className={"md:col-span-4 mt-4"}
+                />
+                <DateTimePicker
+                    title={"Start date"}
+                    dateName={"startDate"}
+                    timeName={"startTime"}
+                    timeInclude={newSchedule.timeInclude}
+                    dateValue={newSchedule.date.startDate!}
+                    timeValue={newSchedule.date.startTime!}
+                    dateOnChange={startDateHandler}
+                    timeOnChange={startDateHandler}
+                />
+                <DateTimePicker
+                    title={"End date"}
+                    dateName={"endDate"}
+                    timeName={"endTime"}
+                    timeInclude={newSchedule.timeInclude}
+                    dateValue={newSchedule.endDate.endDate!}
+                    timeValue={newSchedule.endDate.endTime!}
+                    dateOnChange={endDateHandler}
+                    timeOnChange={endDateHandler}
+                />
+                <label className="block mt-6">
+                    <input
+                        type="checkbox"
+                        name="timeInclude"
+                        checked={newSchedule.timeInclude}
+                        onChange={handleAllDay}
                     />
-                    <div>
-                        <InputField
-                            type={"text"}
-                            title={"company size"}
-                            name={"size"}
-                            value={newSchedule.startDate}
-                            placeholder={"company size"}
-                            onChange={companyDataHandler}
-                        />
-                    </div>
-                </div>
+                    <span className="pl-2 font-thin">Include time</span>
+                </label>
                 <Text_field_lg
                     name={"description"}
                     onChange={companyDataHandler}
+                    value={newSchedule.description}
                 />
                 <div className="flex justify-end gap-2 mt-4">
                     <Button_sm

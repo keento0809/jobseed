@@ -18,15 +18,19 @@ scheduleRouter
   .route("/applied")
   .get(authorization, getSchedulesSortedByCategory); // get a seeker's schedules sorted by applied
 scheduleRouter
-  .route("/in-progress")
-  .get(authorization, getSchedulesSortedByCategory); // get a seeker's schedules sorted by in progress
-scheduleRouter.route("/past").get(authorization, getSchedulesSortedByCategory); // get a seeker's schedules sorted by past
+  .route("/interview")
+  .get(authorization, getSchedulesSortedByCategory); // get a seeker's schedules sorted by interview
+scheduleRouter
+  .route("/rejected")
+  .get(authorization, getSchedulesSortedByCategory); // get a seeker's schedules sorted by rejected
 scheduleRouter.route("/new").post(authorization, createSchedule); // add a new schedule
 // scheduleRouter.route("/other").get(() => {}); // get a seeker's schedules sorted by other
 scheduleRouter
-  .route("/:seeker_id")
-  .get(authorization, getSchedules)
-  .put(authorization, updateSchedule)
+  .route("/allSchedules/:seeker_id")
+  .get(authorization, getSchedules);
+scheduleRouter
+  .route("/allSchedules/:seeker_id/:schedule_id")
+  .patch(authorization, updateSchedule)
   .delete(authorization, deleteSchedule);
 
 scheduleRouter

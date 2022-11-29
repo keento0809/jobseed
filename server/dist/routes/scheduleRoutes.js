@@ -14,15 +14,19 @@ scheduleRouter
     .route("/applied")
     .get(authController_1.authorization, scheduleController_1.getSchedulesSortedByCategory); // get a seeker's schedules sorted by applied
 scheduleRouter
-    .route("/in-progress")
-    .get(authController_1.authorization, scheduleController_1.getSchedulesSortedByCategory); // get a seeker's schedules sorted by in progress
-scheduleRouter.route("/past").get(authController_1.authorization, scheduleController_1.getSchedulesSortedByCategory); // get a seeker's schedules sorted by past
+    .route("/interview")
+    .get(authController_1.authorization, scheduleController_1.getSchedulesSortedByCategory); // get a seeker's schedules sorted by interview
+scheduleRouter
+    .route("/rejected")
+    .get(authController_1.authorization, scheduleController_1.getSchedulesSortedByCategory); // get a seeker's schedules sorted by rejected
 scheduleRouter.route("/new").post(authController_1.authorization, scheduleController_1.createSchedule); // add a new schedule
 // scheduleRouter.route("/other").get(() => {}); // get a seeker's schedules sorted by other
 scheduleRouter
-    .route("/:seeker_id")
-    .get(authController_1.authorization, scheduleController_1.getSchedules)
-    .put(authController_1.authorization, scheduleController_1.updateSchedule)
+    .route("/allSchedules/:seeker_id")
+    .get(authController_1.authorization, scheduleController_1.getSchedules);
+scheduleRouter
+    .route("/allSchedules/:seeker_id/:schedule_id")
+    .patch(authController_1.authorization, scheduleController_1.updateSchedule)
     .delete(authController_1.authorization, scheduleController_1.deleteSchedule);
 scheduleRouter
     .route("/:seeker_id/calendar")

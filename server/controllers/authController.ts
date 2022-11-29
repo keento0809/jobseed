@@ -58,18 +58,20 @@ export const signupSeeker = catchAsync(
     // hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const newSeeker = await pool.query(
+    const newSeekerData = await pool.query(
       `INSERT INTO seeker (name,email,password) VALUES($1,$2,$3) RETURNING *`,
       [name, email, hashedPassword]
     );
-    if (!newSeeker) next(new Error("Failed to register new seeker"));
+    if (!newSeekerData) next(new Error("Failed to register new seeker"));
     // create token
-    const token = await createToken(newSeeker.rows[0].seeker_id);
+    const token = await createToken(newSeekerData.rows[0].seeker_id);
+    const newSeeker = newSeekerData.rows[0];
+    console.log(newSeeker.rows[0].seeker_id);
     res
-      .cookie("access_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-      })
+      // .cookie("access_token", token, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === "production",
+      // })
       .status(200)
       .json({ msg: "good signup", token, newSeeker });
     next();
