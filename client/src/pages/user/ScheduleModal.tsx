@@ -13,13 +13,6 @@ type Props = {
 }
 
 const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => {
-    //
-    // const date = new Date()
-    // let day = date.getDate();
-    // let month = date.getMonth() + 1
-    // let year = date.getFullYear()
-    // let today = `${year}-${month}-${day}`
-    //
     const [newSchedule, setNewSchedule] = useState<Schedule>(
         {
             seeker_id,

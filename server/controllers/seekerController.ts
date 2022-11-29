@@ -3,7 +3,7 @@ import { catchAsync } from "../helpers/middlewares";
 import pool from "../db/postgres";
 import multer from "multer";
 import sharp from "sharp";
-import { uploadFile } from "../s3";
+import { getObjectSignedUrl, uploadFile } from "../s3";
 
 export const getSeekerInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -53,7 +53,23 @@ export const addAvatar = catchAsync(
       [caption, seeker_id]
     );
     const updatingSeeker = updatingSeekerData.rows[0];
-    res.status(200).json({ msg: "Good avatar", updatingSeeker });
+    res.status(200).json({ msg: "Good new avatar", updatingSeeker });
+    next();
+  }
+);
+
+export const getAvatar = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { seeker_id } = req.params;
+    const seekerData = await pool.query(
+      "SELECT * FROM seeker WHERE seeker.seeker_id = $1",
+      [seeker_id]
+    );
+    if (!seekerData) next(new Error("No seeker found"));
+    const avatarCaption = seekerData.rows[0].avatar;
+    const avatarUrl = await getObjectSignedUrl(avatarCaption);
+    if (!avatarUrl) next(new Error("No avatar found"));
+    res.status(200).json({ msg: "good avatar", avatarUrl });
     next();
   }
 );

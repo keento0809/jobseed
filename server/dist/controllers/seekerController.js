@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAvatar = exports.addAvatar = exports.updateSeekerInfo = exports.getSeekerInfo = void 0;
+exports.updateAvatar = exports.getAvatar = exports.addAvatar = exports.updateSeekerInfo = exports.getSeekerInfo = void 0;
 const middlewares_1 = require("../helpers/middlewares");
 const postgres_1 = __importDefault(require("../db/postgres"));
 const sharp_1 = __importDefault(require("sharp"));
@@ -55,7 +55,19 @@ exports.addAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(
     // add data to DB
     const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2", [caption, seeker_id]);
     const updatingSeeker = updatingSeekerData.rows[0];
-    res.status(200).json({ msg: "Good avatar", updatingSeeker });
+    res.status(200).json({ msg: "Good new avatar", updatingSeeker });
+    next();
+}));
+exports.getAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { seeker_id } = req.params;
+    const seekerData = yield postgres_1.default.query("SELECT * FROM seeker WHERE seeker.seeker_id = $1", [seeker_id]);
+    if (!seekerData)
+        next(new Error("No seeker found"));
+    const avatarCaption = seekerData.rows[0].avatar;
+    const avatarUrl = yield (0, s3_1.getObjectSignedUrl)(avatarCaption);
+    if (!avatarUrl)
+        next(new Error("No avatar found"));
+    res.status(200).json({ msg: "good avatar", avatarUrl });
     next();
 }));
 exports.updateAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

@@ -52,7 +52,6 @@ function getObjectSignedUrl(key) {
             Bucket: exports.bucketName,
             Key: key,
         };
-        // https://aws.amazon.com/blogs/developer/generate-presigned-url-modular-aws-sdk-javascript/
         const command = new client_s3_1.GetObjectCommand(params);
         const seconds = 60;
         const url = yield (0, s3_request_presigner_1.getSignedUrl)(exports.s3Client, command, { expiresIn: seconds });

@@ -45,13 +45,7 @@ exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) 
 }));
 exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, link, jobType, company_size, salary, location, description } = req.body;
-    if (!name ||
-        !link ||
-        !jobType ||
-        !company_size ||
-        !salary ||
-        !location ||
-        !description)
+    if (!name || !jobType)
         next(new Error("Invalid input values"));
     const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", [
         name,

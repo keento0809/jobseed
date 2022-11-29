@@ -13,6 +13,7 @@ seekerRouter
     .patch(authController_1.authorization, seekerController_1.updateSeekerInfo);
 seekerRouter
     .route("/avatar/:seeker_id")
+    .get(authController_1.authorization, seekerController_1.getAvatar)
     .post(authController_1.authorization, seekerController_1.addAvatar)
     .put(authController_1.authorization, seekerController_1.updateAvatar);
 exports.default = seekerRouter;
