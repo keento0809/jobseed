@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {EventClickArg} from "@fullcalendar/react";
 import {IoMdClose} from "react-icons/io";
 import {MdModeEditOutline} from "react-icons/md";
 import {BsTrash} from "react-icons/bs"
+import ScheduleEditModal from "../../../pages/user/ScheduleEditModal";
 
 type EventDetailProps = {
     selectedEvent: EventClickArg
 }
 
 const EventDetail = ({selectedEvent}: EventDetailProps) => {
-    console.log(selectedEvent.event)
+
+    const [showScheduleEditModal, setShowScheduleEditModal] = useState<boolean>(false)
 
     const getDay = (day: Date, start: boolean) => {
         const date = day.toString().slice(0, 9)
@@ -30,7 +32,7 @@ const EventDetail = ({selectedEvent}: EventDetailProps) => {
                         <h3 className="text-lg font-bold">{selectedEvent.event._def.title}</h3>
                         <div className="flex justify-end">
                             < MdModeEditOutline
-                                onClick={()=> {console.log("Hi")}}
+                                onClick={()=> setShowScheduleEditModal(true)}
                                 size={30} className="p-2 block cursor-pointer rounded-full hover:bg-slate-300"
                             />
                             < BsTrash
@@ -40,12 +42,17 @@ const EventDetail = ({selectedEvent}: EventDetailProps) => {
                         </div>
                     </div>
                     <div className="my-2">
-                        <p className="text-sm">{selectedEvent.event._def.allDay ? null : getDay(selectedEvent.event._instance?.range.start!, true)}</p>
-                        <p className="text-sm">{selectedEvent.event._instance?.range.end ? getDay(selectedEvent.event._instance?.range.end!, false) : null}</p>
+                        <div className="text-sm">{selectedEvent.event._def.allDay ? null : getDay(selectedEvent.event._instance?.range.start!, true)}</div>
+                        <div className="text-sm">{selectedEvent.event._instance?.range.end ? getDay(selectedEvent.event._instance?.range.end!, false) : null}</div>
                     </div>
                     <p className="text-sm">Subject: {selectedEvent.event._def.extendedProps.description}</p>
                 </div>
             </div>
+            {showScheduleEditModal &&
+                < ScheduleEditModal
+                    selectedEvent={selectedEvent}
+                    setShowScheduleEditModal={setShowScheduleEditModal}
+                />}
         </div>
     );
 };

@@ -24,7 +24,7 @@ const TopPage = () => {
             if (seeker!.seeker_id) {
                 switch (showPage) {
                     case "Interested":
-                        getCompaniesByStatus(seeker!.seeker_id, "Interested")
+                        // getCompaniesByStatus(seeker!.seeker_id, "Interested")
                         setChildComponent(<Interested/>)
                         break;
                     case "Applied":
@@ -44,7 +44,6 @@ const TopPage = () => {
             } else return null
         }
         pageRender(showPage)
-        console.log("Changed")
     }, [showPage])
 
     const modalHandler = (e: React.MouseEvent<HTMLElement>) => {
@@ -75,8 +74,8 @@ const TopPage = () => {
                         onClick={modalHandler}
                     />
                 </div>
+                {childComponent}
             </div>
-            {childComponent}
             {showModal && < CompanyModal showModal={showModal} setShowModal={setShowModal}/>}
         </div>
     );

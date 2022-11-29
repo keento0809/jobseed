@@ -3,7 +3,6 @@ import axios from "axios";
 import {Company} from "../../types/Company";
 import Companies_data from "../../data/Companies_data";
 import {useCookies} from "react-cookie";
-import {useSeekerContext} from "./seekerContext";
 
 type Props = {
     children: ReactNode
@@ -14,7 +13,7 @@ type Props = {
  */
 
 type companyContext = {
-    companies: Company[] | null,
+    companies: Company[],
     getCompanies: (id: string) => void,
     getCompaniesByStatus:(seeker_id: string, status: string) => void,
     createCompany: (data: Company) => void,
@@ -29,7 +28,7 @@ export const useCompanyContext = () => {
 }
 
 export const CompanyProvider = ({children}: Props) => {
-    const [companies, setCompanies] = useState<Company[] | null>(Companies_data);
+    const [companies, setCompanies] = useState<Company[]>(Companies_data);
     const [cookies] = useCookies();
 
     const getCompanies = async (seeker_id: string) => {
@@ -54,9 +53,8 @@ export const CompanyProvider = ({children}: Props) => {
                 },
                 withCredentials : true
             })
-            console.log("this", res.data.companiesWithStatus)
-            await setCompanies(res.data);
-            console.log(companies)
+            await setCompanies(res.data.companiesWithStatus);
+            console.log(companies, "I got data")
         } catch (err: any) {
             console.log(err)
         }

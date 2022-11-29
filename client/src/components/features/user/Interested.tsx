@@ -1,27 +1,32 @@
 import React from 'react';
 import CompanyCard from "./CompanyCard";
 import {useCompanyContext} from "../../context/companyContext";
+import {Company} from "../../../types/Company";
+import EmptyCompany from "./EmptyCompany";
 
 
 const Interested = () => {
     const { companies } = useCompanyContext();
-    console.log("companies", companies)
+    console.log("companies", companies.length)
 
     return (
         <section className="interested card-container">
-            {/*{companies!.map( (company) =>*/}
-            {/*    <CompanyCard*/}
-            {/*        key={company.company_id}*/}
-            {/*        company_id={company.company_id}*/}
-            {/*        name={company.name}*/}
-            {/*        location={company.location}*/}
-            {/*        link={company.link}*/}
-            {/*        jobTitle={company.jobTitle}*/}
-            {/*        salary={company.salary}*/}
-            {/*        description={company.description}*/}
-            {/*        status={company.status}*/}
-            {/*        interest={company.interest}*/}
-            {/*    />)}*/}
+            {
+                companies.length > 0 ?
+                companies!.map( (company) =>
+                <CompanyCard
+                    key={company.company_id}
+                    company_id={company.company_id}
+                    name={company.name}
+                    location={company.location}
+                    link={company.link}
+                    jobTitle={company.jobTitle}
+                    salary={company.salary}
+                    description={company.description}
+                    status={company.status}
+                    interest={company.interest}
+                />) : < EmptyCompany />
+            }
         </section>
     );
 };
