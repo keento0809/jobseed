@@ -7,32 +7,34 @@ import ScheduleModal from "../../../pages/user/ScheduleModal";
 import {Company} from "../../../types/Company";
 import CompanyEditModal from "../../../pages/user/CompanyEditModal";
 import {Status} from "../../../types/Company";
+import {useSeekerContext} from "../../context/seekerContext";
 
 const CompanyCard = ({name, jobTitle, status, link, company_id, description, location}: Company) => {
     const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false)
     const [showEditModal, setShowEditModal] = useState<boolean>(false)
     const [showStatusDropDown, setShowStatusDropDown] = useState<boolean>(false)
+    const {seeker} = useSeekerContext()
 
     const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        showScheduleModal === true ? setShowScheduleModal(false) : setShowScheduleModal(true)
+        showScheduleModal ? setShowScheduleModal(false) : setShowScheduleModal(true)
     }
 
     const showEditModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
-        showEditModal === true ? setShowEditModal(false) : setShowEditModal(true)
+        showEditModal ? setShowEditModal(false) : setShowEditModal(true)
     }
 
     const getStatus = (status: number) => {
         switch (status) {
             case 0:
-                return "interested"
+                return "Interested"
             case 1:
-                return "applied"
+                return "Applied"
             case 2:
-                return "interview"
+                return "Interview"
             case 3:
-                return "rejected"
+                return "Rejected"
         }
     }
 
@@ -85,7 +87,12 @@ const CompanyCard = ({name, jobTitle, status, link, company_id, description, loc
                 <li className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer"
                     onClick={scheduleModalHandler}>< BsCalendarPlus/></li>
             </ul>
-            {showScheduleModal && <ScheduleModal setShowScheduleModal={setShowScheduleModal}/>}
+            {showScheduleModal &&
+                <ScheduleModal
+                    setShowScheduleModal={setShowScheduleModal}
+                    seeker_id={seeker!.seeker_id!}
+                    company_id={company_id!}
+                />}
             {showEditModal &&
                 <CompanyEditModal
                     setShowModal={setShowEditModal}

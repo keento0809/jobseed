@@ -1,6 +1,6 @@
 import React, {createContext, ReactNode, useContext, useState} from 'react';
 import axios from "axios";
-import {Schedule} from "../../types/Schedule";
+import {CalenderEvent, Schedule} from "../../types/Schedule";
 
 
 type Props = {
@@ -8,10 +8,10 @@ type Props = {
 };
 
 type scheduleContext = {
-    events: Schedule[],
+    events: any[],
     getSchedule: (id: string) => void,
     createSchedule: (schedule: Schedule) => void,
-    editSchedule: (id: string, data: Schedule) => void,
+    updateSchedule: (id: string, data: Schedule) => void,
     deleteSchedule: (id: string) => void
 }
 
@@ -23,7 +23,17 @@ export const useScheduleContext = () => {
 
 export const ScheduleProvider = ({children}: Props) => {
 
-    const [events, setEvents] = useState<Schedule[]>([]);
+    const [events, setEvents] = useState([{
+        schedule_id: "100000",
+        seeker_id: "1",
+        company_id: "2",
+        title: "Hi",
+        allDay: false,
+        date: "2022-11-21T13:00:00",
+        end: "2022-11-21T16:00:00",
+        backgroundColor: "#257e4a",
+        description: "dsadsadsasasadsadsadsadsadsa"
+    }]);
 
     const getSchedule = async (seeker_id: string) => {
         try {
@@ -37,13 +47,13 @@ export const ScheduleProvider = ({children}: Props) => {
     const createSchedule = async (data: Schedule) => {
         try {
             let res = await axios.post("http://localhost:8080/schedules/new", data)
-            setEvents(res.data)
+            console.log(res.data)
         } catch (e: any) {
             console.log(e.message)
         }
     }
 
-    const editSchedule = async (schedule_id: string, newSchedule: Schedule) => {
+    const updateSchedule = async (schedule_id: string, newSchedule: Schedule) => {
         try {
             let res = await axios.patch(`http://localhost:8080/schedules/${schedule_id}`, newSchedule)
             setEvents(res.data)
@@ -64,7 +74,7 @@ export const ScheduleProvider = ({children}: Props) => {
     }
 
     return(
-        <scheduleContext.Provider value={{events,getSchedule, createSchedule, editSchedule,deleteSchedule}}>
+        <scheduleContext.Provider value={{events,getSchedule, createSchedule, updateSchedule,deleteSchedule}}>
             {children}
         </scheduleContext.Provider>
     )

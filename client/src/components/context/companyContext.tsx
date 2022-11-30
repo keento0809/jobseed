@@ -13,7 +13,7 @@ type Props = {
  */
 
 type companyContext = {
-    companies: Company[] | null,
+    companies: Company[],
     getCompanies: (id: string) => void,
     getCompaniesByStatus:(seeker_id: string, status: string) => void,
     createCompany: (data: Company) => void,
@@ -28,7 +28,7 @@ export const useCompanyContext = () => {
 }
 
 export const CompanyProvider = ({children}: Props) => {
-    const [companies, setCompanies] = useState<Company[] | null>(Companies_data);
+    const [companies, setCompanies] = useState<Company[]>(Companies_data);
     const [cookies] = useCookies();
 
     const getCompanies = async (seeker_id: string) => {
@@ -47,11 +47,16 @@ export const CompanyProvider = ({children}: Props) => {
         try {
             let res = await axios({
                 method: "get",
-                url: `http://localhost:8080/companies/${seeker_id}/${status}`
+                url: `http://localhost:8080/companies/${seeker_id}/${status}`,
+                headers: {
+                    authorization:`Bearer ${cookies.JWT_TOKEN}`
+                },
+                withCredentials : true
             })
-            setCompanies(res.data);
+            await setCompanies(res.data.companiesWithStatus);
+            console.log(companies, "I got data")
         } catch (err: any) {
-            console.log(err.message)
+            console.log(err)
         }
     }
 
@@ -67,8 +72,7 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log(res)
-            setCompanies([...companies!, res.data])
+            setCompanies([...companies!, res.data.companiesWithStatus])
         } catch (err: any) {
             console.log(err.message);
         }

@@ -14,10 +14,10 @@ const UserNav = (props: nav) => {
     }
 
     const links = [
-        {id: 1, name: "interested"},
-        {id: 2, name: "applied"},
-        {id: 3, name: "interview"},
-        {id: 4, name: "rejected"}
+        {id: 1, name: "Interested"},
+        {id: 2, name: "Applied"},
+        {id: 3, name: "Interview"},
+        {id: 4, name: "Rejected"}
     ]
     return (
         <div className="user_nav">

@@ -7,7 +7,6 @@ const express_1 = __importDefault(require("express"));
 const companyController_1 = require("../controllers/companyController");
 const authController_1 = require("../controllers/authController");
 const companyRouter = express_1.default.Router();
-// companyRouter.route("/:seeker_id").get(authorization, getAllCompanies);
 companyRouter
     .route("/:seeker_id/:status")
     .get(authController_1.authorization, companyController_1.getCompaniesWithStatus);
