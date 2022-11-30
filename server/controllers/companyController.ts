@@ -34,33 +34,21 @@ export const getCompaniesWithStatus = catchAsync(
     );
     if (!companiesWithStatusInfo) next(new Error("No companies found"));
     const companiesWithStatus = companiesWithStatusInfo.rows;
-    res
-      .status(200)
-      .json({ msg: "good companies with status", companiesWithStatus });
+    res.status(200).json({ companiesWithStatus });
     next();
   }
 );
 
 export const createNewCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, link, jobType, company_size, salary, location, description } =
-      req.body;
+    const { name, link, jobType, salary, location, description } = req.body;
     if (!name || !jobType) next(new Error("Invalid input values"));
     const newCompany = await pool.query(
-      "INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
-      [
-        name,
-        link,
-        jobType,
-        company_size,
-        salary,
-        location,
-        description,
-        "Interested",
-      ]
+      "INSERT INTO company (name,link,jobType,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
+      [name, link, jobType, salary, location, description, "Interested"]
     );
     if (!newCompany) next(new Error("Failed to create company"));
-    res.status(200).json({ msg: "Company successfully created", newCompany });
+    res.status(200).json({ newCompany });
     next();
   }
 );
@@ -76,8 +64,8 @@ export const updateCompany = catchAsync(
       "UPDATE company SET name = $1,link = $2,location = $3,jobType = $4,description = $5,status = $6,interest = $7  WHERE company.company_id = $8",
       [name, link, location, jobType, description, status, interest, company_id]
     );
-    if (!updatingCompany) next(new Error("No company found"));
-    res.status(200).json({ msg: "Company updated" });
+    if (!updatingCompany) next(new Error("Failed to update company"));
+    res.status(200).json({ updatingCompany });
     next();
   }
 );
@@ -91,6 +79,9 @@ export const deleteCompany = catchAsync(
       [company_id]
     );
     if (!deletingCompany) next(new Error("Company not found"));
+    await pool.query("DELETE FROM company WHERE company.company_id = $1", [
+      company_id,
+    ]);
     res.status(200).json({ msg: "company deleted", deletingCompany });
     next();
   }
