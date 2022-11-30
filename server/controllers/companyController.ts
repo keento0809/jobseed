@@ -19,7 +19,7 @@ export const getAllCompanies = catchAsync(
 export const getCompaniesWithStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { status } = req.params;
-    console.log(status)
+    console.log(status);
     if (
       !status ||
       (status !== "Interested" &&
@@ -41,9 +41,16 @@ export const getCompaniesWithStatus = catchAsync(
 
 export const createNewCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-<<<<<<< HEAD
-    const { name, link, jobtype, company_size, salary, location, description, interest } =
-      req.body;
+    const {
+      name,
+      link,
+      jobtype,
+      company_size,
+      salary,
+      location,
+      description,
+      interest,
+    } = req.body;
     if (!name || !jobtype) next(new Error("Invalid input values"));
     const newCompany = await pool.query(
       "INSERT INTO company (name,link,jobtype,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
@@ -56,15 +63,8 @@ export const createNewCompany = catchAsync(
         location,
         description,
         "Interested",
-          interest
+        interest,
       ]
-=======
-    const { name, link, jobType, salary, location, description } = req.body;
-    if (!name || !jobType) next(new Error("Invalid input values"));
-    const newCompany = await pool.query(
-      "INSERT INTO company (name,link,jobType,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
-      [name, link, jobType, salary, location, description, "Interested"]
->>>>>>> upstream/dev
     );
     if (!newCompany) next(new Error("Failed to create company"));
     res.status(200).json({ newCompany });
