@@ -4,10 +4,13 @@ import {useCompanyContext} from "../../context/companyContext";
 import {Company} from "../../../types/Company";
 import EmptyCompany from "./EmptyCompany";
 
+type CompaniesProps = {
+    companies : Company[]
+}
 
-const Interested = () => {
-    const { companies } = useCompanyContext();
-    console.log("companies", companies.length)
+const Interested = ({companies} : CompaniesProps) => {
+
+    console.log("companies", companies)
 
     return (
         <section className="interested card-container">
@@ -20,11 +23,12 @@ const Interested = () => {
                     name={company.name}
                     location={company.location}
                     link={company.link}
-                    jobTitle={company.jobTitle}
+                    jobtype={company.jobtype}
                     salary={company.salary}
                     description={company.description}
                     status={company.status}
                     interest={company.interest}
+                    company_size={company.company_size}
                 />) : < EmptyCompany />
             }
         </section>

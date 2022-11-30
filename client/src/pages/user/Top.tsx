@@ -16,16 +16,19 @@ const TopPage = () => {
     const [showPage, setShowPage] = useState<string>("Interested");
     const [showModal, setShowModal] = useState<boolean>(false);
     const {getCompaniesByStatus} = useCompanyContext();
-    const [childComponent, setChildComponent] = useState<ReactNode>(<Interested/>)
-    const {seeker} = useSeekerContext()
+    const {companies} = useCompanyContext()
+    const [childComponent, setChildComponent] = useState<ReactNode>(<Interested companies={companies}/>)
+    const {seeker} = useSeekerContext();
 
     useEffect(() => {
-        const pageRender = (showPage: string) => {
+
+        const pageRender = async (showPage: string) => {
+
             if (seeker!.seeker_id) {
                 switch (showPage) {
                     case "Interested":
-                        // getCompaniesByStatus(seeker!.seeker_id, "Interested")
-                        setChildComponent(<Interested/>)
+                        getCompaniesByStatus(seeker!.seeker_id, "Interested")
+                        setChildComponent(<Interested companies={companies}/>)
                         break;
                     case "Applied":
                         getCompaniesByStatus(seeker!.seeker_id, "Applied")

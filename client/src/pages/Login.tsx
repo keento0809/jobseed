@@ -22,7 +22,6 @@ const Login = () => {
 
     const loginUser = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        console.log(email)
         try {
             let res = await axios.post(
                 "http://localhost:8080/auth/login",
@@ -30,8 +29,8 @@ const Login = () => {
                 axiosConfig
             )
             console.log(res.data.seeker)
-            setCookie("JWT_TOKEN", res.data.token);
-            setSeeker(res.data.seeker)
+            await setCookie("JWT_TOKEN", res.data.token);
+            await setSeeker(res.data.seeker)
             navigate("/user", { replace: true });
         } catch (e: any) {
             console.log(e)
@@ -40,12 +39,17 @@ const Login = () => {
 
     const OnSuccess = (res: any) => {
         setCookie("JWT_TOKEN", res.accessToken);
+
         navigate("/user", { replace: true });
     }
 
     const onFailure = (res: any) => {
         console.log("Fail to login", res)
     }
+
+    // if(cookies.JWT_TOKEN) {
+    //     navigate("/user", { replace: true });
+    // }
 
     return (
         <section className="wrapper flex justify-center font-bold">

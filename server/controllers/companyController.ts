@@ -41,11 +41,30 @@ export const getCompaniesWithStatus = catchAsync(
 
 export const createNewCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+<<<<<<< HEAD
+    const { name, link, jobtype, company_size, salary, location, description, interest } =
+      req.body;
+    if (!name || !jobtype) next(new Error("Invalid input values"));
+    const newCompany = await pool.query(
+      "INSERT INTO company (name,link,jobtype,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
+      [
+        name,
+        link,
+        jobtype,
+        company_size,
+        salary,
+        location,
+        description,
+        "Interested",
+          interest
+      ]
+=======
     const { name, link, jobType, salary, location, description } = req.body;
     if (!name || !jobType) next(new Error("Invalid input values"));
     const newCompany = await pool.query(
       "INSERT INTO company (name,link,jobType,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
       [name, link, jobType, salary, location, description, "Interested"]
+>>>>>>> upstream/dev
     );
     if (!newCompany) next(new Error("Failed to create company"));
     res.status(200).json({ newCompany });
@@ -72,7 +91,7 @@ export const updateCompany = catchAsync(
 
 export const deleteCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { company_id } = req.body;
+    const { company_id } = req.params;
     if (!company_id) next(new Error("Invalid request"));
     const deletingCompany = await pool.query(
       "SELECT * FROM company WHERE company.company_id = $1",

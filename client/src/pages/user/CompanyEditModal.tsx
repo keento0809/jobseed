@@ -11,23 +11,24 @@ import GooglePlace from "../../components/features/user/GooglePlace";
 type modalProps = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
     name: string,
-    jobTitle: string,
+    jobtype: string,
     link: string,
     description: string,
     company_id: string,
     location: Location
 }
 
-const CompanyEditModal = ({setShowModal, name,jobTitle,link,description,company_id,location}: modalProps) => {
+const CompanyEditModal = ({setShowModal, name,jobtype,link,description,company_id,location}: modalProps) => {
 
     const [searchPlace, setSearchPlace] = useState<Location>(location)
 
     const [editCompanyData, setEditCompanyData] = useState<Company>({
-        company_id: company_id,
-        name: name,
-        link: link,
+        company_id,
+        name,
+        link,
         location: searchPlace,
-        jobTitle: jobTitle,
+        company_size: "small",
+        jobtype,
         salary: "",
         description: description,
         status: 0,
@@ -63,10 +64,10 @@ const CompanyEditModal = ({setShowModal, name,jobTitle,link,description,company_
                     <div>
                         <InputField
                             type={"text"}
-                            title={"job title"}
-                            name={"jobTitle"}
-                            value={editCompanyData.jobTitle}
-                            placeholder={"job title"}
+                            title={"job type"}
+                            name={"jobtype"}
+                            value={editCompanyData.jobtype}
+                            placeholder={"job type"}
                             onChange={companyDataHandler}
                         />
 

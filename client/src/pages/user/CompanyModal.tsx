@@ -20,10 +20,10 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
         name: "",
         link: "",
         location,
-        jobTitle: "",
+        jobtype: "",
+        company_size: "",
         salary: "",
         description: "",
-        status: 0,
         interest: 0
     })
 
@@ -37,7 +37,6 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
         console.log(companyData)
         setShowModal(false)
     }
-
 
     return (
         <div className="bg-modal relative z-[1001]">
@@ -58,10 +57,10 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                     <div>
                         <InputField
                             type={"text"}
-                            title={"job title"}
-                            name={"jobTitle"}
-                            value={companyData.jobTitle}
-                            placeholder={"job title"}
+                            title={"job type"}
+                            name={"jobtype"}
+                            value={companyData.jobtype}
+                            placeholder={"job type"}
                             onChange={companyDataHandler}
                         />
                     </div>
@@ -92,7 +91,14 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                     />
                 </div>
                 <div>
-
+                    <InputField
+                        type={"text"}
+                        title={"company size"}
+                        name={"company_size"}
+                        value={companyData.company_size}
+                        placeholder={"company size"}
+                        onChange={companyDataHandler}
+                    />
                 </div>
                 <Text_field_lg
                     name={"description"}
