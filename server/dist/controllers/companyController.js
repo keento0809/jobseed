@@ -27,7 +27,6 @@ exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __aw
 }));
 exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { status } = req.params;
-    console.log(status);
     if (!status ||
         (status !== "Interested" &&
             status !== "Applied" &&
@@ -35,6 +34,7 @@ exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) 
             status !== "Rejected"))
         return next(new Error("Invalid request"));
     const companiesWithStatusInfo = yield postgres_1.default.query("SELECT * FROM company WHERE company.status = $1", [status]);
+    console.log(status);
     if (!companiesWithStatusInfo)
         next(new Error("No companies found"));
     const companiesWithStatus = companiesWithStatusInfo.rows;

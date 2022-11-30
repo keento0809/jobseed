@@ -16,31 +16,30 @@ const TopPage = () => {
     const [showPage, setShowPage] = useState<string>("Interested");
     const [showModal, setShowModal] = useState<boolean>(false);
     const {getCompaniesByStatus} = useCompanyContext();
-    const {companies} = useCompanyContext()
+    const {companies, getCompanies} = useCompanyContext()
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested companies={companies}/>)
     const {seeker} = useSeekerContext();
 
     useEffect(() => {
-
         const pageRender = async (showPage: string) => {
-
+            console.log(showPage)
             if (seeker!.seeker_id) {
                 switch (showPage) {
                     case "Interested":
-                        getCompaniesByStatus(seeker!.seeker_id, "Interested")
+                        getCompaniesByStatus(seeker!.seeker_id, showPage)
                         setChildComponent(<Interested companies={companies}/>)
                         break;
                     case "Applied":
-                        getCompaniesByStatus(seeker!.seeker_id, "Applied")
-                        setChildComponent(<Applied/>)
+                        getCompaniesByStatus(seeker!.seeker_id, showPage)
+                        setChildComponent(<Applied companies={companies}/>)
                         break;
                     case "Interview":
-                        getCompaniesByStatus(seeker!.seeker_id, "Interview")
-                        setChildComponent(<Interview/>)
+                        getCompaniesByStatus(seeker!.seeker_id, showPage)
+                        setChildComponent(<Interview  companies={companies}/>)
                         break;
                     case "Rejected":
-                        getCompaniesByStatus(seeker!.seeker_id, "Rejected")
-                        setChildComponent(<Rejected/>)
+                        getCompaniesByStatus(seeker!.seeker_id, showPage)
+                        setChildComponent(<Rejected  companies={companies}/>)
                         break;
                     default:
                 }

@@ -9,9 +9,6 @@ type CompaniesProps = {
 }
 
 const Interested = ({companies} : CompaniesProps) => {
-
-    console.log("companies", companies)
-
     return (
         <section className="interested card-container">
             {

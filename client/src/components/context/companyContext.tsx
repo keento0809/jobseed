@@ -35,9 +35,14 @@ export const CompanyProvider = ({children}: Props) => {
         try {
             let res = await axios({
                 method: "get",
-                url: `http://localhost:8080/companies/${seeker_id}`
+                url: `http://localhost:8080/companies/${seeker_id}`,
+                headers: {
+                    authorization:`Bearer ${cookies.JWT_TOKEN}`
+                },
+                withCredentials : true
             })
-            setCompanies(res.data);
+            // setCompanies(res.data);
+            console.log(res.data)
         } catch (err: any) {
             console.log(err.message)
         }
