@@ -7,7 +7,7 @@ import EmptyCompany from "./EmptyCompany";
 
 const Interested = () => {
     const { companies } = useCompanyContext();
-    console.log("companies", companies.length)
+    console.log("companies", companies)
 
     return (
         <section className="interested card-container">
@@ -20,11 +20,12 @@ const Interested = () => {
                     name={company.name}
                     location={company.location}
                     link={company.link}
-                    jobTitle={company.jobTitle}
+                    jobtype={company.jobtype}
                     salary={company.salary}
                     description={company.description}
                     status={company.status}
                     interest={company.interest}
+                    company_size={company.company_size}
                 />) : < EmptyCompany />
             }
         </section>

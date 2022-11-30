@@ -44,18 +44,19 @@ exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) 
     next();
 }));
 exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, link, jobType, company_size, salary, location, description } = req.body;
-    if (!name || !jobType)
+    const { name, link, jobtype, company_size, salary, location, description, interest } = req.body;
+    if (!name || !jobtype)
         next(new Error("Invalid input values"));
-    const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobType,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", [
+    const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobtype,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", [
         name,
         link,
-        jobType,
+        jobtype,
         company_size,
         salary,
         location,
         description,
         "Interested",
+        interest
     ]);
     if (!newCompany)
         next(new Error("Failed to create company"));
@@ -75,7 +76,7 @@ exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
     next();
 }));
 exports.deleteCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { company_id } = req.body;
+    const { company_id } = req.params;
     if (!company_id)
         next(new Error("Invalid request"));
     const deletingCompany = yield postgres_1.default.query("SELECT * FROM company WHERE company.company_id = $1", [company_id]);

@@ -18,13 +18,16 @@ const TopPage = () => {
     const {getCompaniesByStatus} = useCompanyContext();
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested/>)
     const {seeker} = useSeekerContext()
+    const {companies} = useCompanyContext()
+
+    console.log("SEEEEEKERR", seeker)
 
     useEffect(() => {
         const pageRender = (showPage: string) => {
             if (seeker!.seeker_id) {
                 switch (showPage) {
                     case "Interested":
-                        // getCompaniesByStatus(seeker!.seeker_id, "Interested")
+                        getCompaniesByStatus(seeker!.seeker_id, "Interested")
                         setChildComponent(<Interested/>)
                         break;
                     case "Applied":
