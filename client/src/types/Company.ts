@@ -16,9 +16,10 @@ export type Company = {
     name: string;
     link: string;
     location: Location;
-    jobTitle: string;
+    company_size: string;
+    jobtype: string;
     salary: string;
     description: string;
-    status: Status;
+    status?: Status;
     interest: number;
 }

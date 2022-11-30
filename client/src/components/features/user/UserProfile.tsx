@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {BiEditAlt} from "react-icons/bi"
 import InputField from "../../models/InputField";
+import {Seeker} from "../../../types/Seeker";
 import {useSeekerContext} from "../../context/seekerContext";
 
 type User = {
@@ -15,8 +16,12 @@ type User = {
  */
 const UserProfile = (props: User) => {
 
+    const {seeker} = useSeekerContext()
     const [wannaEdit, setWannaEdit] = useState<boolean>(false);
-    const {seeker} = useSeekerContext();
+    const [editSeeker, setEditSeeker] = useState<Seeker>({
+        name:props.name,
+        email: props.email
+    })
 
     return (
         <div className="user-profile my-4 flex lg:flex-col lg:col-span-1 ">
@@ -24,8 +29,20 @@ const UserProfile = (props: User) => {
 
             {wannaEdit ?
                 <div className="w-full">
-                    < InputField type={"name"} title={""} name={"name"} value={"name"}/>
-                    < InputField type={"email"} title={""} name={"email"} value={"email"}/>
+                    < InputField
+                        type={"name"}
+                        title={""}
+                        name={"name"}
+                        value={editSeeker.name}
+                        onChange={(e) => {setEditSeeker({...editSeeker, [e.target.name]: e.target.value})}}
+                    />
+                    < InputField
+                        type={"email"}
+                        title={""}
+                        name={"email"}
+                        value={editSeeker.email}
+                        onChange={(e) => {setEditSeeker({...editSeeker, [e.target.name]: e.target.value})}}
+                    />
                     <div className="flex justify-center w-full gap-2 mt-4">
                         <div
                             onClick={() => {
@@ -57,9 +74,8 @@ const UserProfile = (props: User) => {
                         <BiEditAlt/>
                         <span className="text-sm">Edit Profile</span>
                     </div>
-                </div>}
-
-
+                </div>
+            }
         </div>
     );
 };

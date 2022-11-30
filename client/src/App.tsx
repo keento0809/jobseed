@@ -14,8 +14,12 @@ import Rejected from "./components/features/user/Rejected";
 import CompanyMap from "./pages/user/Map";
 import ProtectRoutes from "./components/features/ProtectRoutes";
 import Documents from "./pages/user/Documents";
+import {useCompanyContext} from "./components/context/companyContext";
 
 function App() {
+
+    const {companies} = useCompanyContext()
+
     return (
         <div className="App">
             <Header/>
@@ -25,7 +29,7 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                     <Route element={<ProtectRoutes/>}>
                         <Route path="/user" element={<><TopPage/><Outlet/></>}>
-                            <Route path="interested" element={<Interested/>}/>
+                            <Route path="interested" element={<Interested companies={companies}/>}/>
                             <Route path="applied" element={<Applied/>}/>
                             <Route path="interview" element={<Interview/>}/>
                             <Route path="rejected" element={<Rejected/>}/>

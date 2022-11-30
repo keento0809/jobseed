@@ -20,7 +20,7 @@ const MapDetail =  ({company}: Props) => {
     return (
         <div className="py-4 font-thin">
             <h3 className="text-xl">Company name: {company.name}</h3>
-            <p>Position: {company.jobTitle}</p>
+            <p>Position: {company.jobtype}</p>
             <p>{address}</p>
             <a
                 href={`https://www.google.com/maps/search/?api=1&query=${address}`}

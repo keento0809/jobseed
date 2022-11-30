@@ -8,12 +8,14 @@ import {Company} from "../../../types/Company";
 import CompanyEditModal from "../../../pages/user/CompanyEditModal";
 import {Status} from "../../../types/Company";
 import {useSeekerContext} from "../../context/seekerContext";
+import {useCompanyContext} from "../../context/companyContext";
 
-const CompanyCard = ({name, jobTitle, status, link, company_id, description, location}: Company) => {
+const CompanyCard = ({name, jobtype, status, link, company_id, description, location}: Company) => {
     const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false)
     const [showEditModal, setShowEditModal] = useState<boolean>(false)
     const [showStatusDropDown, setShowStatusDropDown] = useState<boolean>(false)
     const {seeker} = useSeekerContext()
+    const {deleteCompany} = useCompanyContext()
 
     const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
@@ -40,7 +42,7 @@ const CompanyCard = ({name, jobTitle, status, link, company_id, description, loc
 
     type StatusName = keyof typeof Status
     const enumStatusName = Object.values(Status).filter(item  => typeof item !== "number") as StatusName[];
-    const statusArr = enumStatusName.filter(item => item !== getStatus(status))
+    const statusArr = enumStatusName.filter(item => item !== getStatus(status!))
 
     const statusHandler = (e: React.MouseEvent<HTMLElement>) => {
         console.log(e.currentTarget.innerText)
@@ -63,7 +65,7 @@ const CompanyCard = ({name, jobTitle, status, link, company_id, description, loc
             <div className="card-left flex flex-wrap flex-col justify-between">
                 <div>
                     <h3 className="font-bold">{name}</h3>
-                    <h2 className="font-thin">{jobTitle}</h2>
+                    <h2 className="font-thin">{jobtype}</h2>
                 </div>
                 <div
                     className="flex items-center cursor-pointer mt-6 relative"
@@ -72,14 +74,18 @@ const CompanyCard = ({name, jobTitle, status, link, company_id, description, loc
                     <h2
                         className="bg-slate-300 px-4 rounded-md z-0"
                     >
-                        {getStatus(status)}
+                        {status}
                     </h2>
                     {statusDropDown()}
                 </div>
 
             </div>
             <ul className="">
-                <li className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer">< BsTrash/></li>
+                <li
+                    onClick={() => {deleteCompany(company_id!)}}
+                    className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer">
+                    < BsTrash/>
+                </li>
                 <li className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer"><a
                     href={link} target="_blank">< AiOutlineLink/></a></li>
                 <li className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer"
@@ -97,7 +103,7 @@ const CompanyCard = ({name, jobTitle, status, link, company_id, description, loc
                 <CompanyEditModal
                     setShowModal={setShowEditModal}
                     name={name}
-                    jobTitle={jobTitle}
+                    jobtype={jobtype}
                     link={link}
                     description={description}
                     company_id={company_id!}

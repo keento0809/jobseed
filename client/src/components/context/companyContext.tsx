@@ -28,7 +28,7 @@ export const useCompanyContext = () => {
 }
 
 export const CompanyProvider = ({children}: Props) => {
-    const [companies, setCompanies] = useState<Company[]>(Companies_data);
+    const [companies, setCompanies] = useState<Company[]>([]);
     const [cookies] = useCookies();
 
     const getCompanies = async (seeker_id: string) => {
@@ -53,7 +53,7 @@ export const CompanyProvider = ({children}: Props) => {
                 },
                 withCredentials : true
             })
-            await setCompanies(res.data.companiesWithStatus);
+            setCompanies(res.data.companiesWithStatus);
             console.log(companies, "I got data")
         } catch (err: any) {
             console.log(err)
@@ -72,7 +72,7 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            setCompanies([...companies!, res.data.companiesWithStatus])
+            console.log(res.data)
         } catch (err: any) {
             console.log(err.message);
         }
@@ -85,6 +85,7 @@ export const CompanyProvider = ({children}: Props) => {
                 url: `http://localhost:8080/companies/${companyId}`,
                 data
             })
+
         } catch (err: any) {
             console.log(err.message)
         }
@@ -94,7 +95,11 @@ export const CompanyProvider = ({children}: Props) => {
         try {
             await axios({
                 method: "delete",
-                url: `http://localhost:8080/companies/${companyId}`
+                url: `http://localhost:8080/companies/${companyId}`,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
             })
         } catch (err: any) {
             console.log(err.message)
