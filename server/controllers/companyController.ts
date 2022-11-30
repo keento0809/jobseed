@@ -19,7 +19,7 @@ export const getAllCompanies = catchAsync(
 export const getCompaniesWithStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { status } = req.params;
-    console.log(status)
+    console.log(status);
     if (
       !status ||
       (status !== "Interested" &&
@@ -41,9 +41,16 @@ export const getCompaniesWithStatus = catchAsync(
 
 export const createNewCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-<<<<<<< HEAD
-    const { name, link, jobtype, company_size, salary, location, description, interest } =
-      req.body;
+    const {
+      name,
+      link,
+      jobtype,
+      company_size,
+      salary,
+      location,
+      description,
+      interest,
+    } = req.body;
     if (!name || !jobtype) next(new Error("Invalid input values"));
     const newCompany = await pool.query(
       "INSERT INTO company (name,link,jobtype,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
@@ -56,15 +63,8 @@ export const createNewCompany = catchAsync(
         location,
         description,
         "Interested",
-          interest
+        interest,
       ]
-=======
-    const { name, link, jobType, salary, location, description } = req.body;
-    if (!name || !jobType) next(new Error("Invalid input values"));
-    const newCompany = await pool.query(
-      "INSERT INTO company (name,link,jobType,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
-      [name, link, jobType, salary, location, description, "Interested"]
->>>>>>> upstream/dev
     );
     if (!newCompany) next(new Error("Failed to create company"));
     res.status(200).json({ newCompany });
@@ -77,11 +77,29 @@ export const updateCompany = catchAsync(
     const { company_id } = req.params;
     if (!company_id) next(new Error("Invalid request"));
     const { companyObj } = req.body;
-    const { name, link, location, jobType, description, status, interest } =
-      companyObj;
+    const {
+      name,
+      link,
+      jobtype,
+      company_size,
+      salary,
+      location,
+      description,
+      interest,
+    } = companyObj;
     const updatingCompany = await pool.query(
-      "UPDATE company SET name = $1,link = $2,location = $3,jobType = $4,description = $5,status = $6,interest = $7  WHERE company.company_id = $8",
-      [name, link, location, jobType, description, status, interest, company_id]
+      "UPDATE company SET name = $1,link = $2,jobtype = $3,company_size = $4,salary = $5,location = $6,description = $7,interest = $8 WHERE company.company_id = $9",
+      [
+        name,
+        link,
+        jobtype,
+        company_size,
+        salary,
+        location,
+        description,
+        interest,
+        company_id,
+      ]
     );
     if (!updatingCompany) next(new Error("Failed to update company"));
     res.status(200).json({ updatingCompany });
