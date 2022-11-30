@@ -29,8 +29,8 @@ const Login = () => {
                 axiosConfig
             )
             console.log(res.data.seeker)
-            setCookie("JWT_TOKEN", res.data.token);
-            setSeeker(res.data.seeker)
+            await setCookie("JWT_TOKEN", res.data.token);
+            await setSeeker(res.data.seeker)
             navigate("/user", { replace: true });
         } catch (e: any) {
             console.log(e)

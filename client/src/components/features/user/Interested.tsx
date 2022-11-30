@@ -4,9 +4,12 @@ import {useCompanyContext} from "../../context/companyContext";
 import {Company} from "../../../types/Company";
 import EmptyCompany from "./EmptyCompany";
 
+type CompaniesProps = {
+    companies : Company[]
+}
 
-const Interested = () => {
-    const { companies } = useCompanyContext();
+const Interested = ({companies} : CompaniesProps) => {
+
     console.log("companies", companies)
 
     return (
