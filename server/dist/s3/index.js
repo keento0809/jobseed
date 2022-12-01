@@ -12,15 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getObjectSignedUrl = exports.deleteFile = exports.uploadFile = exports.s3Client = exports.bucketName = void 0;
+exports.getObjectSignedUrl = exports.deleteFile = exports.uploadFile = exports.uploadDocument = exports.s3Client = exports.bucketName = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
+const aws_sdk_1 = __importDefault(require("aws-sdk"));
 const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
 const dotenv_1 = __importDefault(require("dotenv"));
+const fs_1 = __importDefault(require("fs"));
 dotenv_1.default.config();
 exports.bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
 const accessKey = process.env.ACCESS_KEY;
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+const s3 = new aws_sdk_1.default.S3({
+    accessKeyId: accessKey,
+    secretAccessKey: secretAccessKey,
+});
 exports.s3Client = new client_s3_1.S3Client({
     credentials: {
         accessKeyId: accessKey,
@@ -28,6 +34,21 @@ exports.s3Client = new client_s3_1.S3Client({
     },
     region: bucketRegion,
 });
+function uploadDocument(fileName) {
+    const fileContent = fs_1.default.readFileSync(fileName);
+    const params = {
+        Bucket: exports.bucketName,
+        Key: fileName,
+        Body: fileContent,
+    };
+    s3.upload(params, function (err, data) {
+        if (err) {
+            throw err;
+        }
+        console.log(`File uploaded successfully. ${data.Location}`);
+    });
+}
+exports.uploadDocument = uploadDocument;
 function uploadFile(fileBuffer, fileName, mimetype) {
     const uploadParams = {
         Bucket: exports.bucketName,
