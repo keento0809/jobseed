@@ -19,7 +19,6 @@ export const getAllCompanies = catchAsync(
 export const getCompaniesWithStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { status } = req.params;
-    console.log(status);
     if (
       !status ||
       (status !== "Interested" &&

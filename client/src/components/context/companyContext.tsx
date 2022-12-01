@@ -29,15 +29,21 @@ export const useCompanyContext = () => {
 
 export const CompanyProvider = ({children}: Props) => {
     const [companies, setCompanies] = useState<Company[]>([]);
+    const [allCompanies, setAllCompanies] = useState<Company[]>([]);
     const [cookies] = useCookies();
 
     const getCompanies = async (seeker_id: string) => {
         try {
             let res = await axios({
                 method: "get",
-                url: `http://localhost:8080/companies/${seeker_id}`
+                url: `http://localhost:8080/companies/${seeker_id}`,
+                headers: {
+                    authorization:`Bearer ${cookies.JWT_TOKEN}`
+                },
+                withCredentials : true
             })
-            setCompanies(res.data);
+            // setCompanies(res.data);
+            console.log(res.data)
         } catch (err: any) {
             console.log(err.message)
         }

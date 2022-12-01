@@ -27,7 +27,6 @@ exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __aw
 }));
 exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { status } = req.params;
-    console.log(status);
     if (!status ||
         (status !== "Interested" &&
             status !== "Applied" &&
