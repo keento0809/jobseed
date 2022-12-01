@@ -1,19 +1,33 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import CompanyCard from "./CompanyCard";
 import {Company} from "../../../types/Company";
 import EmptyCompany from "./EmptyCompany";
+import {useCompanyContext} from "../../context/companyContext";
 
 type CompaniesProps = {
     companies : Company[]
 }
 
 const Rejected = ({companies} : CompaniesProps) => {
+
+    const [filtered, setFiltered] = useState<Company[]>(companies);
+    const {filteredChildren} = useCompanyContext();
+
+    useEffect(()=> {
+        if(companies.length > 0 && filteredChildren.length > 0) {
+            let filteredArray = companies.filter(company => company.name?.includes(filteredChildren))
+            setFiltered(filteredArray)
+            return
+        }
+        setFiltered(companies)
+    }, [filteredChildren])
+
     return (
         <section className="interested card-container">
             <section className="interested card-container">
                 {
                     companies.length > 0 ?
-                        companies!.map( (company) =>
+                        filtered.map( (company) =>
                             <CompanyCard
                                 key={company.company_id}
                                 company_id={company.company_id}

@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useContext, useState} from "react";
+import React, {createContext, ReactNode, useContext, useState} from "react";
 import axios from "axios";
 import {Company} from "../../types/Company";
 import Companies_data from "../../data/Companies_data";
@@ -18,7 +18,9 @@ type companyContext = {
     getCompaniesByStatus:(seeker_id: string, status: string) => void,
     createCompany: (data: Company) => void,
     editCompany: (id: string, data: Company) => void,
-    deleteCompany: (id: string) => void
+    deleteCompany: (id: string) => void,
+    filteredChildren: string,
+    setFilteredChildren: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const companyContext = createContext({} as companyContext)
@@ -31,6 +33,7 @@ export const CompanyProvider = ({children}: Props) => {
     const [companies, setCompanies] = useState<Company[]>([]);
     const [allCompanies, setAllCompanies] = useState<Company[]>([]);
     const [cookies] = useCookies();
+    const [filteredChildren, setFilteredChildren] = useState<string>("")
 
     const getCompanies = async (seeker_id: string) => {
         try {
@@ -68,7 +71,6 @@ export const CompanyProvider = ({children}: Props) => {
 
     const createCompany = async (company: Company) => {
         try {
-            console.log(`Bearer ${cookies.JWT_TOKEN}`)
             let res = await axios({
                 method: "post",
                 url: "http://localhost:8080/companies/new",
@@ -84,16 +86,21 @@ export const CompanyProvider = ({children}: Props) => {
         }
     }
 
-    const editCompany = async (companyId: string, data: Company) => {
+    const editCompany = async (companyId: string, companyObj: Company) => {
         try {
-            await axios({
+            let res = await axios({
                 method: "patch",
                 url: `http://localhost:8080/companies/${companyId}`,
-                data
+                data: companyObj,
+                withCredentials: true,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
             })
-
+            console.log(res.data)
         } catch (err: any) {
-            console.log(err.message)
+            console.log(err)
         }
     }
 
@@ -113,7 +120,7 @@ export const CompanyProvider = ({children}: Props) => {
     }
 
     return (
-        <companyContext.Provider value={{companies, getCompanies, getCompaniesByStatus,createCompany, editCompany, deleteCompany}}>
+        <companyContext.Provider value={{companies, getCompanies, getCompaniesByStatus,createCompany, editCompany, deleteCompany, filteredChildren,setFilteredChildren}}>
             {children}
         </companyContext.Provider>
     )

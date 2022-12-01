@@ -18,12 +18,9 @@ const TopPage = () => {
     const [showPage, setShowPage] = useState<string>("Interested");
     const [showModal, setShowModal] = useState<boolean>(false);
     const {getCompaniesByStatus} = useCompanyContext();
-    const {companies, getCompanies} = useCompanyContext()
+    const {companies, filteredChildren,setFilteredChildren} = useCompanyContext()
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested companies={companies}/>)
     const {seeker} = useSeekerContext();
-
-    getCompanies(seeker!.seeker_id!)
-
     useEffect(() => {
         const pageRender = (showPage: string) => {
             console.log(showPage)
@@ -70,7 +67,10 @@ const TopPage = () => {
                     setShowPage={setShowPage}
                 />
                 <div className="lg:grid lg:grid-cols-9 lg:gap-4 mt-4">
-                    < Search/>
+                    < Search　
+                     filteredChildren={filteredChildren}
+                     setFilteredChildren={setFilteredChildren}
+                    />
                     <Button_sm
                         title={"New"}
                         color={"text-white"}

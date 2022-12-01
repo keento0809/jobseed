@@ -75,7 +75,8 @@ export const updateCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { company_id } = req.params;
     if (!company_id) next(new Error("Invalid request"));
-    const { companyObj } = req.body;
+    // const { companyObj } = req.body;
+    // console.log(companyObj)
     const {
       name,
       link,
@@ -85,7 +86,7 @@ export const updateCompany = catchAsync(
       location,
       description,
       interest,
-    } = companyObj;
+    } = req.body
     const updatingCompany = await pool.query(
       "UPDATE company SET name = $1,link = $2,jobtype = $3,company_size = $4,salary = $5,location = $6,description = $7,interest = $8 WHERE company.company_id = $9",
       [

@@ -64,8 +64,8 @@ exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
     const { company_id } = req.params;
     if (!company_id)
         next(new Error("Invalid request"));
-    const { companyObj } = req.body;
-    const { name, link, jobtype, company_size, salary, location, description, interest, } = companyObj;
+    // const { companyObj } =
+    const { name, link, jobtype, company_size, salary, location, description, interest, } = req.body;
     const updatingCompany = yield postgres_1.default.query("UPDATE company SET name = $1,link = $2,jobtype = $3,company_size = $4,salary = $5,location = $6,description = $7,interest = $8 WHERE company.company_id = $9", [
         name,
         link,
