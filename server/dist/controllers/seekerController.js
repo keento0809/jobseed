@@ -53,7 +53,7 @@ exports.addAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(
         .toBuffer();
     const result = yield (0, s3_1.uploadFile)(fileBuffer, caption, file === null || file === void 0 ? void 0 : file.mimetype);
     // add data to DB
-    const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2", [caption, seeker_id]);
+    const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *", [caption, seeker_id]);
     const updatingSeeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "Good new avatar", updatingSeeker });
     next();

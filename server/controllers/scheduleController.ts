@@ -111,7 +111,7 @@ export const updateSchedule = catchAsync(
     } = req.body;
     if (!schedule_id) next(new Error("Invalid request"));
     const updatingScheduleData = await pool.query(
-      "UPDATE schedule SET title = $1,date = $2,description = $3,seeker_id = $4,company_id = $5,allday = $6,enddate = $7,backendcolor = $8 WHERE schedule.schedule_id = $9",
+      "UPDATE schedule SET title = $1,date = $2,description = $3,seeker_id = $4,company_id = $5,allday = $6,enddate = $7,backendcolor = $8 WHERE schedule.schedule_id = $9 RETURNING *",
       [
         title,
         date,
