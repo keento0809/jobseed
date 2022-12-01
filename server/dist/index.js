@@ -10,7 +10,6 @@ const cors_1 = __importDefault(require("cors"));
 const companyRoutes_1 = __importDefault(require("./routes/companyRoutes"));
 const seekerRoutes_1 = __importDefault(require("./routes/seekerRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
-const calendarRoutes_1 = __importDefault(require("./routes/calendarRoutes"));
 const scheduleRoutes_1 = __importDefault(require("./routes/scheduleRoutes"));
 const multer_1 = __importDefault(require("multer"));
 // import
@@ -31,7 +30,6 @@ app.use((0, cookie_parser_1.default)());
 app.use("/auth", authRoutes_1.default);
 app.use("/seekers", seekerRoutes_1.default);
 app.use("/companies", companyRoutes_1.default);
-app.use("/calenders", calendarRoutes_1.default);
 app.use("/schedules", scheduleRoutes_1.default);
 app.get("/", (req, res) => {
     res.send("Express + Typescript server");
@@ -42,4 +40,4 @@ app.all("*", (req, res, next) => {
 app.listen(port, () => {
     console.log(`[server] server is listening on port ${port}`);
 });
-// npx tsc --watch
+// "concurrently \"tsc-watch --onSuccess\" \"nodemon dist/index.js\""

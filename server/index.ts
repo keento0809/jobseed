@@ -40,4 +40,4 @@ app.listen(port, () => {
   console.log(`[server] server is listening on port ${port}`);
 });
 
-// npx tsc --watch
+// "concurrently \"tsc-watch --onSuccess\" \"nodemon dist/index.js\""
