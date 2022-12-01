@@ -49,7 +49,7 @@ export const addAvatar = catchAsync(
     const result = await uploadFile(fileBuffer, caption, file?.mimetype);
     // add data to DB
     const updatingSeekerData = await pool.query(
-      "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2",
+      "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *",
       [caption, seeker_id]
     );
     const updatingSeeker = updatingSeekerData.rows[0];
