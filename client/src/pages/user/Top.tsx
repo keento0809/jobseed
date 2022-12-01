@@ -11,6 +11,8 @@ import CompanyModal from "./CompanyModal";
 import Search from "../../components/models/Search";
 import {useCompanyContext} from "../../components/context/companyContext";
 import {useSeekerContext} from "../../components/context/seekerContext";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 const TopPage = () => {
     const [showPage, setShowPage] = useState<string>("Interested");
@@ -19,6 +21,8 @@ const TopPage = () => {
     const {companies, getCompanies} = useCompanyContext()
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested companies={companies}/>)
     const {seeker} = useSeekerContext();
+
+    getCompanies(seeker!.seeker_id!)
 
     useEffect(() => {
         const pageRender = (showPage: string) => {
