@@ -34,7 +34,6 @@ exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) 
             status !== "Rejected"))
         return next(new Error("Invalid request"));
     const companiesWithStatusInfo = yield postgres_1.default.query("SELECT * FROM company WHERE company.status = $1", [status]);
-    console.log(status);
     if (!companiesWithStatusInfo)
         next(new Error("No companies found"));
     const companiesWithStatus = companiesWithStatusInfo.rows;
@@ -42,7 +41,7 @@ exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) 
     next();
 }));
 exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, link, jobtype, company_size, salary, location, description, interest } = req.body;
+    const { name, link, jobtype, company_size, salary, location, description, interest, } = req.body;
     if (!name || !jobtype)
         next(new Error("Invalid input values"));
     const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobtype,company_size,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", [
@@ -54,7 +53,7 @@ exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __a
         location,
         description,
         "Interested",
-        interest
+        interest,
     ]);
     if (!newCompany)
         next(new Error("Failed to create company"));
@@ -66,8 +65,18 @@ exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
     if (!company_id)
         next(new Error("Invalid request"));
     const { companyObj } = req.body;
-    const { name, link, location, jobType, description, status, interest } = companyObj;
-    const updatingCompany = yield postgres_1.default.query("UPDATE company SET name = $1,link = $2,location = $3,jobType = $4,description = $5,status = $6,interest = $7  WHERE company.company_id = $8", [name, link, location, jobType, description, status, interest, company_id]);
+    const { name, link, jobtype, company_size, salary, location, description, interest, } = companyObj;
+    const updatingCompany = yield postgres_1.default.query("UPDATE company SET name = $1,link = $2,jobtype = $3,company_size = $4,salary = $5,location = $6,description = $7,interest = $8 WHERE company.company_id = $9", [
+        name,
+        link,
+        jobtype,
+        company_size,
+        salary,
+        location,
+        description,
+        interest,
+        company_id,
+    ]);
     if (!updatingCompany)
         next(new Error("Failed to update company"));
     res.status(200).json({ updatingCompany });

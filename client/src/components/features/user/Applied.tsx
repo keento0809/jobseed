@@ -9,7 +9,6 @@ type CompaniesProps = {
 }
 const Applied = ({companies} : CompaniesProps) => {
     return (
-        <section className="interested card-container">
             <section className="interested card-container">
                 {
                     companies.length > 0 ?
@@ -28,7 +27,6 @@ const Applied = ({companies} : CompaniesProps) => {
                                 company_size={company.company_size}
                             />) : < EmptyCompany />
                 }
-            </section>
         </section>
     );
 };

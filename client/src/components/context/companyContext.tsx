@@ -29,6 +29,7 @@ export const useCompanyContext = () => {
 
 export const CompanyProvider = ({children}: Props) => {
     const [companies, setCompanies] = useState<Company[]>([]);
+    const [allCompanies, setAllCompanies] = useState<Company[]>([]);
     const [cookies] = useCookies();
 
     const getCompanies = async (seeker_id: string) => {

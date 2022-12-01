@@ -21,25 +21,25 @@ const TopPage = () => {
     const {seeker} = useSeekerContext();
 
     useEffect(() => {
-        const pageRender = async (showPage: string) => {
+        const pageRender = (showPage: string) => {
             console.log(showPage)
             if (seeker!.seeker_id) {
                 switch (showPage) {
                     case "Interested":
-                        getCompaniesByStatus(seeker!.seeker_id, showPage)
+                        getCompaniesByStatus(seeker!.seeker_id, "Interested")
                         setChildComponent(<Interested companies={companies}/>)
                         break;
                     case "Applied":
-                        getCompaniesByStatus(seeker!.seeker_id, showPage)
+                        getCompaniesByStatus(seeker!.seeker_id, "Applied")
                         setChildComponent(<Applied companies={companies}/>)
                         break;
                     case "Interview":
-                        getCompaniesByStatus(seeker!.seeker_id, showPage)
-                        setChildComponent(<Interview  companies={companies}/>)
+                        getCompaniesByStatus(seeker!.seeker_id, "Interview")
+                        setChildComponent(<Interview companies={companies}/>)
                         break;
                     case "Rejected":
-                        getCompaniesByStatus(seeker!.seeker_id, showPage)
-                        setChildComponent(<Rejected  companies={companies}/>)
+                        getCompaniesByStatus(seeker!.seeker_id, "Rejected")
+                        setChildComponent(<Rejected companies={companies}/>)
                         break;
                     default:
                 }
@@ -56,8 +56,8 @@ const TopPage = () => {
     return (
         <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
             < UserProfile
-                name={"Misato Tanno"}
-                email={"misato@gmail.com"}
+                name={seeker!.name}
+                email={seeker!.email}
                 avatar={human}
             />
             <div className="lg:col-span-4">
