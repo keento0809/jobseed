@@ -20,7 +20,6 @@ export const getAllCompanies = catchAsync(
 export const getCompaniesWithStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { status } = req.params;
-    console.log(status);
     if (
       !status ||
       (status !== "Interested" &&
@@ -78,7 +77,6 @@ export const updateCompany = catchAsync(
       status,
       interest,
     } = req.body;
-    console.log(company_id);
     const updatingCompany = await pool.query(
       "UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8 WHERE company.company_id = $9 RETURNING *",
       [

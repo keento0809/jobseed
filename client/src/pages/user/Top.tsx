@@ -11,19 +11,19 @@ import CompanyModal from "./CompanyModal";
 import Search from "../../components/models/Search";
 import {useCompanyContext} from "../../components/context/companyContext";
 import {useSeekerContext} from "../../components/context/seekerContext";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 const TopPage = () => {
     const [showPage, setShowPage] = useState<string>("Interested");
     const [showModal, setShowModal] = useState<boolean>(false);
     const {getCompaniesByStatus} = useCompanyContext();
-    const {companies} = useCompanyContext()
+    const {companies, filteredChildren,setFilteredChildren} = useCompanyContext()
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested companies={companies}/>)
     const {seeker} = useSeekerContext();
-
     useEffect(() => {
-
-        const pageRender = async (showPage: string) => {
-
+        const pageRender = (showPage: string) => {
+            console.log(showPage)
             if (seeker!.seeker_id) {
                 switch (showPage) {
                     case "Interested":
@@ -32,15 +32,15 @@ const TopPage = () => {
                         break;
                     case "Applied":
                         getCompaniesByStatus(seeker!.seeker_id, "Applied")
-                        setChildComponent(<Applied/>)
+                        setChildComponent(<Applied companies={companies}/>)
                         break;
                     case "Interview":
                         getCompaniesByStatus(seeker!.seeker_id, "Interview")
-                        setChildComponent(<Interview/>)
+                        setChildComponent(<Interview companies={companies}/>)
                         break;
                     case "Rejected":
                         getCompaniesByStatus(seeker!.seeker_id, "Rejected")
-                        setChildComponent(<Rejected/>)
+                        setChildComponent(<Rejected companies={companies}/>)
                         break;
                     default:
                 }
@@ -57,8 +57,8 @@ const TopPage = () => {
     return (
         <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
             < UserProfile
-                name={"Misato Tanno"}
-                email={"misato@gmail.com"}
+                name={seeker!.name}
+                email={seeker!.email}
                 avatar={human}
             />
             <div className="lg:col-span-4">
@@ -67,7 +67,10 @@ const TopPage = () => {
                     setShowPage={setShowPage}
                 />
                 <div className="lg:grid lg:grid-cols-9 lg:gap-4 mt-4">
-                    < Search/>
+                    < Search　
+                     filteredChildren={filteredChildren}
+                     setFilteredChildren={setFilteredChildren}
+                    />
                     <Button_sm
                         title={"New"}
                         color={"text-white"}

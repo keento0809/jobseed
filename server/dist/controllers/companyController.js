@@ -28,7 +28,6 @@ exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __aw
 }));
 exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { status } = req.params;
-    console.log(status);
     if (!status ||
         (status !== "Interested" &&
             status !== "Applied" &&
@@ -66,7 +65,6 @@ exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
     if (!company_id)
         next(new Error("Invalid request"));
     const { name, link, jobtype, location, description, salary, status, interest, } = req.body;
-    console.log(company_id);
     const updatingCompany = yield postgres_1.default.query("UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8 WHERE company.company_id = $9 RETURNING *", [
         name,
         link,

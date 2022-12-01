@@ -18,7 +18,7 @@ import {useCompanyContext} from "./components/context/companyContext";
 
 function App() {
 
-    const {companies} = useCompanyContext()
+    const {companies, filteredChildren,setFilteredChildren} = useCompanyContext()
 
     return (
         <div className="App">
@@ -30,9 +30,9 @@ function App() {
                     <Route element={<ProtectRoutes/>}>
                         <Route path="/user" element={<><TopPage/><Outlet/></>}>
                             <Route path="interested" element={<Interested companies={companies}/>}/>
-                            <Route path="applied" element={<Applied/>}/>
-                            <Route path="interview" element={<Interview/>}/>
-                            <Route path="rejected" element={<Rejected/>}/>
+                            <Route path="applied" element={<Applied companies={companies}/>}/>
+                            <Route path="interview" element={<Interview companies={companies}/>}/>
+                            <Route path="rejected" element={<Rejected companies={companies}/>}/>
                         </Route>
                         <Route path="/calendar" element={<Calendar/>}/>
                         <Route path="/map" element={<CompanyMap/>}/>

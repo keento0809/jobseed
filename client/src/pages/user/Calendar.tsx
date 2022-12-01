@@ -14,7 +14,6 @@ const Calendar = () => {
 
     const [selectedEvent, setSelectedEvent] = useState<EventClickArg >();
     const {events} = useScheduleContext();
-
     const handleClick = (arg: EventClickArg) => {
         console.log(arg)
         setSelectedEvent(arg)

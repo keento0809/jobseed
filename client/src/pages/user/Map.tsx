@@ -42,7 +42,7 @@ const CompanyMap = () => {
                 companies?.map(company =>
                     <div key={company.company_id}>
                         <Marker
-                            position={company.location}
+                            position={{lat: company.location.lat, lng: company.location.lng}}
                             onClick={() => setSelectedMap(company)}
                             title={company.name}
                         />
