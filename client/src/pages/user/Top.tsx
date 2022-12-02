@@ -11,19 +11,18 @@ import CompanyModal from "./CompanyModal";
 import Search from "../../components/models/Search";
 import {useCompanyContext} from "../../components/context/companyContext";
 import {useSeekerContext} from "../../components/context/seekerContext";
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
 const TopPage = () => {
     const [showPage, setShowPage] = useState<string>("Interested");
     const [showModal, setShowModal] = useState<boolean>(false);
     const {getCompaniesByStatus} = useCompanyContext();
-    const {companies, filteredChildren,setFilteredChildren} = useCompanyContext()
+    const {companies, filteredChildren, setFilteredChildren} = useCompanyContext()
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested companies={companies}/>)
     const {seeker} = useSeekerContext();
+
     useEffect(() => {
         const pageRender = (showPage: string) => {
-            console.log(showPage)
             if (seeker!.seeker_id) {
                 switch (showPage) {
                     case "Interested":
@@ -47,6 +46,7 @@ const TopPage = () => {
             } else return null
         }
         pageRender(showPage)
+
     }, [showPage])
 
     const modalHandler = (e: React.MouseEvent<HTMLElement>) => {
@@ -59,7 +59,7 @@ const TopPage = () => {
             < UserProfile
                 name={seeker!.name}
                 email={seeker!.email}
-                avatar={human}
+                avatar={seeker!.avatar ? seeker!.avatar : human}
             />
             <div className="lg:col-span-4">
                 <UserNav
@@ -67,9 +67,9 @@ const TopPage = () => {
                     setShowPage={setShowPage}
                 />
                 <div className="lg:grid lg:grid-cols-9 lg:gap-4 mt-4">
-                    < Search　
-                     filteredChildren={filteredChildren}
-                     setFilteredChildren={setFilteredChildren}
+                    < Search
+                        filteredChildren={filteredChildren}
+                        setFilteredChildren={setFilteredChildren}
                     />
                     <Button_sm
                         title={"New"}

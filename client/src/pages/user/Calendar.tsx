@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FullCalendar, {EventClickArg} from "@fullcalendar/react"
 import dayGridPlugin from '@fullcalendar/daygrid'
 import listPlugin from '@fullcalendar/list';
@@ -13,11 +13,16 @@ import {useScheduleContext} from "../../components/context/scheduleContext";
 const Calendar = () => {
 
     const [selectedEvent, setSelectedEvent] = useState<EventClickArg >();
-    const {events} = useScheduleContext();
+    const {seeker} = useSeekerContext()
+    const {events, getSchedule} = useScheduleContext();
     const handleClick = (arg: EventClickArg) => {
         console.log(arg)
         setSelectedEvent(arg)
     }
+
+    useEffect(() => {
+        getSchedule(seeker!.seeker_id!)
+    }, [])
 
     return (
         <div className="relative z-5 h-[40rem]">

@@ -4,5 +4,5 @@ export type Seeker = {
     email: string;
     password?: string;
     passwordConfirmation?:string;
-    avatar?: string;
+    avatar?: string ;
 }

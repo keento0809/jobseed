@@ -1,6 +1,7 @@
 import React, {createContext, ReactNode, useContext, useState} from 'react';
 import axios from "axios";
 import {CalenderEvent, Schedule} from "../../types/Schedule";
+import {useCookies} from "react-cookie";
 
 
 type Props = {
@@ -10,7 +11,7 @@ type Props = {
 type scheduleContext = {
     events: any[],
     getSchedule: (id: string) => void,
-    createSchedule: (schedule: Schedule) => void,
+    createSchedule: (schedule: any) => void,
     updateSchedule: (id: string, data: Schedule) => void,
     deleteSchedule: (id: string) => void
 }
@@ -23,40 +24,55 @@ export const useScheduleContext = () => {
 
 export const ScheduleProvider = ({children}: Props) => {
 
-    const [events, setEvents] = useState([{
-        schedule_id: "100000",
-        seeker_id: "1",
-        company_id: "2",
-        title: "Hi",
-        allDay: false,
-        date: "2022-11-21T13:00:00",
-        end: "2022-11-21T16:00:00",
-        backgroundColor: "#257e4a",
-        description: "dsadsadsasasadsadsadsadsadsa"
-    }]);
+    const [events, setEvents] = useState([]);
+    const [cookies] = useCookies();
 
     const getSchedule = async (seeker_id: string) => {
         try {
-            let res = await axios.get(`http://localhost:8080/schedules/${seeker_id}`)
-            setEvents(res.data)
+            let res = await axios({
+                method: "get",
+                url: `http://localhost:8080/schedules/allSchedules/${seeker_id}`,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
+            })
+            setEvents(res.data.schedules)
         } catch (e: any) {
             console.log(e.message)
         }
     }
 
-    const createSchedule = async (data: Schedule) => {
+    const createSchedule = async (data: any) => {
         try {
-            let res = await axios.post("http://localhost:8080/schedules/new", data)
+            let res = await axios({
+                method: "post",
+                url: `http://localhost:8080/schedules/new`,
+                data,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
+            })
             console.log(res.data)
         } catch (e: any) {
-            console.log(e.message)
+            console.log(e)
         }
     }
 
     const updateSchedule = async (schedule_id: string, newSchedule: Schedule) => {
         try {
-            let res = await axios.patch(`http://localhost:8080/schedules/${schedule_id}`, newSchedule)
-            setEvents(res.data)
+            let res = await axios({
+                method:"put",
+                url: `http://localhost:8080/schedules/${schedule_id}`,
+                data: newSchedule,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
+            })
+            console.log(res.data)
+            // setEvents(res.data)
         } catch (e: any) {
             console.log(e.message)
         }

@@ -18,7 +18,7 @@ import {useCompanyContext} from "./components/context/companyContext";
 
 function App() {
 
-    const {companies, filteredChildren,setFilteredChildren} = useCompanyContext()
+    const {companies} = useCompanyContext()
 
     return (
         <div className="App">
