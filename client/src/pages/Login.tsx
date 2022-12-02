@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Text_filed from "../components/models/Text_filed";
 import Button_sm from "../components/models/Button_sm";
 import {GoogleLogin} from "react-google-login";
 import {gapi} from "gapi-script";
 import {useCookies} from "react-cookie";
-import {Navigate, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useSeekerContext} from "../components/context/seekerContext";
 
@@ -14,43 +14,35 @@ const Login = () => {
     const [password, setPassword] = useState<string>("")
     const [cookies, setCookie, removeCookie] = useCookies();
     const navigate = useNavigate();
-    const {setSeeker} = useSeekerContext()
-
-    let axiosConfig = {
-        withCredentials : true
-    }
+    const {setSeeker, loginSeeker} = useSeekerContext()
 
     const loginUser = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        try {
-            let res = await axios.post(
-                "http://localhost:8080/auth/login",
-                {email, password},
-                axiosConfig
-            )
-            console.log(res.data.seeker)
-            await setCookie("JWT_TOKEN", res.data.token);
-            await setSeeker(res.data.seeker)
-            navigate("/user", { replace: true });
-        } catch (e: any) {
-            console.log(e)
-        }
+        loginSeeker(email, password)
     }
 
-    const OnSuccess = (res: any) => {
-        setCookie("JWT_TOKEN", res.accessToken);
+    gapi.load("client:auth2", () => {
+        gapi.client.init({
+            clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+            plugin_name: "chat",
+        });
+    });
 
-        navigate("/user", { replace: true });
+    const OnSuccess = (res: any) => {
+        console.log(res.profileObj.imageUrl)
+        setSeeker({
+            seeker_id: res.profileObj.googleId,
+            name: res.profileObj.name,
+            email: res.profileObj.email,
+            avatar: res.profileObj.imageUrl
+        })
+        setCookie("JWT_TOKEN", res.accessToken);
+        navigate("/user", {replace: true});
     }
 
     const onFailure = (res: any) => {
         console.log("Fail to login", res)
     }
-
-    // if(cookies.JWT_TOKEN) {
-    //     navigate("/user", { replace: true });
-    // }
-
     return (
         <section className="wrapper flex justify-center font-bold">
             <div className="h-[78vh] flex justify-center items-center">
@@ -60,13 +52,17 @@ const Login = () => {
                         <Text_filed
                             type={"email"}
                             name={"email"}
-                            onChangeHandler={(e)=>{setEmail(e.target.value)}}
+                            onChangeHandler={(e) => {
+                                setEmail(e.target.value)
+                            }}
                             value={email}
                         />
                         <Text_filed
                             type={"password"}
                             name={"password"}
-                            onChangeHandler={(e)=>{setPassword(e.target.value)}}
+                            onChangeHandler={(e) => {
+                                setPassword(e.target.value)
+                            }}
                             value={password}
                         />
                         < Button_sm

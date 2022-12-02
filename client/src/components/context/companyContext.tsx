@@ -94,7 +94,6 @@ export const CompanyProvider = ({children}: Props) => {
                 data: companyObj,
                 withCredentials: true,
                 headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })

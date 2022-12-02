@@ -65,7 +65,7 @@ export const getSchedulesSortedByCategory = catchAsync(
 
 export const createSchedule = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const {
+      const {
       title,
       date,
       description,

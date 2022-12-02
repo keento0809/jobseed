@@ -25,7 +25,6 @@ const UserProfile = (props: User) => {
 
     const updateUserInfoHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        console.log(editSeeker)
         updateSeeker(seeker!.seeker_id!, editSeeker)
         setWannaEdit(false)
         navigate("/user", { replace: true });
