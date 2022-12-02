@@ -36,6 +36,7 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
         createCompany(companyData)
         console.log(companyData)
         setShowModal(false)
+        window.location.reload()
     }
 
     return (

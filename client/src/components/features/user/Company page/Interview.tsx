@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import CompanyCard from "./CompanyCard";
-import {useCompanyContext} from "../../context/companyContext";
-import {Company} from "../../../types/Company";
-import EmptyCompany from "./EmptyCompany";
+import CompanyCard from "../CompanyCard";
+import {Company} from "../../../../types/Company";
+import EmptyCompany from "../EmptyCompany";
+import {useCompanyContext} from "../../../context/companyContext";
 
 type CompaniesProps = {
     companies: Company[]
 }
-const Applied = ({companies}: CompaniesProps) => {
 
+const Interview = () => {
+
+    const {filteredChildren, companies} = useCompanyContext();
     const [filtered, setFiltered] = useState<Company[]>(companies);
-    const {filteredChildren} = useCompanyContext();
 
-    useEffect(()=> {
-        if(companies.length > 0 && filteredChildren.length > 0) {
+    useEffect(() => {
+        if (companies.length > 0 && filteredChildren.length > 0) {
             let filteredArray = companies.filter(company => company.name?.includes(filteredChildren))
             setFiltered(filteredArray)
             return
@@ -21,11 +22,12 @@ const Applied = ({companies}: CompaniesProps) => {
         setFiltered(companies)
     }, [filteredChildren])
 
+
     return (
         <section className="interested card-container">
             {
                 companies.length > 0 ?
-                   filtered.map((company) =>
+                    filtered.map((company) =>
                         <CompanyCard
                             key={company.company_id}
                             company_id={company.company_id}
@@ -44,4 +46,4 @@ const Applied = ({companies}: CompaniesProps) => {
     );
 };
 
-export default Applied;
+export default Interview;

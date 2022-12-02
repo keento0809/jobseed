@@ -1,10 +1,4 @@
-
-export enum Status {
-    Interested,
-    Applied,
-    Interview,
-    Rejected
-}
+export const company_status: string[] = ["Interested", "Applied", "Interview", "Rejected"]
 
 export type Location = {
     lat: number,
@@ -20,6 +14,6 @@ export type Company = {
     jobtype: string;
     salary: string;
     description: string;
-    status?: Status;
-    interest: number;
+    status?: string;
+    interest?: number;
 }

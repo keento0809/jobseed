@@ -75,7 +75,9 @@ export const createSchedule = catchAsync(
       enddate,
       backendcolor,
     } = req.body;
-    if (!title || !date || !allday) next(new Error("Invalid input data"));
+      console.log(req.body)
+
+    if (!title || !date || allday === undefined) next(new Error("Invalid input data"));
     const newScheduleData = await pool.query(
       "INSERT INTO schedule (title,date,description,seeker_id,company_id,allday,enddate,backendcolor) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
       [
