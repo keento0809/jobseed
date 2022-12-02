@@ -15,10 +15,11 @@ type modalProps = {
     description: string,
     company_id: string,
     company_size: string,
-    location: Location
+    location: Location,
+    status: string
 }
 
-const CompanyEditModal = ({setShowModal, name, jobtype,link,description,company_id, company_size,location}: modalProps) => {
+const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,company_id, company_size,location}: modalProps) => {
 
     const [searchPlace, setSearchPlace] = useState<Location>(location)
     const {editCompany} = useCompanyContext()
@@ -29,10 +30,9 @@ const CompanyEditModal = ({setShowModal, name, jobtype,link,description,company_
         location: searchPlace,
         company_size,
         jobtype,
+        status,
         salary: "",
-        description: description,
-        status: 0,
-        interest: 0
+        description: description
     })
 
     const companyDataHandler = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {

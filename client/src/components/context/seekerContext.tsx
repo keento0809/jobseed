@@ -1,4 +1,4 @@
-import React, {createContext, Dispatch, ReactNode, SetStateAction, useContext, useState} from "react";
+import React, {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from "react";
 import {Seeker} from "../../types/Seeker";
 import Seeker1 from "../../data/Seeker"
 import axios from "axios";
@@ -12,6 +12,8 @@ type Props = {
 type seekerContext = {
     seeker: Seeker | undefined,
     setSeeker: Dispatch<SetStateAction<Seeker | undefined>>,
+    loadingSeeker: boolean,
+    setLoadingSeeker: Dispatch<SetStateAction<boolean>>,
     createSeeker: (data: Seeker) => void,
     loginSeeker: (email: string, password: string) => void,
     updateSeeker: (seeker_id: string, data: Seeker) => void,
@@ -25,6 +27,16 @@ export const useSeekerContext = () => {
 }
 
 export const SeekerProvider = ({children}: Props) => {
+    const [loadingSeeker, setLoadingSeeker] = useState<boolean>(true)
+
+
+    useEffect(() => {
+        setLoadingSeeker(true);
+        const seeker_id = cookies.seeker_id
+        getSeekerData(seeker_id)
+        setLoadingSeeker(false)
+    }, [])
+
     const [seeker, setSeeker] = useState<Seeker | undefined>(Seeker1);
     const [cookies, setCookie] = useCookies();
     const navigate = useNavigate();
@@ -105,10 +117,13 @@ export const SeekerProvider = ({children}: Props) => {
         }
     }
 
+    if(loadingSeeker && seeker === undefined) {
+        return <h1>Loading...</h1>
+    }
 
     return (
-        <seekerContext.Provider value={{seeker, setSeeker, createSeeker, loginSeeker, updateSeeker, getSeekerData}}>
-            {children}
+        <seekerContext.Provider value={{seeker, setSeeker, loadingSeeker, setLoadingSeeker,createSeeker, loginSeeker, updateSeeker, getSeekerData}}>
+            {!loadingSeeker && children}
         </seekerContext.Provider>
     )
 }

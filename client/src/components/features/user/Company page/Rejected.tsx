@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import CompanyCard from "./CompanyCard";
-import {Company} from "../../../types/Company";
-import EmptyCompany from "./EmptyCompany";
-import {useCompanyContext} from "../../context/companyContext";
+import CompanyCard from "../CompanyCard";
+import {Company} from "../../../../types/Company";
+import EmptyCompany from "../EmptyCompany";
+import {useCompanyContext} from "../../../context/companyContext";
 
 type CompaniesProps = {
     companies : Company[]
 }
 
-const Rejected = ({companies} : CompaniesProps) => {
+const Rejected = () => {
 
+    const {filteredChildren, companies} = useCompanyContext();
     const [filtered, setFiltered] = useState<Company[]>(companies);
-    const {filteredChildren} = useCompanyContext();
 
     useEffect(()=> {
         if(companies.length > 0 && filteredChildren.length > 0) {

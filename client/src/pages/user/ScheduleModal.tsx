@@ -21,7 +21,7 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
             title: "",
             date: "",
             enddate: "",
-            allday: false,
+            allday: true,
             description: "",
             backendcolor: "#257e4a"
         }
@@ -39,8 +39,8 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
         setNewSchedule({...newSchedule, [e.target.name]: e.target.value});
     }
 
-    const handleAllDay = () => {
-        setNewSchedule({...newSchedule, allday: !newSchedule.allday})
+    const handleAllDay = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewSchedule({...newSchedule, allday: e.target.checked})
     }
 
     const colorHandler = (e: React.MouseEvent<HTMLElement>) => {
@@ -49,12 +49,22 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
     }
 
     const startDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let startDate = startDateRef.current!.value + "T" + startTimeRef.current!.value + ":00"
+        let startDate;
+        if(!newSchedule.allday) {
+            startDate = startDateRef.current!.value
+        } else {
+            startDate = startDateRef.current!.value + "T" + startTimeRef.current!.value + ":00"
+        }
         setNewSchedule({...newSchedule, date: startDate})
     }
 
     const endDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let endDate = startDateRef.current!.value + "T" + startTimeRef.current!.value + ":00"
+        let endDate;
+        if(!newSchedule.allday) {
+            endDate = startDateRef.current!.value
+        } else {
+            endDate = startDateRef.current!.value + "T" + startTimeRef.current!.value + ":00"
+        }
         setNewSchedule({...newSchedule, enddate: endDate})
     }
 
@@ -122,7 +132,7 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
                     <label className="block">
                         <input
                             type="checkbox"
-                            name="timeInclude"
+                            name="allday"
                             checked={newSchedule.allday}
                             onChange={handleAllDay}
                         />

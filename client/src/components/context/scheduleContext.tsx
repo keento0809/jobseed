@@ -2,6 +2,7 @@ import React, {createContext, ReactNode, useContext, useState} from 'react';
 import axios from "axios";
 import {CalenderEvent, Schedule} from "../../types/Schedule";
 import {useCookies} from "react-cookie";
+import {Company} from "../../types/Company";
 
 
 type Props = {
@@ -9,7 +10,8 @@ type Props = {
 };
 
 type scheduleContext = {
-    events: any[],
+    events: any[] | undefined,
+    setEvents: React.Dispatch<React.SetStateAction<any[]>>;
     getSchedule: (id: string) => void,
     createSchedule: (schedule: any) => void,
     updateSchedule: (id: string, data: Schedule) => void,
@@ -24,7 +26,7 @@ export const useScheduleContext = () => {
 
 export const ScheduleProvider = ({children}: Props) => {
 
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<any[]>([]);
     const [cookies] = useCookies();
 
     const getSchedule = async (seeker_id: string) => {
@@ -90,7 +92,7 @@ export const ScheduleProvider = ({children}: Props) => {
     }
 
     return(
-        <scheduleContext.Provider value={{events,getSchedule, createSchedule, updateSchedule,deleteSchedule}}>
+        <scheduleContext.Provider value={{events,setEvents,getSchedule, createSchedule, updateSchedule,deleteSchedule}}>
             {children}
         </scheduleContext.Provider>
     )
