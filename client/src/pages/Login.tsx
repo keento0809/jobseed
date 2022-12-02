@@ -5,7 +5,6 @@ import {GoogleLogin} from "react-google-login";
 import {gapi} from "gapi-script";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router-dom";
-import axios from "axios";
 import {useSeekerContext} from "../components/context/seekerContext";
 
 const Login = () => {

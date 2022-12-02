@@ -14,7 +14,8 @@ type seekerContext = {
     setSeeker: Dispatch<SetStateAction<Seeker | undefined>>,
     createSeeker: (data: Seeker) => void,
     loginSeeker: (email: string, password: string) => void,
-    updateSeeker: (seeker_id: string, data: Seeker) => void
+    updateSeeker: (seeker_id: string, data: Seeker) => void,
+    getSeekerData: (seeker_id: string) => void
 }
 
 const seekerContext = createContext({} as seekerContext);
@@ -59,7 +60,9 @@ export const SeekerProvider = ({children}: Props) => {
                 data: {email, password},
                 withCredentials: true
             })
+            console.log(res.data)
             setCookie("JWT_TOKEN", res.data.token);
+            setCookie("seeker_id", res.data.seeker.seeker_id)
             setSeeker(res.data.seeker)
             navigate("/user", {replace: true});
         } catch (e: any) {
@@ -85,9 +88,26 @@ export const SeekerProvider = ({children}: Props) => {
         }
     }
 
+    const getSeekerData = async (seeker_id: string) => {
+        try {
+            let res = await axios({
+                method: "get",
+                url: `http://localhost:8080/seekers/${seeker_id}`,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
+            })
+            console.log(res.data)
+            setSeeker(res.data.seeker)
+        } catch (e : any) {
+            console.log(e.message)
+        }
+    }
+
 
     return (
-        <seekerContext.Provider value={{seeker, setSeeker, createSeeker, loginSeeker, updateSeeker}}>
+        <seekerContext.Provider value={{seeker, setSeeker, createSeeker, loginSeeker, updateSeeker, getSeekerData}}>
             {children}
         </seekerContext.Provider>
     )

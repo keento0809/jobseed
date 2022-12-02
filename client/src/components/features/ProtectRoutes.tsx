@@ -4,7 +4,7 @@ import {useCookies} from "react-cookie";
 
 const ProtectRoutes = () => {
     const [cookie] = useCookies();
-    return ( cookie ? <Outlet/> : < Navigate to={"/home"}/> )
+    return ( cookie.JWT_TOKEN ? <Outlet/> : < Navigate to={"/home"}/> )
 };
 
 export default ProtectRoutes;

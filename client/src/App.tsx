@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Header from "./components/features/Header";
 import {Outlet, Route, Routes} from "react-router-dom";
 import Signup from "./pages/Signup";
@@ -15,10 +15,21 @@ import CompanyMap from "./pages/user/Map";
 import ProtectRoutes from "./components/features/ProtectRoutes";
 import Documents from "./pages/user/Documents";
 import {useCompanyContext} from "./components/context/companyContext";
+import {useCookies} from "react-cookie";
+import {useSeekerContext} from "./components/context/seekerContext";
 
 function App() {
 
-    const {companies} = useCompanyContext()
+    const {companies} = useCompanyContext();
+    const {getSeekerData} = useSeekerContext()
+    const [cookie] = useCookies();
+
+    useEffect(() => {
+        if(cookie.JWT_TOKEN && cookie.seeker_id) {
+            const seeker_id = cookie.seeker_id
+            getSeekerData(seeker_id)
+        }
+    }, [])
 
     return (
         <div className="App">
