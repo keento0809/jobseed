@@ -25,50 +25,14 @@ const UserProfile = (props: User) => {
 
     const updateUserInfoHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        console.log(editSeeker)
         updateSeeker(seeker!.seeker_id!, editSeeker)
         setWannaEdit(false)
         navigate("/user", { replace: true });
     }
 
-    // const [file, setFile] = useState<string | Blob>();
-    // const [caption, setCaption] = useState("");
-    //
-    // const handleSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
-    //     const { files } = event.target;
-    //     event.preventDefault();
-    //     // Create form data
-    //     const formData = new FormData();
-    //     formData.append("image", file!);
-    //     formData.append("caption", caption);
-    //     await axios.post(`http://localhost:8080/seekers/avatar/${seeker!.seeker_id}`, formData, {
-    //         headers: {"Content-Type": "multipart/form-data"},
-    //     });
-    //     navigate("/")
-    // };
-    //
-    // const fileSelected = (event: React.MouseEvent<HTMLElement>) => {
-    //     const file = event.target.files[0];
-    //     setFile(file);
-    // };
-
     return (
         <div className="user-profile my-4 flex lg:flex-col lg:col-span-1 ">
             <img src={props.avatar} alt="" className="w-24 lg:w-52 rounded-full object-cover"/>
-
-            {/*<form>*/}
-            {/*    <input*/}
-            {/*        type="file"*/}
-            {/*        accept="image/*"*/}
-            {/*        onChange={handleSubmit}*/}
-            {/*    />*/}
-            {/*    <input*/}
-            {/*        type="text"*/}
-            {/*        value={caption}*/}
-            {/*        onChange={(e) => {setCaption(e.target.value)}}*/}
-            {/*        placeholder="Caption"*/}
-            {/*    />*/}
-            {/*</form>*/}
             {wannaEdit ?
                 <div className="w-full">
                     < InputField

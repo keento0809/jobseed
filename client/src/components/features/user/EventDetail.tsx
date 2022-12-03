@@ -4,6 +4,7 @@ import {IoMdClose} from "react-icons/io";
 import {MdModeEditOutline} from "react-icons/md";
 import {BsTrash} from "react-icons/bs"
 import ScheduleEditModal from "../../../pages/user/ScheduleEditModal";
+import {useScheduleContext} from "../../context/scheduleContext";
 
 type EventDetailProps = {
     selectedEvent: EventClickArg
@@ -12,6 +13,7 @@ type EventDetailProps = {
 const EventDetail = ({selectedEvent}: EventDetailProps) => {
 
     const [showScheduleEditModal, setShowScheduleEditModal] = useState<boolean>(false)
+    const {deleteSchedule} = useScheduleContext()
 
     const getDay = (day: Date, start: boolean) => {
         const date = day.toString().slice(0, 9)
@@ -36,7 +38,7 @@ const EventDetail = ({selectedEvent}: EventDetailProps) => {
                                 size={30} className="p-2 block cursor-pointer rounded-full hover:bg-slate-300"
                             />
                             < BsTrash
-                                onClick={()=> {console.log("Hi")}}
+                                onClick={() => deleteSchedule(selectedEvent.event._def.extendedProps.schedule_id)}
                                 size={30} className="block p-2 cursor-pointer rounded-full hover:bg-slate-300"
                             />
                         </div>

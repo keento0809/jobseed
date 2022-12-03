@@ -5,6 +5,7 @@ import Text_field_lg from "../../components/models/Text_field_lg";
 import Button_sm from "../../components/models/Button_sm";
 import {Schedule} from "../../types/Schedule";
 import ColorPicker from "../../components/features/user/ColorPicker";
+import {useScheduleContext} from "../../components/context/scheduleContext";
 
 type Props = {
     setShowScheduleModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,20 +14,21 @@ type Props = {
 }
 
 const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => {
-    const [newSchedule, setNewSchedule] = useState<Schedule>(
+    const [newSchedule, setNewSchedule] = useState(
         {
             seeker_id,
             company_id,
             title: "",
             date: "",
-            endDate: "",
-            allDay: false,
+            enddate: "",
+            allday: true,
             description: "",
-            backendColor: "#257e4a"
+            backendcolor: "#257e4a"
         }
     )
 
     const [showColorPallet, setShowColorPallet] = useState<boolean>(false)
+    const {createSchedule} = useScheduleContext();
 
     const startDateRef = useRef<HTMLInputElement>(null)
     const startTimeRef = useRef<HTMLInputElement>(null)
@@ -37,27 +39,38 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
         setNewSchedule({...newSchedule, [e.target.name]: e.target.value});
     }
 
-    const handleAllDay = () => {
-        setNewSchedule({...newSchedule, allDay: !newSchedule.allDay})
+    const handleAllDay = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewSchedule({...newSchedule, allday: e.target.checked})
     }
 
     const colorHandler = (e: React.MouseEvent<HTMLElement>) => {
-        setNewSchedule({...newSchedule, backendColor: e.currentTarget.id})
+        setNewSchedule({...newSchedule, backendcolor: e.currentTarget.id})
         setShowColorPallet(false)
     }
 
     const startDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let startDate = startDateRef.current!.value + "T" + startTimeRef.current!.value + ":00"
+        let startDate;
+        if(!newSchedule.allday) {
+            startDate = startDateRef.current!.value
+        } else {
+            startDate = startDateRef.current!.value + "T" + startTimeRef.current!.value + ":00"
+        }
         setNewSchedule({...newSchedule, date: startDate})
     }
 
     const endDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let endDate = startDateRef.current!.value + "T" + startTimeRef.current!.value + ":00"
-        setNewSchedule({...newSchedule, endDate})
+        let endDate;
+        if(!newSchedule.allday) {
+            endDate = startDateRef.current!.value
+        } else {
+            endDate = startDateRef.current!.value + "T" + startTimeRef.current!.value + ":00"
+        }
+        setNewSchedule({...newSchedule, enddate: endDate})
     }
 
-    const createSchedule = () => {
+    const createScheduleWithServer = () => {
         console.log(newSchedule)
+        createSchedule(newSchedule)
         setShowScheduleModal(false)
     }
 
@@ -88,7 +101,7 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
                             onChange={startDateHandler}
                         />
                         <input
-                            className={`${newSchedule.allDay ? null : "hidden"} font-thin shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+                            className={`${newSchedule.allday ? null : "hidden"} font-thin shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
                             type={"time"}
                             id={"time"}
                             ref={startTimeRef}
@@ -107,7 +120,7 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
                             onChange={endDateHandler}
                         />
                         <input
-                            className={`${newSchedule.allDay ? null : "hidden"} font-thin shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+                            className={`${newSchedule.allday ? null : "hidden"} font-thin shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
                             type={"time"}
                             id={"time"}
                             ref={endTimeRef}
@@ -119,15 +132,15 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
                     <label className="block">
                         <input
                             type="checkbox"
-                            name="timeInclude"
-                            checked={newSchedule.allDay}
+                            name="allday"
+                            checked={newSchedule.allday}
                             onChange={handleAllDay}
                         />
                         <span className="pl-2 font-thin">Include time</span>
                     </label>
                     <ColorPicker
                         setColor={colorHandler}
-                        color={newSchedule.backendColor}
+                        color={newSchedule.backendcolor}
                         showColorPallet={showColorPallet}
                         setShowColorPallet={setShowColorPallet}
                     />
@@ -143,7 +156,7 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
                         color={"text-white"}
                         bg_color={"bg-content-blue"}
                         width={"w-24"}
-                        onClick={createSchedule}
+                        onClick={createScheduleWithServer}
                     />
                     <Button_sm
                         title={"close"}
