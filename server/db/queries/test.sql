@@ -2,11 +2,11 @@
 -- ALTER TABLE company ALTER COLUMN location TYPE POINT USING location::POINT;
 -- ALTER TABLE schedule ADD COLUMN allDay BOOLEAN;
 -- ALTER TABLE schedule ADD COLUMN end TEXT;
--- ALTER TABLE schedule ADD COLUMN end TEXT;
+-- ALTER TABLE company ADD COLUMN seeker_id INTEGER REFERENCES seeker(seeker_id);
 -- ALTER TABLE schedule DROP COLUMN time;
 -- ALTER TABLE schedule RENAME COLUMN memo TO description;
 -- ADD COLUMN avatar TEXT DEFAULT NULL
 -- SELECT * FROM schedule;
 -- SELECT * FROM seeker;
-DROP TABLE document;
--- DELETE FROM schedule WHERE schedule.company_id = 2;
+-- DROP TABLE document;
+DELETE FROM company WHERE company.company_id = 6;
