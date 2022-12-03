@@ -17,6 +17,7 @@ type Props = {
 type companyContext = {
     companies: Company[],
     setCompanies: React.Dispatch<React.SetStateAction<Company[]>>;
+
     getCompanies: (id: string) => void,
     getCompaniesByStatus:(seeker_id: string, status: string) => void,
     createCompany: (data: Company) => void,

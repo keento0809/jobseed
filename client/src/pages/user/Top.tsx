@@ -24,7 +24,6 @@ const TopPage = () => {
     const {getSeekerData} = useSeekerContext()
     const [cookie] = useCookies();
 
-
     useEffect(() => {
         const firstRender = async () => {
             try {
@@ -37,7 +36,6 @@ const TopPage = () => {
                     },
                     withCredentials: true
                 })
-                console.log("hi")
                 setCompanies(res.data.companiesWithStatus);
                 setChildComponent(<Interested/>)
             } catch (e: any) {
