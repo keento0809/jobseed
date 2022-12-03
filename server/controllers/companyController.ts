@@ -12,6 +12,7 @@ export const getAllCompanies = catchAsync(
     );
     if (!companiesData) next(new Error("No company found"));
     const companies = companiesData.rows;
+    console.log(companies, "a-a-a-");
     res.status(200).json({ msg: "succeeded to get companies", companies });
     next();
   }
@@ -41,11 +42,19 @@ export const getCompaniesWithStatus = catchAsync(
 
 export const createNewCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, link, jobtype, salary, location, description, interest } =
-      req.body;
+    const {
+      name,
+      link,
+      jobtype,
+      salary,
+      location,
+      description,
+      interest,
+      seeker_id,
+    } = req.body;
     if (!name || !jobtype) next(new Error("Invalid input values"));
     const newCompany = await pool.query(
-      "INSERT INTO company (name,link,jobtype,salary,location,description,status,interest) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
+      "INSERT INTO company (name,link,jobtype,salary,location,description,status,interest,seeker_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
       [
         name,
         link,
@@ -55,6 +64,7 @@ export const createNewCompany = catchAsync(
         description,
         "Interested",
         interest,
+        seeker_id,
       ]
     );
     if (!newCompany) next(new Error("Failed to create company"));
@@ -76,9 +86,10 @@ export const updateCompany = catchAsync(
       salary,
       status,
       interest,
+      seeker_id,
     } = req.body;
     const updatingCompany = await pool.query(
-      "UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8 WHERE company.company_id = $9 RETURNING *",
+      "UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8,seeker_id = $9 WHERE company.company_id = $10 RETURNING *",
       [
         name,
         link,
@@ -88,6 +99,7 @@ export const updateCompany = catchAsync(
         description,
         interest,
         status,
+        seeker_id,
         company_id,
       ]
     );
