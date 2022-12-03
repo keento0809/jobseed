@@ -23,7 +23,6 @@ exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __aw
     if (!companiesData)
         next(new Error("No company found"));
     const companies = companiesData.rows;
-    console.log(companies, "a-a-a-");
     res.status(200).json({ msg: "succeeded to get companies", companies });
     next();
 }));
