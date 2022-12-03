@@ -7,7 +7,8 @@ export const getAllCompanies = catchAsync(
     const { seeker_id } = req.params;
     if (!seeker_id) next(new Error("Invalid seeker"));
     const companiesData = await pool.query(
-      "SELECT * FROM company JOIN schedule ON company.company_id = schedule.company_id JOIN seeker ON schedule.seeker_id = seeker.seeker_id WHERE seeker.seeker_id = $1",
+      "SELECT * FROM company WHERE company.seeker_id = $1",
+      // "SELECT * FROM company JOIN schedule ON company.company_id = schedule.company_id JOIN seeker ON schedule.seeker_id = seeker.seeker_id WHERE seeker.seeker_id = $1",
       [seeker_id]
     );
     if (!companiesData) next(new Error("No company found"));
