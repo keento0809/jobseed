@@ -39,5 +39,3 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
 app.listen(port, () => {
   console.log(`[server] server is listening on port ${port}`);
 });
-
-// "concurrently \"tsc-watch --onSuccess\" \"nodemon dist/index.js\""

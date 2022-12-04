@@ -39,7 +39,7 @@ export const ScheduleProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            setEvents(res.data.schedules)
+            await setEvents(res.data.schedules)
         } catch (e: any) {
             console.log(e.message)
         }
@@ -74,6 +74,7 @@ export const ScheduleProvider = ({children}: Props) => {
                 }
             })
             console.log(res.data)
+            window.location.reload();
             // setEvents(res.data)
         } catch (e: any) {
             console.log(e.message)

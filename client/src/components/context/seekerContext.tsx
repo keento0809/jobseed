@@ -27,17 +27,9 @@ export const useSeekerContext = () => {
 }
 
 export const SeekerProvider = ({children}: Props) => {
+
     const [loadingSeeker, setLoadingSeeker] = useState<boolean>(true)
-
-
-    useEffect(() => {
-        setLoadingSeeker(true);
-        const seeker_id = cookies.seeker_id
-        getSeekerData(seeker_id)
-        setLoadingSeeker(false)
-    }, [])
-
-    const [seeker, setSeeker] = useState<Seeker | undefined>(Seeker1);
+    const [seeker, setSeeker] = useState<Seeker | undefined>();
     const [cookies, setCookie] = useCookies();
     const navigate = useNavigate();
 
@@ -93,7 +85,6 @@ export const SeekerProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log(res.data.updatingSeeker.rows[0])
             setSeeker(res.data.updatingSeeker.rows[0])
         } catch (e: any) {
             console.log(e.message)
@@ -117,13 +108,9 @@ export const SeekerProvider = ({children}: Props) => {
         }
     }
 
-    if(loadingSeeker && seeker === undefined) {
-        return <h1>Loading...</h1>
-    }
-
     return (
         <seekerContext.Provider value={{seeker, setSeeker, loadingSeeker, setLoadingSeeker,createSeeker, loginSeeker, updateSeeker, getSeekerData}}>
-            {!loadingSeeker && children}
+            {children}
         </seekerContext.Provider>
     )
 }

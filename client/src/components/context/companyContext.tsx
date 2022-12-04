@@ -17,7 +17,6 @@ type Props = {
 type companyContext = {
     companies: Company[],
     setCompanies: React.Dispatch<React.SetStateAction<Company[]>>;
-
     getCompanies: (id: string) => void,
     getCompaniesByStatus:(seeker_id: string, status: string) => void,
     createCompany: (data: Company) => void,
@@ -37,7 +36,7 @@ export const useCompanyContext = () => {
 
 export const CompanyProvider = ({children}: Props) => {
     const [companies, setCompanies] = useState<Company[]>([]);
-    const {seeker} = useSeekerContext()
+    const {seeker, loadingSeeker, setLoadingSeeker} = useSeekerContext()
     const [allCompanies, setAllCompanies] = useState<Company[]>([]);
     const [cookies] = useCookies();
     const [filteredChildren, setFilteredChildren] = useState<string>("");
@@ -55,7 +54,6 @@ export const CompanyProvider = ({children}: Props) => {
                 withCredentials : true
             })
             setAllCompanies(res.data);
-            console.log(res.data)
         } catch (err: any) {
             console.log(err.message)
         }
@@ -71,7 +69,8 @@ export const CompanyProvider = ({children}: Props) => {
                 },
                 withCredentials : true
             })
-            setCompanies(res.data.companiesWithStatus);
+            await setCompanies(res.data.companiesWithStatus);
+            await setLoadingSeeker(false)
         } catch (err: any) {
             console.log(err)
         }
@@ -89,7 +88,8 @@ export const CompanyProvider = ({children}: Props) => {
                 }
             })
             console.log(res.data)
-            navigate("/user", {state: {seeker}});
+            window.location.reload();
+            navigate("/calendar", {replace: true});
         } catch (err: any) {
             console.log(err.message);
         }
@@ -107,9 +107,20 @@ export const CompanyProvider = ({children}: Props) => {
                 }
             })
             console.log(res.data)
-
+            window.location.reload();
         } catch (err: any) {
             console.log(err)
+        }
+    }
+
+    const editStatus = async (companyId: string, companyObj: Company) => {
+        try {
+            let res = await axios({
+                method: "patch",
+                url: `http://localhost:8080/companies/${companyId}`,
+            })
+        } catch (e: any) {
+
         }
     }
 
@@ -123,8 +134,7 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log("HI")
-            navigate("/user", {replace: true});
+            window.location.reload();
         } catch (err: any) {
             console.log(err.message)
         }

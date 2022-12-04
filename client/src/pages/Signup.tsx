@@ -21,7 +21,7 @@ const Signup: FC = () => {
     const userHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewUser({...newUser!, [e.target.name]: e.target.value});
     };
-    const createUser =  (e: React.MouseEvent<HTMLButtonElement>) => {
+    const createUser = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         console.log(newUser)
         createSeeker(newUser);
@@ -31,38 +31,41 @@ const Signup: FC = () => {
             <div className="h-[78vh] flex justify-center items-center">
                 <div>
                     <h2 className="text-center font-bold">Welcome to Jub hunter</h2>
-                    <Text_filed
-                        type={"text"}
-                        name={"name"}
-                        onChangeHandler={userHandler}
-                        value={newUser.name}
-                    />
-                    <Text_filed
-                        type={"email"}
-                        name={"email"}
-                        onChangeHandler={userHandler}
-                        value={newUser.email}
-                    />
-                    <Text_filed
-                        type={"password"}
-                        name={"password"}
-                        onChangeHandler={userHandler}
-                        value={newUser.password}
-                    />
-                    <Text_filed
-                        type={"password"}
-                        name={"passwordConfirmation"}
-                        onChangeHandler={userHandler}
-                        value={newUser.passwordConfirmation}
-                    />
-                    <Button_sm
-                        title={"Sign up"}
-                        color={"text-white"}
-                        bg_color={"bg-content-blue"}
-                        className={"mt-8"}
-                        width={"w-full"}
-                        onClick={createUser}
-                    />
+                    <form action="">
+
+                        <Text_filed
+                            type={"text"}
+                            name={"name"}
+                            onChangeHandler={userHandler}
+                            value={newUser.name}
+                        />
+                        <Text_filed
+                            type={"email"}
+                            name={"email"}
+                            onChangeHandler={userHandler}
+                            value={newUser.email}
+                        />
+                        <Text_filed
+                            type={"password"}
+                            name={"password"}
+                            onChangeHandler={userHandler}
+                            value={newUser.password}
+                        />
+                        <Text_filed
+                            type={"password"}
+                            name={"passwordConfirmation"}
+                            onChangeHandler={userHandler}
+                            value={newUser.passwordConfirmation}
+                        />
+                        <Button_sm
+                            title={"Sign up"}
+                            color={"text-white"}
+                            bg_color={"bg-content-blue"}
+                            className={"mt-8"}
+                            width={"w-full"}
+                            onClick={createUser}
+                        />
+                    </form>
                     <div id="signInDiv"></div>
                 </div>
             </div>

@@ -15,6 +15,7 @@ const HamburgerMenu = ({isOpen, setMenuOpen}: Props) => {
     const logout = () => {
         setMenuOpen(false)
         removeCookie("JWT_TOKEN");
+        removeCookie("seeker_id");
         navigate("/", { replace: true });
     }
 

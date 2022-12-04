@@ -6,6 +6,7 @@ import {BsBuilding} from "react-icons/bs"
 import {useCompanyContext} from "../../components/context/companyContext";
 import {Company, Location} from "../../types/Company";
 import GooglePlace from "../../components/features/user/GooglePlace";
+import {useSeekerContext} from "../../components/context/seekerContext";
 
 type modalProps = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,6 +24,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
 
     const [searchPlace, setSearchPlace] = useState<Location>(location)
     const {editCompany} = useCompanyContext()
+    const {seeker} = useSeekerContext()
     const [editCompanyData, setEditCompanyData] = useState<Company>({
         company_id,
         name,
@@ -32,7 +34,8 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
         jobtype,
         status,
         salary: "",
-        description: description
+        description: description,
+        seeker_id: seeker!.seeker_id!
     })
 
     const companyDataHandler = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -45,6 +48,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
         editCompany(company_id, editCompanyData)
         setShowModal(false)
     }
+
 
     return (
         <div className="bg-modal relative z-[1001]">

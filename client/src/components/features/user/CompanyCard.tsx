@@ -11,12 +11,12 @@ import {useSeekerContext} from "../../context/seekerContext";
 import {useCompanyContext} from "../../context/companyContext";
 
 
-const CompanyCard = ({name, jobtype, status, link, company_id, description, location, company_size}: Company) => {
+const CompanyCard = ({name, jobtype, status, link, company_id, description, location, company_size, seeker_id}: Company) => {
     const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false)
     const [showEditModal, setShowEditModal] = useState<boolean>(false)
     const [showStatusDropDown, setShowStatusDropDown] = useState<boolean>(false)
     const {seeker} = useSeekerContext()
-    const {deleteCompany, showPage} = useCompanyContext()
+    const {deleteCompany, showPage, editCompany} = useCompanyContext()
 
     const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
@@ -29,7 +29,19 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
     }
 
     const statusHandler = (e: React.MouseEvent<HTMLElement>) => {
-        console.log(e.currentTarget.innerText)
+        const editStatusCompany: Company = {
+            name,
+            jobtype,
+            status: e.currentTarget.innerText,
+            link,
+            company_id,
+            description,
+            location,
+            company_size,
+            seeker_id
+        }
+        console.log(editStatusCompany)
+        editCompany(company_id!, editStatusCompany)
     }
 
     const filteredStatus = () => {
