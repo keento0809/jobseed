@@ -76,7 +76,16 @@ export const getAvatar = catchAsync(
 
 export const updateAvatar = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).json({ msg: "good updating avatar" });
+    const { seeker_id } = req.params;
+    const file = req.file;
+    const caption = req.body.caption;
+    if (!file || !caption) next(new Error("No avatar attached"));
+    const updatingSeekerData = await pool.query(
+      "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *",
+      [caption, seeker_id]
+    );
+    const updatingSeeker = updatingSeekerData.rows[0];
+    res.status(200).json({ msg: "good updating avatar", updatingSeeker });
     next();
   }
 );
