@@ -25,7 +25,7 @@ const Calendar = () => {
 
     useEffect(() => {
 
-       async function getEvebt () {
+       async function getEvent () {
             try {
                 let res = await axios({
                     method: "get",
@@ -41,7 +41,7 @@ const Calendar = () => {
                 console.log(e)
             }
         }
-        getEvebt()
+        getEvent()
     }, [])
 
     console.log(events)

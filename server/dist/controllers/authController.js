@@ -67,9 +67,8 @@ exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __await
     if (!newSeekerData)
         next(new Error("Failed to register new seeker"));
     // create token
-    const token = yield createToken(newSeekerData.rows[0].seeker_id);
+    const token = createToken(newSeekerData.rows[0].seeker_id);
     const newSeeker = newSeekerData.rows[0];
-    console.log(newSeeker.rows[0].seeker_id);
     res
         // .cookie("access_token", token, {
         //   httpOnly: true,

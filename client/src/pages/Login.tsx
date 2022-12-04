@@ -17,11 +17,12 @@ const Login = () => {
 
     const loginUser = async (e: React.SyntheticEvent) => {
         e.preventDefault();
+        console.log(password)
         loginSeeker(email, password)
     }
 
     gapi.load("client:auth2", () => {
-        gapi.client.init({
+        gapi.auth2.init({
             clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
             plugin_name: "chat",
         });

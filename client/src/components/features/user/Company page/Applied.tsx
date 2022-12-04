@@ -3,6 +3,7 @@ import CompanyCard from "../CompanyCard";
 import {useCompanyContext} from "../../../context/companyContext";
 import {Company} from "../../../../types/Company";
 import EmptyCompany from "../EmptyCompany";
+import {useSeekerContext} from "../../../context/seekerContext";
 
 type CompaniesProps = {
     companies: Company[]
@@ -11,6 +12,7 @@ const Applied = () => {
 
     const {filteredChildren, companies} = useCompanyContext();
     const [filtered, setFiltered] = useState<Company[]>(companies);
+    const {seeker} = useSeekerContext()
 
     useEffect(()=> {
         if(companies.length > 0 && filteredChildren.length > 0) {
@@ -38,6 +40,7 @@ const Applied = () => {
                             status={company.status}
                             interest={company.interest}
                             company_size={company.company_size}
+                            seeker_id={seeker!.seeker_id!}
                         />) : < EmptyCompany/>
             }
         </section>

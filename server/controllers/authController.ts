@@ -22,16 +22,16 @@ export const loginSeeker = catchAsync(
       [email]
     );
     if (!loginSeeker) next(new Error("Seeker not found."));
-    const hashedPassword = loginSeeker.rows[0].password;
-    const checkPassword = await bcrypt.compare(password, hashedPassword);
-    if (!checkPassword) next(new Error("Password is not correct."));
-    // create token
-    const token = await createToken(loginSeeker.rows[0].seeker_id);
-    // retrieve seeker info form db
-    const loginSeekerName = loginSeeker.rows[0].name;
-    const loginSeekerEmail = loginSeeker.rows[0].email;
-    const loginSeekerPassword = loginSeeker.rows[0].password;
-    const loginSeekerInfo = await pool.query(
+      const hashedPassword = loginSeeker.rows[0].password;
+      const checkPassword = await bcrypt.compare(password, hashedPassword);
+      if (!checkPassword) next(new Error("Password is not correct."));
+      // create token
+      const token = await createToken(loginSeeker.rows[0].seeker_id);
+      // retrieve seeker info form db
+      const loginSeekerName = loginSeeker.rows[0].name;
+      const loginSeekerEmail = loginSeeker.rows[0].email;
+      const loginSeekerPassword = loginSeeker.rows[0].password;
+      const loginSeekerInfo = await pool.query(
       "SELECT * FROM seeker WHERE seeker.name = $1 AND seeker.email = $2 AND seeker.password = $3",
       [loginSeekerName, loginSeekerEmail, loginSeekerPassword]
     );
@@ -64,9 +64,8 @@ export const signupSeeker = catchAsync(
     );
     if (!newSeekerData) next(new Error("Failed to register new seeker"));
     // create token
-    const token = await createToken(newSeekerData.rows[0].seeker_id);
+    const token = createToken(newSeekerData.rows[0].seeker_id);
     const newSeeker = newSeekerData.rows[0];
-    console.log(newSeeker.rows[0].seeker_id);
     res
       // .cookie("access_token", token, {
       //   httpOnly: true,
