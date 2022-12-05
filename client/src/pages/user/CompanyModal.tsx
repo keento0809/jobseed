@@ -34,10 +34,10 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
         setCompanyData({...companyData, [e.target.name]: e.target.value});
     }
 
+    console.log(companyData)
     const sendCompany = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         createCompany(companyData)
-        console.log(companyData)
         setShowModal(false)
         window.location.reload()
     }

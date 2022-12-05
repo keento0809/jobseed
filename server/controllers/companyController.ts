@@ -33,6 +33,7 @@ export const getCompaniesWithStatus = catchAsync(
       "SELECT * FROM company WHERE company.status = $1",
       [status]
     );
+
     if (!companiesWithStatusInfo) next(new Error("No companies found"));
     const companiesWithStatus = companiesWithStatusInfo.rows;
     res.status(200).json({ companiesWithStatus });

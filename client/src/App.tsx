@@ -21,7 +21,7 @@ import {company_status} from "./types/Company";
 
 function App() {
     const {getSeekerData, setLoadingSeeker, loadingSeeker} = useSeekerContext()
-    const {setCompanies, getCompaniesByStatus, companies} = useCompanyContext()
+    const {setCompanies, getCompaniesByStatus, companies, getCompanies} = useCompanyContext()
     const [cookie] = useCookies();
     let seeker_id: string;
 
@@ -33,6 +33,7 @@ function App() {
         console.log("App", companies)
         if (seeker_id !== undefined) {
             getSeekerData(seeker_id)
+            getCompanies(seeker_id)
             getCompaniesByStatus(seeker_id, "Interested")
         }
     }, [])

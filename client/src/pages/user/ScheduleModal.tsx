@@ -42,7 +42,6 @@ const ScheduleModal = ({setShowScheduleModal, seeker_id, company_id}: Props) => 
     const handleAllDay = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewSchedule({...newSchedule, allday: e.target.checked})
     }
-
     const colorHandler = (e: React.MouseEvent<HTMLElement>) => {
         setNewSchedule({...newSchedule, backendcolor: e.currentTarget.id})
         setShowColorPallet(false)
