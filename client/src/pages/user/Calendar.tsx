@@ -15,17 +15,16 @@ import {useCookies} from "react-cookie";
 const Calendar = () => {
 
     const [selectedEvent, setSelectedEvent] = useState<EventClickArg >();
-    const {seeker} = useSeekerContext()
+    const {seeker} = useSeekerContext();
     const {events, setEvents,getSchedule} = useScheduleContext();
     const handleClick = (arg: EventClickArg) => {
-        console.log(arg)
         setSelectedEvent(arg)
     }
     const [cookies] = useCookies();
 
     useEffect(() => {
 
-       async function getEvebt () {
+       async function getEvent () {
             try {
                 let res = await axios({
                     method: "get",
@@ -41,7 +40,7 @@ const Calendar = () => {
                 console.log(e)
             }
         }
-        getEvebt()
+        getEvent()
     }, [])
 
     console.log(events)

@@ -32,6 +32,7 @@ export const getCompaniesWithStatus = catchAsync(
       "SELECT * FROM company WHERE company.status = $1 AND company.seeker_id = $2",
       [status, seeker_id]
     );
+
     if (!companiesWithStatusInfo) next(new Error("No companies found"));
     const companiesWithStatus = companiesWithStatusInfo.rows;
     res.status(200).json({ companiesWithStatus });

@@ -17,37 +17,23 @@ import {useCookies} from "react-cookie";
 const TopPage = () => {
 
     const [showModal, setShowModal] = useState<boolean>(false);
-    const {companies, filteredChildren, setFilteredChildren, showPage, setShowPage, setCompanies} = useCompanyContext()
+    const {
+        companies,
+        filteredChildren,
+        setFilteredChildren,
+        showPage,
+        setShowPage,
+        getCompanies,
+        setCompanies
+    } = useCompanyContext()
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested/>)
     const {seeker, loadingSeeker, setLoadingSeeker} = useSeekerContext();
     const [cookies] = useCookies();
     const {getSeekerData} = useSeekerContext()
     const [cookie] = useCookies();
 
-
     useEffect(() => {
-        const firstRender = async () => {
-            try {
-                console.log(seeker)
-                let res = await axios({
-                    method: "get",
-                    url: `http://localhost:8080/companies/${seeker!.seeker_id}/Interested`,
-                    headers: {
-                        authorization: `Bearer ${cookies.JWT_TOKEN}`
-                    },
-                    withCredentials: true
-                })
-                console.log("hi")
-                setCompanies(res.data.companiesWithStatus);
-                setChildComponent(<Interested/>)
-            } catch (e: any) {
-                console.log(e)
-            }
-        }
-        firstRender()
-    }, [])
-
-    useEffect(() => {
+        // getCompanies(seeker!.seeker_id!)
         const pageRender = async () => {
             if (showPage === "Interested") {
                 try {
@@ -114,7 +100,7 @@ const TopPage = () => {
             }
         }
         pageRender()
-    }, [showPage, seeker!.seeker_id])
+    }, [showPage])
 
     const modalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
@@ -122,35 +108,37 @@ const TopPage = () => {
     }
 
     return (
-        <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
-            < UserProfile
-                name={seeker!.name}
-                email={seeker!.email}
-                avatar={seeker!.avatar ? seeker!.avatar : human}
-            />
-            <div className="lg:col-span-4">
-                <UserNav
-                    showPage={showPage}
-                    setShowPage={setShowPage}
+        <>
+            <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
+                < UserProfile
+                    name={seeker!.name}
+                    email={seeker!.email}
+                    avatar={seeker!.avatar ? seeker!.avatar : human}
                 />
-                <div className="lg:grid lg:grid-cols-9 lg:gap-4 mt-4">
-                    < Search
-                        filteredChildren={filteredChildren}
-                        setFilteredChildren={setFilteredChildren}
+                <div className="lg:col-span-4">
+                    <UserNav
+                        showPage={showPage}
+                        setShowPage={setShowPage}
                     />
-                    <Button_sm
-                        title={"New"}
-                        color={"text-white"}
-                        bg_color={"bg-content-blue"}
-                        width={"w-full my-2 lg:my-0"}
-                        className={"block col-span-2"}
-                        onClick={modalHandler}
-                    />
+                    <div className="lg:grid lg:grid-cols-9 lg:gap-4 mt-4">
+                        < Search
+                            filteredChildren={filteredChildren}
+                            setFilteredChildren={setFilteredChildren}
+                        />
+                        <Button_sm
+                            title={"New"}
+                            color={"text-white"}
+                            bg_color={"bg-content-blue"}
+                            width={"w-full my-2 lg:my-0"}
+                            className={"block col-span-2"}
+                            onClick={modalHandler}
+                        />
+                    </div>
+                    {!loadingSeeker ? childComponent : <h1>Loading....</h1>}
                 </div>
-                {childComponent}
+                {showModal && < CompanyModal showModal={showModal} setShowModal={setShowModal}/>}
             </div>
-            {showModal && < CompanyModal showModal={showModal} setShowModal={setShowModal}/>}
-        </div>
+        </>
     );
 };
 

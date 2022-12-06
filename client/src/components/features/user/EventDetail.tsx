@@ -15,12 +15,14 @@ const EventDetail = ({selectedEvent}: EventDetailProps) => {
     const [showScheduleEditModal, setShowScheduleEditModal] = useState<boolean>(false)
     const {deleteSchedule} = useScheduleContext()
 
+    console.log(selectedEvent)
+
     const getDay = (day: Date, start: boolean) => {
-        const date = day.toString().slice(0, 9)
+        const date = day.toString().slice(0, 10)
         const time = day.toLocaleTimeString().slice(0, 1)
         const period = day.toLocaleTimeString().slice(-2)
         const year = day.getFullYear()
-        return <p>{start ? "Start:" : "End: "} {date}, {year} {time}{period}</p>
+        return <p>{start ? "Start:" : "End: "} {date}, {year}&nbsp;&nbsp;{time}&nbsp;{period}</p>
     }
 
     return (

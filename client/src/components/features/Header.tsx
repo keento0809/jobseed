@@ -13,6 +13,7 @@ const Header: FC = () => {
 
     const logout = () => {
         removeCookie("JWT_TOKEN");
+        removeCookie("seeker_id");
         navigate("/", {replace: true});
     }
 

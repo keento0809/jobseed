@@ -6,6 +6,7 @@ import {BsBuilding} from "react-icons/bs"
 import {useCompanyContext} from "../../components/context/companyContext";
 import {Company, Location} from "../../types/Company";
 import GooglePlace from "../../components/features/user/GooglePlace";
+import {useSeekerContext} from "../../components/context/seekerContext";
 
 
 type modalProps = {
@@ -15,6 +16,7 @@ type modalProps = {
 
 const CompanyModal = ({showModal, setShowModal}: modalProps) => {
     const {createCompany} = useCompanyContext();
+    const {seeker} = useSeekerContext()
     const [location, setLocation] = useState<Location>({lat: 49.246292, lng: -123.116226})
     const [companyData, setCompanyData] = useState<Company>({
         name: "",
@@ -24,17 +26,18 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
         company_size: "",
         salary: "",
         description: "",
-        interest: 0
+        interest: 0,
+        seeker_id: seeker!.seeker_id!
     })
 
     const companyDataHandler = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setCompanyData({...companyData, [e.target.name]: e.target.value});
     }
 
+    console.log(companyData)
     const sendCompany = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         createCompany(companyData)
-        console.log(companyData)
         setShowModal(false)
         window.location.reload()
     }
@@ -80,7 +83,7 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                         type={"text"}
                         title={"salary"}
                         name={"salary"}
-                        value={companyData.salary}
+                        value={companyData.salary!}
                         placeholder={"salary"}
                         onChange={companyDataHandler}
                     />

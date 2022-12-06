@@ -33,7 +33,7 @@ const ScheduleEditModal = ({selectedEvent, setShowScheduleEditModal}: EventDetai
         title: selectedEvent.event._def.title,
         date:startDate + "T" + startTime,
         endDate:finishDate + "T" + finishTime,
-        backendColor: selectedEvent.event._def.ui.backgroundColor,
+        color: selectedEvent.event._def.ui.backgroundColor,
         description: selectedEvent.event._def.extendedProps.description,
         allDay: selectedEvent.event.allDay
     })
@@ -45,7 +45,7 @@ const ScheduleEditModal = ({selectedEvent, setShowScheduleEditModal}: EventDetai
     }
 
     const colorHandler = (e: React.MouseEvent<HTMLElement>) => {
-        setEditSchedule({...editSchedule, backendColor: e.currentTarget.id})
+        setEditSchedule({...editSchedule, color: e.currentTarget.id})
         setShowColorPallet(false)
     }
 
@@ -130,7 +130,7 @@ const ScheduleEditModal = ({selectedEvent, setShowScheduleEditModal}: EventDetai
                     </label>
                     <ColorPicker
                         setColor={colorHandler}
-                        color={editSchedule.backendColor}
+                        color={editSchedule.color}
                         showColorPallet={showColorPallet}
                         setShowColorPallet={setShowColorPallet}
                     />

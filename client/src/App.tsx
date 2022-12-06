@@ -17,17 +17,27 @@ import Documents from "./pages/user/Documents";
 import {useCompanyContext} from "./components/context/companyContext";
 import {useCookies} from "react-cookie";
 import {useSeekerContext} from "./components/context/seekerContext";
+import {company_status} from "./types/Company";
 
 function App() {
-    const {getSeekerData} = useSeekerContext()
+    const {getSeekerData, setLoadingSeeker, loadingSeeker} = useSeekerContext()
+    const {setCompanies, getCompaniesByStatus, companies, getCompanies} = useCompanyContext()
     const [cookie] = useCookies();
+    let seeker_id: string;
+
+    if (cookie.JWT_TOKEN && cookie.seeker_id) {
+        seeker_id = cookie.seeker_id
+    }
 
     useEffect(() => {
-        if(cookie.JWT_TOKEN && cookie.seeker_id) {
-            const seeker_id = cookie.seeker_id
+        console.log("App", companies)
+        if (seeker_id !== undefined) {
             getSeekerData(seeker_id)
+            getCompanies(seeker_id)
+            getCompaniesByStatus(seeker_id, "Interested")
         }
     }, [])
+
 
     return (
         <div className="App">
@@ -36,17 +46,18 @@ function App() {
                 <Route path="/" element={<Hero/>}/>
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/login" element={<Login/>}/>
-                    <Route element={<ProtectRoutes/>}>
-                        <Route path="/user" element={<><TopPage/><Outlet/></>}>
-                            <Route path="interested" element={<Interested/>}/>
-                            <Route path="applied" element={<Applied />}/>
-                            <Route path="interview" element={<Interview/>}/>
-                            <Route path="rejected" element={<Rejected />}/>
-                        </Route>
-                        <Route path="/calendar" element={<Calendar/>}/>
-                        <Route path="/map" element={<CompanyMap/>}/>
-                        <Route path="/documents" element={<Documents/>}/>
+                {}
+                <Route element={<ProtectRoutes/>}>
+                    <Route path="/user" element={<><TopPage/><Outlet/></>}>
+                        <Route path="interested" element={<Interested/>}/>
+                        <Route path="applied" element={<Applied/>}/>
+                        <Route path="interview" element={<Interview/>}/>
+                        <Route path="rejected" element={<Rejected/>}/>
                     </Route>
+                    <Route path="/calendar" element={<Calendar/>}/>
+                    <Route path="/map" element={<CompanyMap/>}/>
+                    <Route path="/documents" element={<Documents/>}/>
+                </Route>
             </Routes>
             <Footer/>
         </div>
