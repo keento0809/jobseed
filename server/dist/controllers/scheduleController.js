@@ -60,16 +60,19 @@ exports.getSchedulesSortedByCategory = (0, middlewares_1.catchAsync)((req, res, 
     next();
 }));
 exports.createSchedule = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, date, time, importance, memo, seeker_id, company_id } = req.body;
-    if (!title ||
-        !date ||
-        !time ||
-        !importance ||
-        !memo ||
-        !seeker_id ||
-        !company_id)
+    const { title, date, description, seeker_id, company_id, allday, enddate, backendcolor, } = req.body;
+    if (!title || !date || allday === undefined)
         next(new Error("Invalid input data"));
-    const newScheduleData = yield postgres_1.default.query("INSERT INTO schedule (title,date,importance,memo,seeker_id,company_id,time) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *", [title, date, importance, memo, seeker_id, company_id, time]);
+    const newScheduleData = yield postgres_1.default.query("INSERT INTO schedule (title,date,description,seeker_id,company_id,allday,enddate,backendcolor) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *", [
+        title,
+        date,
+        description,
+        seeker_id,
+        company_id,
+        allday,
+        enddate,
+        backendcolor,
+    ]);
     if (!newScheduleData)
         next(new Error("Failed to create schedule"));
     const newSchedule = newScheduleData.rows[0];
@@ -78,10 +81,20 @@ exports.createSchedule = (0, middlewares_1.catchAsync)((req, res, next) => __awa
 }));
 exports.updateSchedule = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { schedule_id } = req.params;
-    const { title, date, importance, memo, seeker_id, company_id, time } = req.body;
+    const { title, date, description, seeker_id, company_id, allday, enddate, backendcolor, } = req.body;
     if (!schedule_id)
         next(new Error("Invalid request"));
-    const updatingScheduleData = yield postgres_1.default.query("UPDATE schedule SET title = $1,date = $2,importance = $3,memo = $4,seeker_id = $5,company_id = $6,time = $7 WHERE schedule.schedule_id = $8", [title, date, importance, memo, seeker_id, company_id, time, schedule_id]);
+    const updatingScheduleData = yield postgres_1.default.query("UPDATE schedule SET title = $1,date = $2,description = $3,seeker_id = $4,company_id = $5,allday = $6,enddate = $7,backendcolor = $8 WHERE schedule.schedule_id = $9 RETURNING *", [
+        title,
+        date,
+        description,
+        seeker_id,
+        company_id,
+        allday,
+        enddate,
+        backendcolor,
+        schedule_id,
+    ]);
     if (!updatingScheduleData)
         next(new Error("Failed to update schedule"));
     const updatingSchedule = updatingScheduleData.rows[0];

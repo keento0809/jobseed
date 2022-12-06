@@ -4,6 +4,7 @@ import {IoMdClose} from "react-icons/io";
 import {MdModeEditOutline} from "react-icons/md";
 import {BsTrash} from "react-icons/bs"
 import ScheduleEditModal from "../../../pages/user/ScheduleEditModal";
+import {useScheduleContext} from "../../context/scheduleContext";
 
 type EventDetailProps = {
     selectedEvent: EventClickArg
@@ -12,13 +13,16 @@ type EventDetailProps = {
 const EventDetail = ({selectedEvent}: EventDetailProps) => {
 
     const [showScheduleEditModal, setShowScheduleEditModal] = useState<boolean>(false)
+    const {deleteSchedule} = useScheduleContext()
+
+    console.log(selectedEvent)
 
     const getDay = (day: Date, start: boolean) => {
-        const date = day.toString().slice(0, 9)
+        const date = day.toString().slice(0, 10)
         const time = day.toLocaleTimeString().slice(0, 1)
         const period = day.toLocaleTimeString().slice(-2)
         const year = day.getFullYear()
-        return <p>{start ? "Start:" : "End: "} {date}, {year} {time}{period}</p>
+        return <p>{start ? "Start:" : "End: "} {date}, {year}&nbsp;&nbsp;{time}&nbsp;{period}</p>
     }
 
     return (
@@ -36,7 +40,7 @@ const EventDetail = ({selectedEvent}: EventDetailProps) => {
                                 size={30} className="p-2 block cursor-pointer rounded-full hover:bg-slate-300"
                             />
                             < BsTrash
-                                onClick={()=> {console.log("Hi")}}
+                                onClick={() => deleteSchedule(selectedEvent.event._def.extendedProps.schedule_id)}
                                 size={30} className="block p-2 cursor-pointer rounded-full hover:bg-slate-300"
                             />
                         </div>

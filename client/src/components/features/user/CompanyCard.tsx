@@ -6,16 +6,19 @@ import {BsCalendarPlus} from "react-icons/bs"
 import ScheduleModal from "../../../pages/user/ScheduleModal";
 import {Company} from "../../../types/Company";
 import CompanyEditModal from "../../../pages/user/CompanyEditModal";
-import {Status} from "../../../types/Company";
+import {company_status} from "../../../types/Company";
 import {useSeekerContext} from "../../context/seekerContext";
 import {useCompanyContext} from "../../context/companyContext";
 
-const CompanyCard = ({name, jobtype, status, link, company_id, description, location}: Company) => {
+
+const CompanyCard = ({name, jobtype, status, link, company_id, description, location, company_size, seeker_id, salary}: Company) => {
     const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false)
     const [showEditModal, setShowEditModal] = useState<boolean>(false)
     const [showStatusDropDown, setShowStatusDropDown] = useState<boolean>(false)
     const {seeker} = useSeekerContext()
-    const {deleteCompany} = useCompanyContext()
+    const {deleteCompany, showPage, editCompany} = useCompanyContext()
+
+    console.log(name,jobtype, status, link, company_id, description, location, company_size, seeker_id, salary)
 
     const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
@@ -27,30 +30,31 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
         showEditModal ? setShowEditModal(false) : setShowEditModal(true)
     }
 
-    const getStatus = (status: number) => {
-        switch (status) {
-            case 0:
-                return "Interested"
-            case 1:
-                return "Applied"
-            case 2:
-                return "Interview"
-            case 3:
-                return "Rejected"
+    const statusHandler = (e: React.MouseEvent<HTMLElement>) => {
+        const editStatusCompany: Company = {
+            name,
+            jobtype,
+            status: e.currentTarget.innerText,
+            link,
+            company_id,
+            description,
+            location,
+            company_size,
+            seeker_id,
+            salary
         }
+        console.log(editStatusCompany)
+        editCompany(company_id!, editStatusCompany)
     }
 
-    type StatusName = keyof typeof Status
-    const enumStatusName = Object.values(Status).filter(item  => typeof item !== "number") as StatusName[];
-    const statusArr = enumStatusName.filter(item => item !== getStatus(status!))
-
-    const statusHandler = (e: React.MouseEvent<HTMLElement>) => {
-        console.log(e.currentTarget.innerText)
+    const filteredStatus = () => {
+        const filteredArr = company_status.filter(status => status !== showPage)
+        return filteredArr
     }
 
     const statusDropDown = () => <div className={`${showStatusDropDown ? "" : "hidden"} left-28 top-0 absolute`}>
         <ul className="rounded-lg bg-slate-300">
-            {statusArr.map( s =>
+            {filteredStatus().map( s =>
                 <li
                     className="rounded-lg px-4 py-2 hover:bg-slate-200"
                     onClick={statusHandler}
@@ -103,11 +107,14 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
                 <CompanyEditModal
                     setShowModal={setShowEditModal}
                     name={name}
+                    status={status!}
                     jobtype={jobtype}
                     link={link}
                     description={description}
                     company_id={company_id!}
+                    company_size={company_size}
                     location={location}
+                    salary={salary!}
                 />}
         </div>
     );

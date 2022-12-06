@@ -39,3 +39,7 @@
 .fc-day {
     @apply cursor-pointer
 }
+
+.fc-daygrid-event-dot {
+    @apply bg-black
+}

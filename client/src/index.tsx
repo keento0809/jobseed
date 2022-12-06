@@ -13,7 +13,6 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-
         < BrowserRouter>
             <CookiesProvider>
                 <SeekerProvider>
@@ -25,6 +24,5 @@ root.render(
                 </SeekerProvider>
             </CookiesProvider>
         </BrowserRouter>
-
 );
 

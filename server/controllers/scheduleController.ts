@@ -65,21 +65,30 @@ export const getSchedulesSortedByCategory = catchAsync(
 
 export const createSchedule = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { title, date, time, importance, memo, seeker_id, company_id } =
-      req.body;
-    if (
-      !title ||
-      !date ||
-      !time ||
-      !importance ||
-      !memo ||
-      !seeker_id ||
-      !company_id
-    )
+    const {
+      title,
+      date,
+      description,
+      seeker_id,
+      company_id,
+      allday,
+      enddate,
+      backendcolor,
+    } = req.body;
+    if (!title || !date || allday === undefined)
       next(new Error("Invalid input data"));
     const newScheduleData = await pool.query(
-      "INSERT INTO schedule (title,date,importance,memo,seeker_id,company_id,time) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
-      [title, date, importance, memo, seeker_id, company_id, time]
+      "INSERT INTO schedule (title,date,description,seeker_id,company_id,allday,enddate,backendcolor) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
+      [
+        title,
+        date,
+        description,
+        seeker_id,
+        company_id,
+        allday,
+        enddate,
+        backendcolor,
+      ]
     );
     if (!newScheduleData) next(new Error("Failed to create schedule"));
     const newSchedule = newScheduleData.rows[0];
@@ -91,12 +100,30 @@ export const createSchedule = catchAsync(
 export const updateSchedule = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { schedule_id } = req.params;
-    const { title, date, importance, memo, seeker_id, company_id, time } =
-      req.body;
+    const {
+      title,
+      date,
+      description,
+      seeker_id,
+      company_id,
+      allday,
+      enddate,
+      backendcolor,
+    } = req.body;
     if (!schedule_id) next(new Error("Invalid request"));
     const updatingScheduleData = await pool.query(
-      "UPDATE schedule SET title = $1,date = $2,importance = $3,memo = $4,seeker_id = $5,company_id = $6,time = $7 WHERE schedule.schedule_id = $8",
-      [title, date, importance, memo, seeker_id, company_id, time, schedule_id]
+      "UPDATE schedule SET title = $1,date = $2,description = $3,seeker_id = $4,company_id = $5,allday = $6,enddate = $7,backendcolor = $8 WHERE schedule.schedule_id = $9 RETURNING *",
+      [
+        title,
+        date,
+        description,
+        seeker_id,
+        company_id,
+        allday,
+        enddate,
+        backendcolor,
+        schedule_id,
+      ]
     );
     if (!updatingScheduleData) next(new Error("Failed to update schedule"));
     const updatingSchedule = updatingScheduleData.rows[0];

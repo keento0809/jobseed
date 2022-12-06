@@ -5,7 +5,6 @@ import cors from "cors";
 import companyRoutes from "./routes/companyRoutes";
 import seekerRoutes from "./routes/seekerRoutes";
 import authRoutes from "./routes/authRoutes";
-import calendarRoutes from "./routes/calendarRoutes";
 import scheduleRoutes from "./routes/scheduleRoutes";
 import multer from "multer";
 // import
@@ -27,7 +26,6 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/seekers", seekerRoutes);
 app.use("/companies", companyRoutes);
-app.use("/calenders", calendarRoutes);
 app.use("/schedules", scheduleRoutes);
 
 app.get("/", (req: Request, res: Response) => {

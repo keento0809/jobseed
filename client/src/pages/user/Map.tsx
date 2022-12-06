@@ -6,11 +6,8 @@ import {Company} from "../../types/Company";
 import MapDetail from "../../components/features/user/MapDetail";
 
 const CompanyMap = () => {
-    /**
-     * TODO: Loading Page / 404 Page
-     */
-
-    const [selectedMap, setSelectedMap] = useState<Company | null>(null)
+    const {allCompanies} = useCompanyContext();
+    const [selectedMap, setSelectedMap] = useState<Company | null>(null);
 
     const selectedNull = (
         <div className="flex h-[20%] justify-center items-center">
@@ -22,15 +19,13 @@ const CompanyMap = () => {
         height: "80%",
         width: "100%"
     };
-
     const defaultCenter = {
         lat: 49.246292, lng: -123.116226
     }
+
     const {isLoaded} = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_APIKEY!
     })
-
-    const {companies} = useCompanyContext();
 
     const renderMap = () => (
         <GoogleMap
@@ -39,10 +34,10 @@ const CompanyMap = () => {
             center={defaultCenter}
         >
             {
-                companies?.map(company =>
+                allCompanies?.map(company =>
                     <div key={company.company_id}>
                         <Marker
-                            position={company.location}
+                            position={{lat: company.location.lat, lng: company.location.lng}}
                             onClick={() => setSelectedMap(company)}
                             title={company.name}
                         />

@@ -8,7 +8,7 @@ export type Schedule = {
     title: string;
     date: string;
     endDate: string;
-    backendColor: string;
+    color: string;
     allDay: boolean;
     description?: string;
 }

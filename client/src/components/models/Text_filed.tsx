@@ -20,6 +20,7 @@ const Text_filed = (props: CustomTextField) => {
                 placeholder={props.name}
                 onChange={props.onChangeHandler}
                 value={props.value}
+                autoComplete="on"
             />
         </label>
     );

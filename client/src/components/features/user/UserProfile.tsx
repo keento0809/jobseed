@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {BiEditAlt} from "react-icons/bi"
 import InputField from "../../models/InputField";
 import {Seeker} from "../../../types/Seeker";
 import {useSeekerContext} from "../../context/seekerContext";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+
 
 type User = {
     name: string;
@@ -10,23 +13,26 @@ type User = {
     email: string;
 }
 
-/**
- * TODO: Create edit profile
- *
- */
 const UserProfile = (props: User) => {
-
+    const {updateSeeker} = useSeekerContext();
     const {seeker} = useSeekerContext()
     const [wannaEdit, setWannaEdit] = useState<boolean>(false);
     const [editSeeker, setEditSeeker] = useState<Seeker>({
         name:props.name,
         email: props.email
     })
+    const navigate = useNavigate();
+
+    const updateUserInfoHandler = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        updateSeeker(seeker!.seeker_id!, editSeeker)
+        setWannaEdit(false)
+        navigate("/user", { replace: true });
+    }
 
     return (
         <div className="user-profile my-4 flex lg:flex-col lg:col-span-1 ">
             <img src={props.avatar} alt="" className="w-24 lg:w-52 rounded-full object-cover"/>
-
             {wannaEdit ?
                 <div className="w-full">
                     < InputField
@@ -45,9 +51,7 @@ const UserProfile = (props: User) => {
                     />
                     <div className="flex justify-center w-full gap-2 mt-4">
                         <div
-                            onClick={() => {
-                                setWannaEdit(false)
-                            }}
+                            onClick={updateUserInfoHandler}
                             className="cursor-pointer w-full flex justify-center bg-content-blue text-white rounded-sm py-1"
                         >
                             <p className="text-sm">Save</p>

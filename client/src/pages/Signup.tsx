@@ -1,9 +1,6 @@
-import React, {FC, useState, useEffect} from "react";
+import React, {FC, useState} from "react";
 import Text_filed from "../components/models/Text_filed";
 import Button_sm from "../components/models/Button_sm";
-import axios from "axios";
-import {useCookies} from "react-cookie";
-import {useNavigate} from "react-router-dom";
 import {useSeekerContext} from "../components/context/seekerContext";
 import {Seeker} from "../types/Seeker";
 
@@ -19,43 +16,23 @@ const Signup: FC = () => {
         password: "",
         passwordConfirmation: ""
     });
-
-    const [cookie, setCookie] = useCookies();
-    const {seeker, setSeeker} = useSeekerContext();
-    const navigate = useNavigate();
+    const {createSeeker} = useSeekerContext();
 
     const userHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewUser({...newUser!, [e.target.name]: e.target.value});
     };
-    let axiosConfig = {
-        withCredentials: true,
-    };
-    const createUser = async (e: React.SyntheticEvent) => {
+    const createUser = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (newUser === null) {
-            console.log("no user");
-            return;
-        }
-        try {
-            let res = await axios.post(
-                "http://localhost:8080/auth/signup",
-                newUser,
-                axiosConfig
-            );
-            console.log(res.data)
-            setCookie("JWT_TOKEN", res.data.token);
-            setSeeker(newUser!)
-            navigate("/user", {replace: true});
-        } catch (e: any) {
-            console.log(e);
-        }
+        console.log(newUser)
+        createSeeker(newUser);
     };
     return (
         <section className="wrapper flex justify-center">
             <div className="h-[78vh] flex justify-center items-center">
                 <div>
                     <h2 className="text-center font-bold">Welcome to Jub hunter</h2>
-                    <form method="post" className="">
+                    <form action="">
+
                         <Text_filed
                             type={"text"}
                             name={"name"}
@@ -88,8 +65,8 @@ const Signup: FC = () => {
                             width={"w-full"}
                             onClick={createUser}
                         />
-                        <div id="signInDiv"></div>
                     </form>
+                    <div id="signInDiv"></div>
                 </div>
             </div>
         </section>
