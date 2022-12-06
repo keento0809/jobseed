@@ -71,7 +71,14 @@ exports.getAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(
     next();
 }));
 exports.updateAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({ msg: "good updating avatar" });
+    const { seeker_id } = req.params;
+    const file = req.file;
+    const caption = req.body.caption;
+    if (!file || !caption)
+        next(new Error("No avatar attached"));
+    const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *", [caption, seeker_id]);
+    const updatingSeeker = updatingSeekerData.rows[0];
+    res.status(200).json({ msg: "good updating avatar", updatingSeeker });
     next();
 }));
 // Front side

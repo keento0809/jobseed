@@ -27,14 +27,14 @@ exports.getAllCompanies = (0, middlewares_1.catchAsync)((req, res, next) => __aw
     next();
 }));
 exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { status } = req.params;
+    const { status, seeker_id } = req.params;
     if (!status ||
         (status !== "Interested" &&
             status !== "Applied" &&
             status !== "Interview" &&
             status !== "Rejected"))
         return next(new Error("Invalid request"));
-    const companiesWithStatusInfo = yield postgres_1.default.query("SELECT * FROM company WHERE company.status = $1", [status]);
+    const companiesWithStatusInfo = yield postgres_1.default.query("SELECT * FROM company WHERE company.status = $1 AND company.seeker_id = $2", [status, seeker_id]);
     if (!companiesWithStatusInfo)
         next(new Error("No companies found"));
     const companiesWithStatus = companiesWithStatusInfo.rows;
