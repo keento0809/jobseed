@@ -14,12 +14,10 @@ companyRouter
   .route("/:seeker_id/:status")
   .get(authorization, getCompaniesWithStatus);
 
-companyRouter
-    .route("/new")
-    .post(authorization, createNewCompany);
+companyRouter.route("/new").post(authorization, createNewCompany);
 
 companyRouter
-  .route("/:company_id")
+  .route(":seeker_id/:company_id")
   .patch(authorization, updateCompany)
   .delete(authorization, deleteCompany);
 
