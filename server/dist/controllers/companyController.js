@@ -42,10 +42,10 @@ exports.getCompaniesWithStatus = (0, middlewares_1.catchAsync)((req, res, next) 
     next();
 }));
 exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, link, jobtype, salary, location, description, interest, seeker_id, } = req.body;
+    const { name, link, jobtype, salary, location, description, interest, seeker_id, company_size, } = req.body;
     if (!name || !jobtype)
         next(new Error("Invalid input values"));
-    const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobtype,salary,location,description,status,interest,seeker_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *", [
+    const newCompany = yield postgres_1.default.query("INSERT INTO company (name,link,jobtype,salary,location,description,status,interest,seeker_id,company_size) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *", [
         name,
         link,
         jobtype,
@@ -55,6 +55,7 @@ exports.createNewCompany = (0, middlewares_1.catchAsync)((req, res, next) => __a
         "Interested",
         interest,
         seeker_id,
+        company_size,
     ]);
     if (!newCompany)
         next(new Error("Failed to create company"));
@@ -65,8 +66,8 @@ exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
     const { company_id } = req.params;
     if (!company_id)
         next(new Error("Invalid request"));
-    const { name, link, jobtype, location, description, salary, status, interest, seeker_id, } = req.body;
-    const updatingCompany = yield postgres_1.default.query("UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8,seeker_id = $9 WHERE company.company_id = $10 RETURNING *", [
+    const { name, link, jobtype, location, description, salary, status, interest, seeker_id, company_size, } = req.body;
+    const updatingCompany = yield postgres_1.default.query("UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8,seeker_id = $9,company_size = $10 WHERE company.company_id = $11 AND company.seeker_id = $9 RETURNING *", [
         name,
         link,
         jobtype,
@@ -77,6 +78,7 @@ exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
         status,
         seeker_id,
         company_id,
+        company_size,
     ]);
     if (!updatingCompany)
         next(new Error("Failed to update company"));
@@ -84,15 +86,13 @@ exports.updateCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
     next();
 }));
 exports.deleteCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { company_id } = req.params;
+    const { company_id, seeker_id } = req.params;
     if (!company_id)
         next(new Error("Invalid request"));
-    const deletingCompany = yield postgres_1.default.query("SELECT * FROM company WHERE company.company_id = $1", [company_id]);
+    const deletingCompany = yield postgres_1.default.query("SELECT * FROM company WHERE company.company_id = $1 AND company.seeker_id = $2", [company_id, seeker_id]);
     if (!deletingCompany)
         next(new Error("Company not found"));
-    yield postgres_1.default.query("DELETE FROM company WHERE company.company_id = $1", [
-        company_id,
-    ]);
+    yield postgres_1.default.query("DELETE FROM company WHERE company.company_id = $1 AND company.seeker_id = $2", [company_id, seeker_id]);
     res.status(200).json({ msg: "company deleted", deletingCompany });
     next();
 }));
