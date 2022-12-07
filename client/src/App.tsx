@@ -30,13 +30,13 @@ function App() {
     }
 
     useEffect(() => {
-        console.log("App", companies)
         if (seeker_id !== undefined) {
             getSeekerData(seeker_id)
             getCompanies(seeker_id)
             getCompaniesByStatus(seeker_id, "Interested")
+            setLoadingSeeker(false)
         }
-    }, [])
+    }, [loadingSeeker])
 
 
     return (
@@ -46,7 +46,6 @@ function App() {
                 <Route path="/" element={<Hero/>}/>
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/login" element={<Login/>}/>
-                {}
                 <Route element={<ProtectRoutes/>}>
                     <Route path="/user" element={<><TopPage/><Outlet/></>}>
                         <Route path="interested" element={<Interested/>}/>

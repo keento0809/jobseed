@@ -77,7 +77,7 @@ const HamburgerMenu = ({isOpen, setMenuOpen}: Props) => {
                     <IoCloseOutline color={"white"} size={30}/>
                 </div>
                 <ul>
-                    {cookies.JWT_TOKEN ?
+                    {cookies.JWT_TOKEN && cookies.seeker_id ?
                         links.map(link =>
                             <li
                                 key={link.name}

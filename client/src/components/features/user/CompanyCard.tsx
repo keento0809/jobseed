@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BsTrash} from "react-icons/bs";
 import {AiOutlineLink} from "react-icons/ai";
 import {IoMdCreate} from "react-icons/io";
@@ -9,18 +9,18 @@ import CompanyEditModal from "../../../pages/user/CompanyEditModal";
 import {company_status} from "../../../types/Company";
 import {useSeekerContext} from "../../context/seekerContext";
 import {useCompanyContext} from "../../context/companyContext";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
 
 
 const CompanyCard = ({name, jobtype, status, link, company_id, description, location, company_size, seeker_id, salary}: Company) => {
     const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false)
     const [showEditModal, setShowEditModal] = useState<boolean>(false)
     const [showStatusDropDown, setShowStatusDropDown] = useState<boolean>(false)
-    const {seeker} = useSeekerContext()
-    const {deleteCompany, showPage, editCompany} = useCompanyContext()
+    const {seeker, setLoadingSeeker, loadingSeeker} = useSeekerContext()
+    const {deleteCompany, showPage, editCompany, companies} = useCompanyContext()
 
-    console.log(name,jobtype, status, link, company_id, description, location, company_size, seeker_id, salary)
-
-    const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
+     const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         showScheduleModal ? setShowScheduleModal(false) : setShowScheduleModal(true)
     }
@@ -46,6 +46,10 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
         console.log(editStatusCompany)
         editCompany(company_id!, editStatusCompany)
     }
+
+    useEffect(() => {
+        console.log("HI")
+    }, [companies])
 
     const filteredStatus = () => {
         const filteredArr = company_status.filter(status => status !== showPage)

@@ -43,8 +43,6 @@ const Calendar = () => {
         getEvent()
     }, [])
 
-    console.log(events)
-
     return (
         <div className="relative z-5 h-[40rem]">
             <FullCalendar

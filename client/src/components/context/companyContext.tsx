@@ -16,6 +16,8 @@ type Props = {
 type companyContext = {
     companies: Company[],
     allCompanies: Company[] | null,
+    companyChange: boolean,
+    setCompanyChange: React.Dispatch<React.SetStateAction<boolean>>;
     setCompanies: React.Dispatch<React.SetStateAction<Company[]>>;
     locationData: any[],
     setLocationData: React.Dispatch<React.SetStateAction<any[]>>;
@@ -38,13 +40,14 @@ export const useCompanyContext = () => {
 
 export const CompanyProvider = ({children}: Props) => {
     const [companies, setCompanies] = useState<Company[]>([]);
-    const { setLoadingSeeker} = useSeekerContext()
+    const [companyChange, setCompanyChange] = useState<boolean>(false)
+    const { setLoadingSeeker, loadingSeeker } = useSeekerContext()
     const [locationData, setLocationData] = useState<any[]>([])
     const [allCompanies, setAllCompanies] = useState<Company[]|null>(null);
     const [cookies] = useCookies();
     const [filteredChildren, setFilteredChildren] = useState<string>("");
     const [showPage, setShowPage] = useState<string>("Interested");
-    const navigate = useNavigate();
+
 
     const getLat = (location : string) => {
         let lat = location.split(":")[1]
@@ -90,7 +93,7 @@ export const CompanyProvider = ({children}: Props) => {
                 withCredentials : true
             })
             await setCompanies(res.data.companiesWithStatus);
-            await setLoadingSeeker(false)
+
         } catch (err: any) {
             console.log(err)
         }
@@ -107,9 +110,7 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log(res.data)
-            window.location.reload();
-            navigate("/user", {replace: true});
+
         } catch (err: any) {
             console.log(err.message);
         }
@@ -126,8 +127,7 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log(res.data)
-            window.location.reload();
+            setLoadingSeeker(!loadingSeeker)
         } catch (err: any) {
             console.log(err)
         }
@@ -144,7 +144,7 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            window.location.reload();
+
         } catch (err: any) {
             console.log(err.message)
         }
@@ -156,6 +156,8 @@ export const CompanyProvider = ({children}: Props) => {
                 setCompanies,
                 allCompanies,
                 locationData,
+                companyChange,
+                setCompanyChange,
                 setLocationData,
                 getCompanies,
                 getCompaniesByStatus,

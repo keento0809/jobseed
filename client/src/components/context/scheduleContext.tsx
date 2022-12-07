@@ -85,7 +85,11 @@ export const ScheduleProvider = ({children}: Props) => {
         try {
             await axios({
                 method: "delete",
-                url: `http://localhost:8080/schedules/${schedule_id}`
+                url: `http://localhost:8080/schedules/${schedule_id}`,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
             })
         } catch (err: any) {
             console.log(err.message)

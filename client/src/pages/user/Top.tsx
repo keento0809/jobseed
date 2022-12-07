@@ -29,8 +29,6 @@ const TopPage = () => {
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested/>)
     const {seeker, loadingSeeker, setLoadingSeeker} = useSeekerContext();
     const [cookies] = useCookies();
-    const {getSeekerData} = useSeekerContext()
-    const [cookie] = useCookies();
 
     useEffect(() => {
         // getCompanies(seeker!.seeker_id!)

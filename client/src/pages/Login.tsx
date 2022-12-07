@@ -29,7 +29,7 @@ const Login = () => {
     });
 
     const OnSuccess = (res: any) => {
-        console.log(res.profileObj.imageUrl)
+
         setSeeker({
             seeker_id: res.profileObj.googleId,
             name: res.profileObj.name,
@@ -37,6 +37,8 @@ const Login = () => {
             avatar: res.profileObj.imageUrl
         })
         setCookie("JWT_TOKEN", res.accessToken);
+
+        console.log(res)
         navigate("/user", {replace: true});
     }
 
