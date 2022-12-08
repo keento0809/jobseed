@@ -91,28 +91,3 @@ export const updateAvatar = catchAsync(
     next();
   }
 );
-
-// Front side
-
-// const [file, setFile] = useState();
-
-// const handleSubmit = async (event) => {
-//   event.preventDefault();
-//   // Create form data
-//   const formData = new FormData();
-//   formData.append("image", file);
-//   await axios.post("http://localhost:8080/seekers/avatar/:seeker_id", formData, {
-//     headers: { "Content-Type": "multipart/form-data" },
-//   });
-//   navigate("/")
-// };
-
-// const fileSelected = (event) => {
-//   const file = event.target.files[0];
-//   setFile(file);
-// };
-
-// <form onSubmit={handleSubmit}>
-//    <input onChange={fileSelected} type="file" accept="image/*"></input>
-//    <button type="submit">Submit</button>
-// </form>
