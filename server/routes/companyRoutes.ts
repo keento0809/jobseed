@@ -17,7 +17,7 @@ companyRouter
 companyRouter.route("/new").post(authorization, createNewCompany);
 
 companyRouter
-  .route(":seeker_id/:company_id")
+  .route("/:seeker_id/:company_id")
   .patch(authorization, updateCompany)
   .delete(authorization, deleteCompany);
 
