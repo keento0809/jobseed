@@ -42,10 +42,12 @@ export const addAvatar = catchAsync(
     const file = req.file;
     const fileCaption = file?.originalname.split(".")[0];
     if (!file) next(new Error("No avatar attached"));
-    const fileBuffer = sharp(file?.buffer)
+    // fileBuffer
+    const fileBuffer = await sharp(file!.buffer)
       .resize({ height: 1920, width: 1080, fit: "contain" })
       .toBuffer();
-    const result = await uploadFile(fileBuffer, fileCaption, file?.mimetype);
+    // add image to s3
+    const result = await uploadFile(fileBuffer, fileCaption, file!.mimetype);
     if (!result) next(new Error("Failed to upload file to s3"));
     // add data to DB
     const updatingSeekerData = await pool.query(
