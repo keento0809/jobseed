@@ -4,9 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const multer_1 = __importDefault(require("multer"));
 const authController_1 = require("../controllers/authController");
 const seekerController_1 = require("../controllers/seekerController");
 const seekerRouter = express_1.default.Router();
+const storage = multer_1.default.memoryStorage();
+const upload = (0, multer_1.default)({ storage });
 seekerRouter
     .route("/:seeker_id")
     .get(authController_1.authorization, seekerController_1.getSeekerInfo)
@@ -14,6 +17,6 @@ seekerRouter
 seekerRouter
     .route("/avatar/:seeker_id")
     .get(authController_1.authorization, seekerController_1.getAvatar)
-    .post(authController_1.authorization, seekerController_1.addAvatar)
+    .post(authController_1.authorization, upload.single("image"), seekerController_1.addAvatar)
     .put(authController_1.authorization, seekerController_1.updateAvatar);
 exports.default = seekerRouter;

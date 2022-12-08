@@ -83,11 +83,11 @@ export const updateCompany = catchAsync(
       name,
       link,
       jobtype,
+      salary,
       location,
       description,
-      salary,
-      status,
       interest,
+      status,
       seeker_id,
       company_size,
     } = req.body;
@@ -103,8 +103,8 @@ export const updateCompany = catchAsync(
         interest,
         status,
         seeker_id,
-        company_id,
         company_size,
+        company_id,
       ]
     );
     if (!updatingCompany) next(new Error("Failed to update company"));
