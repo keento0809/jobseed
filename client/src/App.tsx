@@ -21,7 +21,7 @@ import {company_status} from "./types/Company";
 
 function App() {
     const {getSeekerData, setLoadingSeeker, loadingSeeker} = useSeekerContext()
-    const {setCompanies, getCompaniesByStatus, companies, getCompanies} = useCompanyContext()
+    const {setCompanies, getCompaniesByStatus, companies, getCompanies, allCompanies} = useCompanyContext()
     const [cookie] = useCookies();
     let seeker_id: string;
 
@@ -33,10 +33,10 @@ function App() {
         if (seeker_id !== undefined) {
             getSeekerData(seeker_id)
             getCompanies(seeker_id)
-            getCompaniesByStatus(seeker_id, "Interested")
+            // getCompaniesByStatus(seeker_id, "Interested")
             setLoadingSeeker(false)
         }
-    }, [loadingSeeker])
+    }, [])
 
 
     return (
@@ -48,7 +48,7 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                 <Route element={<ProtectRoutes/>}>
                     <Route path="/user" element={<><TopPage/><Outlet/></>}>
-                        <Route path="interested" element={<Interested/>}/>
+                        <Route path="interested" element={<Interested companies={allCompanies}/>}/>
                         <Route path="applied" element={<Applied/>}/>
                         <Route path="interview" element={<Interview/>}/>
                         <Route path="rejected" element={<Rejected/>}/>

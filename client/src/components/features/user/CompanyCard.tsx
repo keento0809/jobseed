@@ -44,7 +44,7 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
             salary
         }
         console.log(editStatusCompany)
-        editCompany(company_id!, editStatusCompany)
+        editCompany(company_id!, seeker_id,editStatusCompany)
     }
 
     useEffect(() => {
@@ -90,7 +90,7 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
             </div>
             <ul className="">
                 <li
-                    onClick={() => {deleteCompany(company_id!)}}
+                    onClick={() => {deleteCompany(company_id!, seeker_id)}}
                     className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer">
                     < BsTrash/>
                 </li>

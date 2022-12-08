@@ -44,16 +44,17 @@ exports.updateSeekerInfo = (0, middlewares_1.catchAsync)((req, res, next) => __a
 exports.addAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { seeker_id } = req.params;
     const file = req.file;
-    const caption = req.body.caption;
-    if (!file || !caption)
+    const fileCaption = file === null || file === void 0 ? void 0 : file.originalname.split(".")[0];
+    if (!file)
         next(new Error("No avatar attached"));
-    // Need to add functions sending avatar to S3
     const fileBuffer = (0, sharp_1.default)(file === null || file === void 0 ? void 0 : file.buffer)
         .resize({ height: 1920, width: 1080, fit: "contain" })
         .toBuffer();
-    const result = yield (0, s3_1.uploadFile)(fileBuffer, caption, file === null || file === void 0 ? void 0 : file.mimetype);
+    const result = yield (0, s3_1.uploadFile)(fileBuffer, fileCaption, file === null || file === void 0 ? void 0 : file.mimetype);
+    if (!result)
+        next(new Error("Failed to upload file to s3"));
     // add data to DB
-    const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *", [caption, seeker_id]);
+    const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *", [fileCaption, seeker_id]);
     const updatingSeeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "Good new avatar", updatingSeeker });
     next();
@@ -71,18 +72,23 @@ exports.getAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(
     next();
 }));
 exports.updateAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({ msg: "good updating avatar" });
+    const { seeker_id } = req.params;
+    const file = req.file;
+    const fileCaption = file === null || file === void 0 ? void 0 : file.originalname.split(".")[0];
+    if (!file)
+        next(new Error("No avatar attached"));
+    const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *", [fileCaption, seeker_id]);
+    const updatingSeeker = updatingSeekerData.rows[0];
+    res.status(200).json({ msg: "good updating avatar", updatingSeeker });
     next();
 }));
 // Front side
 // const [file, setFile] = useState();
-// const [caption, setCaption] = useState("");
 // const handleSubmit = async (event) => {
 //   event.preventDefault();
 //   // Create form data
 //   const formData = new FormData();
 //   formData.append("image", file);
-//   formData.append("caption", caption);
 //   await axios.post("http://localhost:8080/seekers/avatar/:seeker_id", formData, {
 //     headers: { "Content-Type": "multipart/form-data" },
 //   });
@@ -94,11 +100,5 @@ exports.updateAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __await
 // };
 // <form onSubmit={handleSubmit}>
 //    <input onChange={fileSelected} type="file" accept="image/*"></input>
-//    <input
-//           value={caption}
-//           onChange={(e) => setCaption(e.target.value)}
-//           type="text"
-//           placeholder="Caption"
-//         ></input>
-//         <button type="submit">Submit</button>
+//    <button type="submit">Submit</button>
 // </form>

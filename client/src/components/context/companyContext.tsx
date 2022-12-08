@@ -15,7 +15,7 @@ type Props = {
 
 type companyContext = {
     companies: Company[],
-    allCompanies: Company[] | null,
+    allCompanies: Company[],
     companyChange: boolean,
     setCompanyChange: React.Dispatch<React.SetStateAction<boolean>>;
     setCompanies: React.Dispatch<React.SetStateAction<Company[]>>;
@@ -24,8 +24,8 @@ type companyContext = {
     getCompanies: (id: string) => void,
     getCompaniesByStatus:(seeker_id: string, status: string) => void,
     createCompany: (data: Company) => void,
-    editCompany: (id: string, data: Company) => void,
-    deleteCompany: (id: string) => void,
+    editCompany: (id: string, seeker_id: string,data: Company) => void,
+    deleteCompany: (id: string, seeker_id:string) => void,
     filteredChildren: string,
     setFilteredChildren: React.Dispatch<React.SetStateAction<string>>;
     showPage: string,
@@ -43,7 +43,7 @@ export const CompanyProvider = ({children}: Props) => {
     const [companyChange, setCompanyChange] = useState<boolean>(false)
     const { setLoadingSeeker, loadingSeeker } = useSeekerContext()
     const [locationData, setLocationData] = useState<any[]>([])
-    const [allCompanies, setAllCompanies] = useState<Company[]|null>(null);
+    const [allCompanies, setAllCompanies] = useState<Company[]>([]);
     const [cookies] = useCookies();
     const [filteredChildren, setFilteredChildren] = useState<string>("");
     const [showPage, setShowPage] = useState<string>("Interested");
@@ -110,35 +110,33 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-
         } catch (err: any) {
             console.log(err.message);
         }
     }
 
-    const editCompany = async (companyId: string, companyObj: Company) => {
+    const editCompany = async (companyId: string, seeker_id:string, companyObj: Company) => {
         try {
             let res = await axios({
                 method: "patch",
-                url: `http://localhost:8080/companies/${companyId}`,
+                url: `http://localhost:8080/companies/${seeker_id}/${companyId}`,
                 data: companyObj,
                 withCredentials: true,
                 headers: {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            setLoadingSeeker(!loadingSeeker)
         } catch (err: any) {
             console.log(err)
         }
     }
 
 
-    const deleteCompany = async (companyId: string) => {
+    const deleteCompany = async (companyId: string ,seeker_id:string,) => {
         try {
             await axios({
                 method: "delete",
-                url: `http://localhost:8080/companies/${companyId}`,
+                url: `http://localhost:8080/companies/${seeker_id}/${companyId}`,
                 withCredentials: true,
                 headers: {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`

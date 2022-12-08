@@ -11,11 +11,9 @@ companyRouter.route("/:seeker_id").get(authController_1.authorization, companyCo
 companyRouter
     .route("/:seeker_id/:status")
     .get(authController_1.authorization, companyController_1.getCompaniesWithStatus);
+companyRouter.route("/new").post(authController_1.authorization, companyController_1.createNewCompany);
 companyRouter
-    .route("/new")
-    .post(authController_1.authorization, companyController_1.createNewCompany);
-companyRouter
-    .route("/:company_id")
+    .route("/:seeker_id/:company_id")
     .patch(authController_1.authorization, companyController_1.updateCompany)
     .delete(authController_1.authorization, companyController_1.deleteCompany);
 exports.default = companyRouter;

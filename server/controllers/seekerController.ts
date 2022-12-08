@@ -40,17 +40,17 @@ export const addAvatar = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { seeker_id } = req.params;
     const file = req.file;
-    const caption = req.body.caption;
-    if (!file || !caption) next(new Error("No avatar attached"));
-    // Need to add functions sending avatar to S3
+    const fileCaption = file?.originalname.split(".")[0];
+    if (!file) next(new Error("No avatar attached"));
     const fileBuffer = sharp(file?.buffer)
       .resize({ height: 1920, width: 1080, fit: "contain" })
       .toBuffer();
-    const result = await uploadFile(fileBuffer, caption, file?.mimetype);
+    const result = await uploadFile(fileBuffer, fileCaption, file?.mimetype);
+    if (!result) next(new Error("Failed to upload file to s3"));
     // add data to DB
     const updatingSeekerData = await pool.query(
       "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *",
-      [caption, seeker_id]
+      [fileCaption, seeker_id]
     );
     const updatingSeeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "Good new avatar", updatingSeeker });
@@ -76,7 +76,16 @@ export const getAvatar = catchAsync(
 
 export const updateAvatar = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).json({ msg: "good updating avatar" });
+    const { seeker_id } = req.params;
+    const file = req.file;
+    const fileCaption = file?.originalname.split(".")[0];
+    if (!file) next(new Error("No avatar attached"));
+    const updatingSeekerData = await pool.query(
+      "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *",
+      [fileCaption, seeker_id]
+    );
+    const updatingSeeker = updatingSeekerData.rows[0];
+    res.status(200).json({ msg: "good updating avatar", updatingSeeker });
     next();
   }
 );
@@ -84,14 +93,12 @@ export const updateAvatar = catchAsync(
 // Front side
 
 // const [file, setFile] = useState();
-// const [caption, setCaption] = useState("");
 
 // const handleSubmit = async (event) => {
 //   event.preventDefault();
 //   // Create form data
 //   const formData = new FormData();
 //   formData.append("image", file);
-//   formData.append("caption", caption);
 //   await axios.post("http://localhost:8080/seekers/avatar/:seeker_id", formData, {
 //     headers: { "Content-Type": "multipart/form-data" },
 //   });
@@ -105,11 +112,5 @@ export const updateAvatar = catchAsync(
 
 // <form onSubmit={handleSubmit}>
 //    <input onChange={fileSelected} type="file" accept="image/*"></input>
-//    <input
-//           value={caption}
-//           onChange={(e) => setCaption(e.target.value)}
-//           type="text"
-//           placeholder="Caption"
-//         ></input>
-//         <button type="submit">Submit</button>
+//    <button type="submit">Submit</button>
 // </form>

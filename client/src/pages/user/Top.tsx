@@ -19,6 +19,7 @@ const TopPage = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const {
         companies,
+        allCompanies,
         filteredChildren,
         setFilteredChildren,
         showPage,
@@ -26,12 +27,23 @@ const TopPage = () => {
         getCompanies,
         setCompanies
     } = useCompanyContext()
-    const [childComponent, setChildComponent] = useState<ReactNode>(<Interested/>)
+    const [childComponent, setChildComponent] = useState<ReactNode>(<Interested companies={allCompanies}/>)
     const {seeker, loadingSeeker, setLoadingSeeker} = useSeekerContext();
     const [cookies] = useCookies();
 
+    // const [companyLoading, setCompanyLoading] = useState<boolean>(false)
+
     useEffect(() => {
-        // getCompanies(seeker!.seeker_id!)
+
+        // setCompanyLoading(true)
+
+    }, [])
+
+
+    useEffect(() => {
+        getCompanies(seeker!.seeker_id!)
+        console.log("all", allCompanies)
+
         const pageRender = async () => {
             if (showPage === "Interested") {
                 try {
@@ -47,7 +59,7 @@ const TopPage = () => {
                 } catch (err: any) {
                     console.log(err)
                 }
-                setChildComponent(<Interested/>)
+                setChildComponent(<Interested companies={allCompanies}/>)
             } else if (showPage === "Applied") {
                 try {
                     let res = await axios({

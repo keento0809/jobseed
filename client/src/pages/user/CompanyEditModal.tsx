@@ -45,7 +45,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
 
     const sendEditData = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        editCompany(company_id, editCompanyData)
+        editCompany(company_id, seeker!.seeker_id!,editCompanyData)
         setShowModal(false)
     }
 

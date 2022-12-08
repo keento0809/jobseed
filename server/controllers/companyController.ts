@@ -8,7 +8,6 @@ export const getAllCompanies = catchAsync(
     if (!seeker_id) next(new Error("Invalid seeker"));
     const companiesData = await pool.query(
       "SELECT * FROM company WHERE company.seeker_id = $1",
-      // "SELECT * FROM company JOIN schedule ON company.company_id = schedule.company_id JOIN seeker ON schedule.seeker_id = seeker.seeker_id WHERE seeker.seeker_id = $1",
       [seeker_id]
     );
     if (!companiesData) next(new Error("No company found"));
@@ -20,7 +19,7 @@ export const getAllCompanies = catchAsync(
 
 export const getCompaniesWithStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { status } = req.params;
+    const { status, seeker_id } = req.params;
     if (
       !status ||
       (status !== "Interested" &&
@@ -30,8 +29,8 @@ export const getCompaniesWithStatus = catchAsync(
     )
       return next(new Error("Invalid request"));
     const companiesWithStatusInfo = await pool.query(
-      "SELECT * FROM company WHERE company.status = $1",
-      [status]
+      "SELECT * FROM company WHERE company.status = $1 AND company.seeker_id = $2",
+      [status, seeker_id]
     );
 
     if (!companiesWithStatusInfo) next(new Error("No companies found"));
@@ -52,10 +51,11 @@ export const createNewCompany = catchAsync(
       description,
       interest,
       seeker_id,
+      company_size,
     } = req.body;
     if (!name || !jobtype) next(new Error("Invalid input values"));
     const newCompany = await pool.query(
-      "INSERT INTO company (name,link,jobtype,salary,location,description,status,interest,seeker_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
+      "INSERT INTO company (name,link,jobtype,salary,location,description,status,interest,seeker_id,company_size) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *",
       [
         name,
         link,
@@ -66,6 +66,7 @@ export const createNewCompany = catchAsync(
         "Interested",
         interest,
         seeker_id,
+        company_size,
       ]
     );
     if (!newCompany) next(new Error("Failed to create company"));
@@ -88,9 +89,10 @@ export const updateCompany = catchAsync(
       status,
       interest,
       seeker_id,
+      company_size,
     } = req.body;
     const updatingCompany = await pool.query(
-      "UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8,seeker_id = $9 WHERE company.company_id = $10 RETURNING *",
+      "UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8,seeker_id = $9,company_size = $10 WHERE company.company_id = $11 AND company.seeker_id = $9 RETURNING *",
       [
         name,
         link,
@@ -102,6 +104,7 @@ export const updateCompany = catchAsync(
         status,
         seeker_id,
         company_id,
+        company_size,
       ]
     );
     if (!updatingCompany) next(new Error("Failed to update company"));
@@ -112,16 +115,17 @@ export const updateCompany = catchAsync(
 
 export const deleteCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { company_id } = req.params;
+    const { company_id, seeker_id } = req.params;
     if (!company_id) next(new Error("Invalid request"));
     const deletingCompany = await pool.query(
-      "SELECT * FROM company WHERE company.company_id = $1",
-      [company_id]
+      "SELECT * FROM company WHERE company.company_id = $1 AND company.seeker_id = $2",
+      [company_id, seeker_id]
     );
     if (!deletingCompany) next(new Error("Company not found"));
-    await pool.query("DELETE FROM company WHERE company.company_id = $1", [
-      company_id,
-    ]);
+    await pool.query(
+      "DELETE FROM company WHERE company.company_id = $1 AND company.seeker_id = $2",
+      [company_id, seeker_id]
+    );
     res.status(200).json({ msg: "company deleted", deletingCompany });
     next();
   }

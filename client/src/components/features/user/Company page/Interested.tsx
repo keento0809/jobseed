@@ -5,9 +5,13 @@ import {Company} from "../../../../types/Company";
 import EmptyCompany from "../EmptyCompany";
 import {useSeekerContext} from "../../../context/seekerContext";
 
-const Interested = () => {
+type CompaniesProps = {
+    companies: Company[]
+}
 
-    const {filteredChildren, companies} = useCompanyContext();
+const Interested = ({companies}: CompaniesProps) => {
+
+    const {filteredChildren} = useCompanyContext();
     const [filtered, setFiltered] = useState<Company[]>(companies);
     const {seeker} = useSeekerContext()
 
