@@ -3,7 +3,7 @@ import { catchAsync } from "../helpers/middlewares";
 import pool from "../db/postgres";
 import multer from "multer";
 import sharp from "sharp";
-import { getObjectSignedUrl, uploadFile } from "../s3";
+import { deleteFile, getObjectSignedUrl, uploadFile } from "../s3";
 
 export const getSeekerInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -82,6 +82,16 @@ export const updateAvatar = catchAsync(
     const file = req.file;
     const fileCaption = file?.originalname.split(".")[0];
     if (!file) next(new Error("No avatar attached"));
+    // delete current avatar
+    await deleteAvatar(seeker_id);
+    // fileBuffer
+    const fileBuffer = await sharp(file!.buffer)
+      .resize({ height: 1920, width: 1080, fit: "contain" })
+      .toBuffer();
+    // add image to s3
+    const result = await uploadFile(fileBuffer, fileCaption, file!.mimetype);
+    if (!result) next(new Error("Failed to upload file to s3"));
+    // add data to DB
     const updatingSeekerData = await pool.query(
       "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *",
       [fileCaption, seeker_id]
@@ -91,3 +101,16 @@ export const updateAvatar = catchAsync(
     next();
   }
 );
+
+export const deleteAvatar = async (seeker_id: string) => {
+  const deletingAvatarData = await pool.query(
+    "SELECT avatar FROM seeker WHERE seeker.seeker_id = $1",
+    [seeker_id]
+  );
+  if (!deletingAvatarData.rows[0]) return;
+  const deletingAvatar = deletingAvatarData.rows[0];
+  // delete avatar in S3 bucket
+  const resultForDeleting = await deleteFile(deletingAvatar);
+  if (!resultForDeleting) throw new Error("Failed to delete avatar");
+  return resultForDeleting;
+};
