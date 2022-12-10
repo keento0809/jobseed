@@ -1,16 +1,14 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Navigate, Outlet} from "react-router-dom";
-import {useCookies} from "react-cookie";
-import {useSeekerContext} from "../context/seekerContext";
-import seeker from "../../data/Seeker";
+import {useAuthContext} from "../context/AuthContext";
 
 const ProtectRoutes = () => {
-    const [cookie] = useCookies();
-    const {seeker, loadingSeeker, setLoadingSeeker} = useSeekerContext()
+    const {seekerState} = useAuthContext();
+
     const pageNav = () => {
-        if (cookie.JWT_TOKEN && !seeker && loadingSeeker) {
+        if (seekerState.token && seekerState.seekerLoading) {
             return <h1>Loading.</h1>
-        } else if (cookie.JWT_TOKEN && seeker) {
+        } else if (seekerState.token && !seekerState.seekerLoading ) {
             return <Outlet/>
         } else return < Navigate to={"/"}/>
 

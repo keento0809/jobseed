@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Text_filed from "../components/models/Text_filed";
 import Button_sm from "../components/models/Button_sm";
 import {GoogleLogin} from "react-google-login";
@@ -6,19 +6,41 @@ import {gapi} from "gapi-script";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router-dom";
 import {useSeekerContext} from "../components/context/seekerContext";
+import {useAuthContext} from "../components/context/AuthContext";
+import {SEEKER_ACTION} from "../components/context/reducer/SeekerReducer";
+import AuthService from "../components/helper/auth.service";
+import axios from "axios";
 
 const Login = () => {
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [cookies, setCookie, removeCookie] = useCookies();
-    const navigate = useNavigate();
-    const {setSeeker, loginSeeker} = useSeekerContext()
 
-    const loginUser = async (e: React.SyntheticEvent) => {
+    const [cookies, setCookie] = useCookies();
+    const navigate = useNavigate();
+    const {seekerState, seekerDispatch} = useAuthContext();
+
+    const LoginUser = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        console.log(password)
-        loginSeeker(email, password)
+        try {
+            seekerDispatch({type: SEEKER_ACTION.SEEKER_FETCHING, payload:{}})
+            let res = await axios({
+                method: "post",
+                url: "http://localhost:8080/auth/login",
+                data: {email, password},
+                withCredentials: true
+            })
+
+            if( res.status === 200 ) {
+                seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_SEEKER, payload: res.data})
+                setCookie("JWT_TOKEN", res.data.token)
+                navigate("/user", {replace: true});
+                return
+            }
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     gapi.load("client:auth2", () => {
@@ -29,16 +51,14 @@ const Login = () => {
     });
 
     const OnSuccess = (res: any) => {
-
-        setSeeker({
-            seeker_id: res.profileObj.googleId,
-            name: res.profileObj.name,
-            email: res.profileObj.email,
-            avatar: res.profileObj.imageUrl
-        })
+        seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_SEEKER, payload: res.profileObj})
+        // setSeeker({
+        //     seeker_id: res.profileObj.googleId,
+        //     name: res.profileObj.name,
+        //     email: res.profileObj.email,
+        //     avatar: res.profileObj.imageUrl
+        // })
         setCookie("JWT_TOKEN", res.accessToken);
-
-        console.log(res)
         navigate("/user", {replace: true});
     }
 
@@ -73,7 +93,7 @@ const Login = () => {
                             bg_color={"bg-content-blue"}
                             className={"mt-8"}
                             width={"w-full"}
-                            onClick={loginUser}
+                            onClick={LoginUser}
                         />
                     </form>
                     <div id="signInButton" className="">

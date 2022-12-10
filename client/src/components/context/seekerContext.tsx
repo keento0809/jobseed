@@ -1,6 +1,5 @@
 import React, {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from "react";
 import {Seeker} from "../../types/Seeker";
-import Seeker1 from "../../data/Seeker"
 import axios from "axios";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router-dom";

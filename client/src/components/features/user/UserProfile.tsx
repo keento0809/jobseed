@@ -5,6 +5,7 @@ import {Seeker} from "../../../types/Seeker";
 import {useSeekerContext} from "../../context/seekerContext";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {useAuthContext} from "../../context/AuthContext";
 
 
 type User = {
@@ -15,7 +16,8 @@ type User = {
 
 const UserProfile = (props: User) => {
     const {updateSeeker} = useSeekerContext();
-    const {seeker} = useSeekerContext()
+    // const {seeker} = useSeekerContext()
+    const {seekerState, seekerDispatch} = useAuthContext();
     const [wannaEdit, setWannaEdit] = useState<boolean>(false);
     const [editSeeker, setEditSeeker] = useState<Seeker>({
         name:props.name,
@@ -25,7 +27,7 @@ const UserProfile = (props: User) => {
 
     const updateUserInfoHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        updateSeeker(seeker!.seeker_id!, editSeeker)
+        updateSeeker(seekerState.seeker.seeker_id!, editSeeker)
         setWannaEdit(false)
         navigate("/user", { replace: true });
     }
@@ -67,8 +69,8 @@ const UserProfile = (props: User) => {
                     </div>
                 </div> :
                 <div className="w-full py-4">
-                    <h3 className="font-bold text-md">{seeker!.name}</h3>
-                    <p className="text-sm">{seeker!.email}</p>
+                    <h3 className="font-bold text-md">{seekerState.seeker.name}</h3>
+                    <p className="text-sm">{seekerState.seeker.email}</p>
                     <div
                         onClick={() => {
                             setWannaEdit(true)

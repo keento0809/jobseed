@@ -2,16 +2,12 @@ import React, {createContext, ReactNode, useContext, useState} from "react";
 import axios from "axios";
 import {Company} from "../../types/Company";
 import {useCookies} from "react-cookie";
-import {useNavigate} from "react-router-dom";
 import {useSeekerContext} from "./seekerContext";
 
 type Props = {
     children: ReactNode
 };
 
-/**
- * TODO: separate company data to show and get all companis
- */
 
 type companyContext = {
     companies: Company[],

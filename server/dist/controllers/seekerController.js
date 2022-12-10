@@ -47,10 +47,12 @@ exports.addAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(
     const fileCaption = file === null || file === void 0 ? void 0 : file.originalname.split(".")[0];
     if (!file)
         next(new Error("No avatar attached"));
-    const fileBuffer = (0, sharp_1.default)(file === null || file === void 0 ? void 0 : file.buffer)
+    // fileBuffer
+    const fileBuffer = yield (0, sharp_1.default)(file.buffer)
         .resize({ height: 1920, width: 1080, fit: "contain" })
         .toBuffer();
-    const result = yield (0, s3_1.uploadFile)(fileBuffer, fileCaption, file === null || file === void 0 ? void 0 : file.mimetype);
+    // add image to s3
+    const result = yield (0, s3_1.uploadFile)(fileBuffer, fileCaption, file.mimetype);
     if (!result)
         next(new Error("Failed to upload file to s3"));
     // add data to DB

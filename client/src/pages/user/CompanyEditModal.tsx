@@ -7,6 +7,11 @@ import {useCompanyContext} from "../../components/context/companyContext";
 import {Company, Location} from "../../types/Company";
 import GooglePlace from "../../components/features/user/GooglePlace";
 import {useSeekerContext} from "../../components/context/seekerContext";
+import axios from "axios";
+import {useAuthContext} from "../../components/context/AuthContext";
+import {useCompaniesContext} from "../../components/context/companiesContext";
+import {COMPANY_ACTIONS} from "../../components/context/reducer/CompanyReducer";
+import {getLat, getLng} from "../../components/helper/companyHelper";
 
 type modalProps = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,8 +29,8 @@ type modalProps = {
 const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,company_id, company_size,location, salary}: modalProps) => {
 
     const [searchPlace, setSearchPlace] = useState<Location>(location)
-    const {editCompany} = useCompanyContext()
-    const {seeker} = useSeekerContext()
+    const {seekerState} = useAuthContext();
+    const {dispatch} = useCompaniesContext();
     const [editCompanyData, setEditCompanyData] = useState<Company>({
         company_id,
         name,
@@ -36,16 +41,44 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
         status,
         salary,
         description,
-        seeker_id: seeker!.seeker_id!
+        seeker_id: seekerState.seeker.seeker_id!
     })
 
     const companyDataHandler = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setEditCompanyData({...editCompanyData, [e.target.name]: e.target.value});
     }
 
-    const sendEditData = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const sendEditData =　async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        editCompany(company_id, seeker!.seeker_id!,editCompanyData)
+
+        try {
+            dispatch({type: COMPANY_ACTIONS.API_CALL, payload: []})
+            let res = await axios({
+                method: "patch",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}/${company_id}`,
+                data: editCompanyData,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${seekerState.token}`
+                }
+            })
+            let getData = await axios({
+                method: "get",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}`,
+                headers: {
+                    authorization:`Bearer ${seekerState.token}`
+                },
+                withCredentials : true
+            })
+            const comp : any[] = getData.data.companies
+            comp.forEach( c => {
+                c.location = {lat: parseFloat(
+                        getLat(c.location)), lng:  parseFloat(getLng(c.location))}
+            })
+            res.status === 200 && dispatch({type: COMPANY_ACTIONS.SUCCESS, payload: comp})
+        } catch (err: any) {
+            console.log(err)
+        }
         setShowModal(false)
     }
 
