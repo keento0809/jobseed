@@ -7,13 +7,14 @@ const Testing = () => {
   const [cookies] = useCookies();
   const [file, setFile] = useState<File>();
   const [avatarPath, setAvatarPath] = useState("");
+  const seeker_id = cookies.seeker_id;
+  console.log(seeker_id);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Create form data
     const formData = new FormData();
     formData.append("image", file!);
-    const seeker_id = cookies.seeker_id;
     // send avatar to image to AWS S3
     await axios.post(
       `http://localhost:8080/seekers/avatar/${seeker_id}`,
