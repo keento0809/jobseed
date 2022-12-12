@@ -18,6 +18,9 @@ import {useCompaniesContext} from "./components/context/companiesContext";
 import {useFetchCompany} from "./hooks/useFetchCompany";
 import {useAuthContext} from "./components/context/AuthContext";
 import {useCookies} from "react-cookie";
+import {useFetchUser} from "./hooks/useFetchSeeker";
+import axios from "axios";
+import {SEEKER_ACTION} from "./components/context/reducer/SeekerReducer";
 
 function App() {
 
@@ -25,6 +28,28 @@ function App() {
     const {companies} = companyState
     const {seekerState, seekerDispatch} = useAuthContext();
     const [cookies] = useCookies();
+
+    // const getSeekerData = async (seeker_id: string) => {
+    //     try {
+    //         seekerDispatch({type: SEEKER_ACTION.SEEKER_FETCHING, payload:{}})
+    //         let res = await axios({
+    //             method: "get",
+    //             url: `http://localhost:8080/seekers/${seeker_id}`,
+    //             withCredentials: true,
+    //             headers: {
+    //                 authorization: `Bearer ${cookies.JWT_TOKEN}`
+    //             }
+    //         })
+    //         console.log(res.data.seeker)
+    //         seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_SEEKER, payload: res.data})
+    //     } catch (error : any) {
+    //         seekerDispatch({type: SEEKER_ACTION.FAILED_GET_SEEKER, payload: {}, error})
+    //     }
+    // }
+    //
+    // // cookies.JWT_TOKEN ? getSeekerData(cookies.SEEKER_ID) : null
+    //
+    // console.log(seekerState.seeker.name)
 
     return (
         <div className="App">

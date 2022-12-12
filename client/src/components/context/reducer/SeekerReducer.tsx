@@ -23,6 +23,8 @@ export const initialSeeker: SeekerState = {
 export const SEEKER_ACTION = {
     SEEKER_FETCHING: "seeker_fetching",
     SUCCESS_GET_SEEKER: "success_get_seeker",
+    SUCCESS_UPDATE_SEEKER: "success_update_seeker",
+    FAILED_UPDATE_SEEKER: "failed_update_seeker",
     FAILED_GET_SEEKER: "failed_get_seeker"
 }
 
@@ -46,6 +48,12 @@ export const seekerReducer = (state: SeekerState, action: SeekerAction) : Seeker
                 seeker: {email: "", name: ""},
                 seekerLoading: false
             };
+        case SEEKER_ACTION.SUCCESS_UPDATE_SEEKER:
+            return {
+                ...state,
+                seeker: action.payload,
+                seekerLoading: false
+            }
         default:
             return state
     }

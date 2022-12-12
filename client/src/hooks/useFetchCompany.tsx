@@ -3,14 +3,13 @@ import {useCompaniesContext} from "../components/context/companiesContext";
 import {COMPANY_ACTIONS} from "../components/context/reducer/CompanyReducer";
 import {useEffect} from "react";
 import {getLat, getLng} from "../components/helper/companyHelper";
+import {useCookies} from "react-cookie";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
 export const useFetchCompany = (params: AxiosRequestConfig) => {
-
-    const {dispatch, companyState} = useCompaniesContext();
-    const {loading} = companyState;
-
+    const [cookies] = useCookies();
+    const {dispatch} = useCompaniesContext();
     const fetchData = async (params: AxiosRequestConfig) => {
         try {
             dispatch({type: COMPANY_ACTIONS.API_CALL, payload:[]})
@@ -26,6 +25,7 @@ export const useFetchCompany = (params: AxiosRequestConfig) => {
     };
 
     useEffect(() => {
+        console.log(cookies.JWT_TOKEN)
         fetchData(params)
     }, [])
 }

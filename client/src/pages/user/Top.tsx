@@ -20,6 +20,7 @@ const TopPage = () => {
     const [cookies] = useCookies();
     const {companyState, filteredChildren, setFilteredChildren} = useCompaniesContext();
     const {seekerState} = useAuthContext();
+    const {seekerLoading} = seekerState;
     const {companies} = companyState
     const [childComponent, setChildComponent] = useState<ReactNode>(<Interested/>)
     const {
@@ -29,14 +30,12 @@ const TopPage = () => {
 
     useFetchCompany({
         method: "get",
-        url: `/companies/${seekerState.seeker.seeker_id}`,
+        url: `/companies/${cookies.SEEKER_ID}`,
         headers: {
             authorization:`Bearer ${cookies.JWT_TOKEN}`
         },
         withCredentials : true
     })
-
-    console.log(companies)
 
     const modalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
@@ -62,13 +61,14 @@ const TopPage = () => {
         }
     }, [showPage])
 
+    console.log(seekerState.seeker.email, seekerState.seeker.name)
     return (
             <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
-                < UserProfile
+                {seekerLoading ? <h1>Loading</h1> :                 < UserProfile
                     name={seekerState.seeker.name}
                     email={seekerState.seeker.email}
                     avatar={human}
-                />
+                />}
                 <div className="lg:col-span-4">
                     <UserNav
                         showPage={showPage}

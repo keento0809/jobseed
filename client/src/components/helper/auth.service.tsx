@@ -40,5 +40,6 @@ const LoginSeeker = (data: loginData) => {
     })
 };
 
+
 export default { SignupSeeker, LoginSeeker }
 

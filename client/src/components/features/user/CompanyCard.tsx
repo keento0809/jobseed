@@ -7,10 +7,7 @@ import ScheduleModal from "../../../pages/user/ScheduleModal";
 import {Company} from "../../../types/Company";
 import CompanyEditModal from "../../../pages/user/CompanyEditModal";
 import {company_status} from "../../../types/Company";
-import {useSeekerContext} from "../../context/seekerContext";
 import {useCompanyContext} from "../../context/companyContext";
-import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
 import {useCompaniesContext} from "../../context/companiesContext";
 import {useAuthContext} from "../../context/AuthContext";
 import {COMPANY_ACTIONS} from "../../context/reducer/CompanyReducer";
@@ -36,7 +33,7 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
         showEditModal ? setShowEditModal(false) : setShowEditModal(true)
     }
 
-    const statusHandler = (e: React.MouseEvent<HTMLElement>) => {
+    const statusHandler = async (e: React.MouseEvent<HTMLElement>) => {
         const editStatusCompany: Company = {
             name,
             jobtype,
@@ -50,11 +47,35 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
             salary
         }
         console.log(editStatusCompany)
-        editCompany(company_id!, seeker_id,editStatusCompany)
+        try {
+            dispatch({type: COMPANY_ACTIONS.API_CALL, payload: []})
+            let res = await axios({
+                method: "patch",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}/${company_id}`,
+                data: editStatusCompany,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${seekerState.token}`
+                }
+            })
+            let getData = await axios({
+                method: "get",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}`,
+                headers: {
+                    authorization:`Bearer ${seekerState.token}`
+                },
+                withCredentials : true
+            })
+            const comp : any[] = getData.data.companies
+            comp.forEach( c => {
+                c.location = {lat: parseFloat(
+                        getLat(c.location)), lng:  parseFloat(getLng(c.location))}
+            })
+            res.status === 200 && dispatch({type: COMPANY_ACTIONS.SUCCESS, payload: comp})
+        } catch (err: any) {
+            console.log(err)
+        }
     }
-    //
-    // useEffect(() => {
-    // }, [companies])
 
     const filteredStatus = () => {
         const filteredArr = company_status.filter(status => status !== showPage)

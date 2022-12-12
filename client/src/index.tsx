@@ -18,7 +18,6 @@ root.render(
     < BrowserRouter>
         <CookiesProvider>
             <AuthProvider>
-                <SeekerProvider>
                     <CompaniesProvider>
                         <CompanyProvider>
                             <ScheduleProvider>
@@ -26,7 +25,6 @@ root.render(
                             </ScheduleProvider>
                         </CompanyProvider>
                     </CompaniesProvider>
-                </SeekerProvider>
             </AuthProvider>
         </CookiesProvider>
     </BrowserRouter>

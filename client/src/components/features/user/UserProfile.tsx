@@ -6,6 +6,7 @@ import {useSeekerContext} from "../../context/seekerContext";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../../context/AuthContext";
+import {SEEKER_ACTION} from "../../context/reducer/SeekerReducer";
 
 
 type User = {
@@ -15,8 +16,6 @@ type User = {
 }
 
 const UserProfile = (props: User) => {
-    const {updateSeeker} = useSeekerContext();
-    // const {seeker} = useSeekerContext()
     const {seekerState, seekerDispatch} = useAuthContext();
     const [wannaEdit, setWannaEdit] = useState<boolean>(false);
     const [editSeeker, setEditSeeker] = useState<Seeker>({
@@ -25,9 +24,26 @@ const UserProfile = (props: User) => {
     })
     const navigate = useNavigate();
 
-    const updateUserInfoHandler = (e: React.MouseEvent<HTMLElement>) => {
+    const updateUserInfoHandler = async (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        updateSeeker(seekerState.seeker.seeker_id!, editSeeker)
+        try {
+            seekerDispatch({type: SEEKER_ACTION.SEEKER_FETCHING, payload:{}})
+            let res = await axios({
+                method: "patch",
+                url: `http://localhost:8080/seekers/${seekerState.seeker.seeker_id}`,
+                data: editSeeker,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${seekerState.token}`
+                }
+            })
+            if (res.status === 200) {
+                console.log(res.data)
+                seekerDispatch({type: SEEKER_ACTION.SUCCESS_UPDATE_SEEKER, payload: res.data.updatingSeeker})
+            }
+        } catch (e: any) {
+            console.log(e.message)
+        }
         setWannaEdit(false)
         navigate("/user", { replace: true });
     }

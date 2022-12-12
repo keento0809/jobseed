@@ -91,8 +91,9 @@ export const updateCompany = catchAsync(
       seeker_id,
       company_size,
     } = req.body;
+    console.log(req.body)
     const updatingCompany = await pool.query(
-      "UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5,description = $6,interest = $7,status = $8,seeker_id = $9,company_size = $10 WHERE company.company_id = $11 AND company.seeker_id = $9 RETURNING *",
+      "UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5, description = $6,interest = $7,status = $8,seeker_id = $9,company_size = $10 WHERE company.company_id = $11 AND company.seeker_id = $9 RETURNING *",
       [
         name,
         link,
@@ -105,7 +106,7 @@ export const updateCompany = catchAsync(
         seeker_id,
         company_size,
         company_id,
-        company_size,
+        // company_size,
       ]
     );
     if (!updatingCompany) next(new Error("Failed to update company"));

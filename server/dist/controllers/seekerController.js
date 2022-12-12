@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAvatar = exports.getAvatar = exports.addAvatar = exports.updateSeekerInfo = exports.getSeekerInfo = void 0;
+exports.deleteAvatar = exports.updateAvatar = exports.getAvatar = exports.addAvatar = exports.updateSeekerInfo = exports.getSeekerInfo = void 0;
 const middlewares_1 = require("../helpers/middlewares");
 const postgres_1 = __importDefault(require("../db/postgres"));
 const sharp_1 = __importDefault(require("sharp"));
@@ -35,9 +35,10 @@ exports.updateSeekerInfo = (0, middlewares_1.catchAsync)((req, res, next) => __a
     const { name, email } = req.body;
     if (!name || !email)
         next(new Error("Invalid inputs"));
-    const updatingSeeker = yield postgres_1.default.query("UPDATE seeker SET name = $1, email = $2 WHERE seeker.seeker_id = $3 RETURNING *", [name, email, seeker_id]);
-    if (!updatingSeeker)
+    const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET name = $1, email = $2 WHERE seeker.seeker_id = $3 RETURNING *", [name, email, seeker_id]);
+    if (!updatingSeekerData)
         next(new Error("Failed to update seeker"));
+    const updatingSeeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "Good seeker update", updatingSeeker });
     next();
 }));
@@ -79,6 +80,17 @@ exports.updateAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __await
     const fileCaption = file === null || file === void 0 ? void 0 : file.originalname.split(".")[0];
     if (!file)
         next(new Error("No avatar attached"));
+    // delete current avatar
+    yield (0, exports.deleteAvatar)(seeker_id);
+    // fileBuffer
+    const fileBuffer = yield (0, sharp_1.default)(file.buffer)
+        .resize({ height: 1920, width: 1080, fit: "contain" })
+        .toBuffer();
+    // add image to s3
+    const result = yield (0, s3_1.uploadFile)(fileBuffer, fileCaption, file.mimetype);
+    if (!result)
+        next(new Error("Failed to upload file to s3"));
+    // add data to DB
     const updatingSeekerData = yield postgres_1.default.query("UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *", [fileCaption, seeker_id]);
     const updatingSeeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "good updating avatar", updatingSeeker });
@@ -104,3 +116,15 @@ exports.updateAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __await
 //    <input onChange={fileSelected} type="file" accept="image/*"></input>
 //    <button type="submit">Submit</button>
 // </form>
+const deleteAvatar = (seeker_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const deletingAvatarData = yield postgres_1.default.query("SELECT avatar FROM seeker WHERE seeker.seeker_id = $1", [seeker_id]);
+    if (!deletingAvatarData.rows[0])
+        return;
+    const deletingAvatar = deletingAvatarData.rows[0];
+    // delete avatar in S3 bucket
+    const resultForDeleting = yield (0, s3_1.deleteFile)(deletingAvatar);
+    if (!resultForDeleting)
+        throw new Error("Failed to delete avatar");
+    return resultForDeleting;
+});
+exports.deleteAvatar = deleteAvatar;

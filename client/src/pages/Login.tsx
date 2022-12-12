@@ -33,7 +33,8 @@ const Login = () => {
 
             if( res.status === 200 ) {
                 seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_SEEKER, payload: res.data})
-                setCookie("JWT_TOKEN", res.data.token)
+                setCookie("JWT_TOKEN", res.data.token);
+                setCookie("SEEKER_ID", res.data.seeker.seeker_id);
                 navigate("/user", {replace: true});
                 return
             }

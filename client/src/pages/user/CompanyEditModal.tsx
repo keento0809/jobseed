@@ -3,10 +3,8 @@ import Button_sm from "../../components/models/Button_sm";
 import Text_field_lg from "../../components/models/Text_field_lg";
 import InputField from "../../components/models/InputField";
 import {BsBuilding} from "react-icons/bs"
-import {useCompanyContext} from "../../components/context/companyContext";
 import {Company, Location} from "../../types/Company";
 import GooglePlace from "../../components/features/user/GooglePlace";
-import {useSeekerContext} from "../../components/context/seekerContext";
 import axios from "axios";
 import {useAuthContext} from "../../components/context/AuthContext";
 import {useCompaniesContext} from "../../components/context/companiesContext";

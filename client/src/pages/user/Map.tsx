@@ -4,9 +4,12 @@ import {useJsApiLoader} from "@react-google-maps/api";
 import {useCompanyContext} from "../../components/context/companyContext";
 import {Company} from "../../types/Company";
 import MapDetail from "../../components/features/user/MapDetail";
+import {useCompaniesContext} from "../../components/context/companiesContext";
 
 const CompanyMap = () => {
-    const {allCompanies} = useCompanyContext();
+    const {companyState} = useCompaniesContext();
+    const {companies} = companyState
+
     const [selectedMap, setSelectedMap] = useState<Company | null>(null);
 
     const selectedNull = (
@@ -34,7 +37,7 @@ const CompanyMap = () => {
             center={defaultCenter}
         >
             {
-                allCompanies?.map(company =>
+                companies?.map(company =>
                     <div key={company.company_id}>
                         <Marker
                             position={{lat: company.location.lat, lng: company.location.lng}}
