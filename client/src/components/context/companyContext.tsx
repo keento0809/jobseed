@@ -2,28 +2,26 @@ import React, {createContext, ReactNode, useContext, useState} from "react";
 import axios from "axios";
 import {Company} from "../../types/Company";
 import {useCookies} from "react-cookie";
-import {useNavigate} from "react-router-dom";
 import {useSeekerContext} from "./seekerContext";
 
 type Props = {
     children: ReactNode
 };
 
-/**
- * TODO: separate company data to show and get all companis
- */
 
 type companyContext = {
     companies: Company[],
-    allCompanies: Company[] | null,
+    allCompanies: Company[],
+    companyChange: boolean,
+    setCompanyChange: React.Dispatch<React.SetStateAction<boolean>>;
     setCompanies: React.Dispatch<React.SetStateAction<Company[]>>;
     locationData: any[],
     setLocationData: React.Dispatch<React.SetStateAction<any[]>>;
     getCompanies: (id: string) => void,
     getCompaniesByStatus:(seeker_id: string, status: string) => void,
     createCompany: (data: Company) => void,
-    editCompany: (id: string, data: Company) => void,
-    deleteCompany: (id: string) => void,
+    editCompany: (id: string, seeker_id: string,data: Company) => void,
+    deleteCompany: (id: string, seeker_id:string) => void,
     filteredChildren: string,
     setFilteredChildren: React.Dispatch<React.SetStateAction<string>>;
     showPage: string,
@@ -38,13 +36,14 @@ export const useCompanyContext = () => {
 
 export const CompanyProvider = ({children}: Props) => {
     const [companies, setCompanies] = useState<Company[]>([]);
-    const { setLoadingSeeker} = useSeekerContext()
+    const [companyChange, setCompanyChange] = useState<boolean>(false)
+    const { setLoadingSeeker, loadingSeeker } = useSeekerContext()
     const [locationData, setLocationData] = useState<any[]>([])
-    const [allCompanies, setAllCompanies] = useState<Company[]|null>(null);
+    const [allCompanies, setAllCompanies] = useState<Company[]>([]);
     const [cookies] = useCookies();
     const [filteredChildren, setFilteredChildren] = useState<string>("");
     const [showPage, setShowPage] = useState<string>("Interested");
-    const navigate = useNavigate();
+
 
     const getLat = (location : string) => {
         let lat = location.split(":")[1]
@@ -90,7 +89,7 @@ export const CompanyProvider = ({children}: Props) => {
                 withCredentials : true
             })
             await setCompanies(res.data.companiesWithStatus);
-            await setLoadingSeeker(false)
+
         } catch (err: any) {
             console.log(err)
         }
@@ -107,44 +106,39 @@ export const CompanyProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log(res.data)
-            window.location.reload();
-            navigate("/user", {replace: true});
         } catch (err: any) {
             console.log(err.message);
         }
     }
 
-    const editCompany = async (companyId: string, companyObj: Company) => {
+    const editCompany = async (companyId: string, seeker_id:string, companyObj: Company) => {
         try {
             let res = await axios({
                 method: "patch",
-                url: `http://localhost:8080/companies/${companyId}`,
+                url: `http://localhost:8080/companies/${seeker_id}/${companyId}`,
                 data: companyObj,
                 withCredentials: true,
                 headers: {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log(res.data)
-            window.location.reload();
         } catch (err: any) {
             console.log(err)
         }
     }
 
 
-    const deleteCompany = async (companyId: string) => {
+    const deleteCompany = async (companyId: string ,seeker_id:string,) => {
         try {
             await axios({
                 method: "delete",
-                url: `http://localhost:8080/companies/${companyId}`,
+                url: `http://localhost:8080/companies/${seeker_id}/${companyId}`,
                 withCredentials: true,
                 headers: {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            window.location.reload();
+
         } catch (err: any) {
             console.log(err.message)
         }
@@ -156,6 +150,8 @@ export const CompanyProvider = ({children}: Props) => {
                 setCompanies,
                 allCompanies,
                 locationData,
+                companyChange,
+                setCompanyChange,
                 setLocationData,
                 getCompanies,
                 getCompaniesByStatus,

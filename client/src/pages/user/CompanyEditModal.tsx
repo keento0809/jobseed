@@ -3,10 +3,13 @@ import Button_sm from "../../components/models/Button_sm";
 import Text_field_lg from "../../components/models/Text_field_lg";
 import InputField from "../../components/models/InputField";
 import {BsBuilding} from "react-icons/bs"
-import {useCompanyContext} from "../../components/context/companyContext";
 import {Company, Location} from "../../types/Company";
 import GooglePlace from "../../components/features/user/GooglePlace";
-import {useSeekerContext} from "../../components/context/seekerContext";
+import axios from "axios";
+import {useAuthContext} from "../../components/context/AuthContext";
+import {useCompaniesContext} from "../../components/context/companiesContext";
+import {COMPANY_ACTIONS} from "../../components/context/reducer/CompanyReducer";
+import {getLat, getLng} from "../../components/helper/companyHelper";
 
 type modalProps = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,8 +27,8 @@ type modalProps = {
 const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,company_id, company_size,location, salary}: modalProps) => {
 
     const [searchPlace, setSearchPlace] = useState<Location>(location)
-    const {editCompany} = useCompanyContext()
-    const {seeker} = useSeekerContext()
+    const {seekerState} = useAuthContext();
+    const {dispatch} = useCompaniesContext();
     const [editCompanyData, setEditCompanyData] = useState<Company>({
         company_id,
         name,
@@ -36,18 +39,44 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
         status,
         salary,
         description,
-        seeker_id: seeker!.seeker_id!
+        seeker_id: seekerState.seeker.seeker_id!
     })
-    console.log(editCompanyData)
 
     const companyDataHandler = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setEditCompanyData({...editCompanyData, [e.target.name]: e.target.value});
     }
 
-    const sendEditData = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const sendEditData =　async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log(editCompanyData)
-        editCompany(company_id, editCompanyData)
+
+        try {
+            dispatch({type: COMPANY_ACTIONS.API_CALL, payload: []})
+            let res = await axios({
+                method: "patch",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}/${company_id}`,
+                data: editCompanyData,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${seekerState.token}`
+                }
+            })
+            let getData = await axios({
+                method: "get",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}`,
+                headers: {
+                    authorization:`Bearer ${seekerState.token}`
+                },
+                withCredentials : true
+            })
+            const comp : any[] = getData.data.companies
+            comp.forEach( c => {
+                c.location = {lat: parseFloat(
+                        getLat(c.location)), lng:  parseFloat(getLng(c.location))}
+            })
+            res.status === 200 && dispatch({type: COMPANY_ACTIONS.SUCCESS, payload: comp})
+        } catch (err: any) {
+            console.log(err)
+        }
         setShowModal(false)
     }
 
@@ -63,7 +92,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
                         type={"text"}
                         title={"company name"}
                         name={"name"}
-                        value={editCompanyData.name!}
+                        value={editCompanyData.name || ""}
                         placeholder={"company name"}
                         onChange={companyDataHandler}
                     />
@@ -72,7 +101,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
                             type={"text"}
                             title={"job type"}
                             name={"jobtype"}
-                            value={editCompanyData.jobtype!}
+                            value={editCompanyData.jobtype! || ""}
                             placeholder={"job type"}
                             onChange={companyDataHandler}
                         />
@@ -83,7 +112,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
                     type={"text"}
                     title={"job post link"}
                     name={"link"}
-                    value={editCompanyData.link!}
+                    value={editCompanyData.link! || ""}
                     placeholder={"job post link"}
                     onChange={companyDataHandler}
                 />
@@ -93,7 +122,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
                         type={"text"}
                         title={"salary"}
                         name={"salary"}
-                        value={editCompanyData.salary!}
+                        value={editCompanyData.salary! || ""}
                         placeholder={"salary"}
                         onChange={companyDataHandler}
                     />
@@ -110,7 +139,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
                         type={"text"}
                         title={"company size"}
                         name={"company_size"}
-                        value={editCompanyData.company_size!}
+                        value={editCompanyData.company_size! || ""}
                         placeholder={"company size"}
                         onChange={companyDataHandler}
                     />
@@ -120,7 +149,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
                 <Text_field_lg
                     name={"description"}
                     onChange={companyDataHandler}
-                    value={editCompanyData.description!}
+                    value={editCompanyData.description! || ""}
                 />
                 <div className="flex justify-end gap-2 mt-4">
                     <Button_sm

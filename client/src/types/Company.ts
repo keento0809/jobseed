@@ -1,7 +1,7 @@
 export const company_status: string[] = ["Interested", "Applied", "Interview", "Rejected"]
 
 export type Location = {
-    lat:  number,
+    lat:  number ,
     lng:  number
 }
 

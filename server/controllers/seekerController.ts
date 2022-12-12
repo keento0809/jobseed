@@ -26,11 +26,12 @@ export const updateSeekerInfo = catchAsync(
     if (!seeker_id) next(new Error("Invalid request"));
     const { name, email } = req.body;
     if (!name || !email) next(new Error("Invalid inputs"));
-    const updatingSeeker = await pool.query(
+    const updatingSeekerData = await pool.query(
       "UPDATE seeker SET name = $1, email = $2 WHERE seeker.seeker_id = $3 RETURNING *",
       [name, email, seeker_id]
     );
-    if (!updatingSeeker) next(new Error("Failed to update seeker"));
+    if (!updatingSeekerData) next(new Error("Failed to update seeker"));
+    const updatingSeeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "Good seeker update", updatingSeeker });
     next();
   }
@@ -101,6 +102,32 @@ export const updateAvatar = catchAsync(
     next();
   }
 );
+
+
+// Front side
+
+// const [file, setFile] = useState();
+
+// const handleSubmit = async (event) => {
+//   event.preventDefault();
+//   // Create form data
+//   const formData = new FormData();
+//   formData.append("image", file);
+//   await axios.post("http://localhost:8080/seekers/avatar/:seeker_id", formData, {
+//     headers: { "Content-Type": "multipart/form-data" },
+//   });
+//   navigate("/")
+// };
+
+// const fileSelected = (event) => {
+//   const file = event.target.files[0];
+//   setFile(file);
+// };
+
+// <form onSubmit={handleSubmit}>
+//    <input onChange={fileSelected} type="file" accept="image/*"></input>
+//    <button type="submit">Submit</button>
+// </form>
 
 export const deleteAvatar = async (seeker_id: string) => {
   const deletingAvatarData = await pool.query(

@@ -7,8 +7,7 @@ import HamburgerMenu from "./HamburgerMenu";
 
 const Header: FC = () => {
     const [openMenu, setOpenMenu] = useState<boolean>(false)
-
-    const [cookie, setCookie, removeCookie] = useCookies();
+    const [cookies, setCookie, removeCookie] = useCookies();
     const navigate = useNavigate();
 
     const logout = () => {
@@ -19,12 +18,12 @@ const Header: FC = () => {
 
     return (
         <header className="h-24 border-b shadow-md wrapper flex justify-between items-center relative z-[1000]">
-            {cookie.JWT_TOKEN ?
+            {cookies.JWT_TOKEN ?
                 <Link to={"/user"} className="block">< AiOutlineRocket size="30"/></Link> :
                 <Link to={"/"} className="block">< AiOutlineRocket size="30"/></Link>
             }
             <HamburgerMenu isOpen={openMenu} setMenuOpen={setOpenMenu}/>
-            {cookie.JWT_TOKEN ? <section className="flex h-full items-center">
+            {cookies.JWT_TOKEN ? <section className="flex h-full items-center">
                     <nav
                         className="space-y-1 md:hidden cursor-pointer"
                         onClick={() => setOpenMenu(true)}
@@ -48,13 +47,6 @@ const Header: FC = () => {
                                     className="absolute -bottom-1 left-0 w-0 h-2 bg-content-blue transition-all group-hover:w-full">
                             </span>
                             </Link>
-                            <Link to="/calendar"
-                                  className="block h-full w-32 flex justify-center items-center group relative">
-                                <li className="">Your journey</li>
-                                <span
-                                    className="absolute -bottom-1 left-0 w-0 h-2 bg-content-blue transition-all group-hover:w-full">
-                            </span>
-                            </Link>
                             <Link to="/map"
                                   className="block h-full w-32 flex justify-center items-center group relative">
                                 <li className="">Map</li>
@@ -62,14 +54,6 @@ const Header: FC = () => {
                                     className="absolute -bottom-1 left-0 w-0 h-2 bg-content-blue transition-all group-hover:w-full">
                             </span>
                             </Link>
-                            <Link to="/documents"
-                                  className="block h-full w-32 flex justify-center items-center group relative">
-                                <li className="">Documentations</li>
-                                <span
-                                    className="absolute -bottom-1 left-0 w-0 h-2 bg-content-blue transition-all group-hover:w-full">
-                            </span>
-                            </Link>
-
                             <div
                                 onClick={logout}
                                 className="block h-full w-32 flex justify-center items-center group relative">

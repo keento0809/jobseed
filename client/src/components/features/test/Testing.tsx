@@ -7,6 +7,7 @@ const Testing = () => {
   const [cookies] = useCookies();
   const [file, setFile] = useState<File>();
   const [avatarPath, setAvatarPath] = useState("");
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Create form data
@@ -25,10 +26,12 @@ const Testing = () => {
       }
     );
   };
+
   const fileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files![0];
     setFile(file);
   };
+
   const fetchImageFromS3 = async () => {
     const seeker_id = cookies.seeker_id;
     const seekerAvatarData = await axios.get(

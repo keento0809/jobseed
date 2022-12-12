@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BsTrash} from "react-icons/bs";
 import {AiOutlineLink} from "react-icons/ai";
 import {IoMdCreate} from "react-icons/io";
@@ -7,20 +7,23 @@ import ScheduleModal from "../../../pages/user/ScheduleModal";
 import {Company} from "../../../types/Company";
 import CompanyEditModal from "../../../pages/user/CompanyEditModal";
 import {company_status} from "../../../types/Company";
-import {useSeekerContext} from "../../context/seekerContext";
 import {useCompanyContext} from "../../context/companyContext";
+import {useCompaniesContext} from "../../context/companiesContext";
+import {useAuthContext} from "../../context/AuthContext";
+import {COMPANY_ACTIONS} from "../../context/reducer/CompanyReducer";
+import axios from "axios";
+import {getLat, getLng} from "../../helper/companyHelper";
 
 
 const CompanyCard = ({name, jobtype, status, link, company_id, description, location, company_size, seeker_id, salary}: Company) => {
     const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false)
     const [showEditModal, setShowEditModal] = useState<boolean>(false)
     const [showStatusDropDown, setShowStatusDropDown] = useState<boolean>(false)
-    const {seeker} = useSeekerContext()
-    const {deleteCompany, showPage, editCompany} = useCompanyContext()
+    const {deleteCompany, showPage, editCompany, companies} = useCompanyContext()
+    const {dispatch} = useCompaniesContext();
+    const {seekerState} = useAuthContext();
 
-    console.log(name,jobtype, status, link, company_id, description, location, company_size, seeker_id, salary)
-
-    const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
+     const scheduleModalHandler = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         showScheduleModal ? setShowScheduleModal(false) : setShowScheduleModal(true)
     }
@@ -30,7 +33,7 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
         showEditModal ? setShowEditModal(false) : setShowEditModal(true)
     }
 
-    const statusHandler = (e: React.MouseEvent<HTMLElement>) => {
+    const statusHandler = async (e: React.MouseEvent<HTMLElement>) => {
         const editStatusCompany: Company = {
             name,
             jobtype,
@@ -44,12 +47,70 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
             salary
         }
         console.log(editStatusCompany)
-        editCompany(company_id!, editStatusCompany)
+        try {
+            dispatch({type: COMPANY_ACTIONS.API_CALL, payload: []})
+            let res = await axios({
+                method: "patch",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}/${company_id}`,
+                data: editStatusCompany,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${seekerState.token}`
+                }
+            })
+            let getData = await axios({
+                method: "get",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}`,
+                headers: {
+                    authorization:`Bearer ${seekerState.token}`
+                },
+                withCredentials : true
+            })
+            const comp : any[] = getData.data.companies
+            comp.forEach( c => {
+                c.location = {lat: parseFloat(
+                        getLat(c.location)), lng:  parseFloat(getLng(c.location))}
+            })
+            res.status === 200 && dispatch({type: COMPANY_ACTIONS.SUCCESS, payload: comp})
+        } catch (err: any) {
+            console.log(err)
+        }
     }
 
     const filteredStatus = () => {
         const filteredArr = company_status.filter(status => status !== showPage)
         return filteredArr
+    }
+
+    const deleteCompanyHandler = async (e: React.MouseEvent<HTMLLIElement>) => {
+        e.preventDefault();
+        try {
+            dispatch({type: COMPANY_ACTIONS.API_CALL, payload: []})
+            let res = await axios({
+                method: "delete",
+                url: `http://localhost:8080/companies/${seeker_id}/${company_id}`,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${seekerState.token}`
+                }
+            })
+            let getData = await axios({
+                method: "get",
+                url: `http://localhost:8080/companies/${seekerState.seeker.seeker_id}`,
+                headers: {
+                    authorization:`Bearer ${seekerState.token}`
+                },
+                withCredentials : true
+            })
+            const comp : any[] = getData.data.companies
+            comp.forEach( c => {
+                c.location = {lat: parseFloat(
+                        getLat(c.location)), lng:  parseFloat(getLng(c.location))}
+            })
+            res.status === 200 && dispatch({type: COMPANY_ACTIONS.SUCCESS, payload: comp})
+        } catch (error: any) {
+            console.log(error)
+        }
     }
 
     const statusDropDown = () => <div className={`${showStatusDropDown ? "" : "hidden"} left-28 top-0 absolute`}>
@@ -86,7 +147,7 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
             </div>
             <ul className="">
                 <li
-                    onClick={() => {deleteCompany(company_id!)}}
+                    onClick={deleteCompanyHandler}
                     className="inline-block p-2 rounded-full hover:bg-slate-300 cursor-pointer">
                     < BsTrash/>
                 </li>
@@ -100,7 +161,7 @@ const CompanyCard = ({name, jobtype, status, link, company_id, description, loca
             {showScheduleModal &&
                 <ScheduleModal
                     setShowScheduleModal={setShowScheduleModal}
-                    seeker_id={seeker!.seeker_id!}
+                    seeker_id={seekerState.seeker.seeker_id!}
                     company_id={company_id!}
                 />}
             {showEditModal &&

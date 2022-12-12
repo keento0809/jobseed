@@ -1,6 +1,5 @@
 import React, {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from "react";
 import {Seeker} from "../../types/Seeker";
-import Seeker1 from "../../data/Seeker"
 import axios from "axios";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router-dom";
@@ -50,7 +49,6 @@ export const SeekerProvider = ({children}: Props) => {
             setCookie("JWT_TOKEN", res.data.token);
             setCookie("seeker_id", res.data.seeker_id)
             setSeeker(newUser!)
-            navigate("/user", {replace: true});
         } catch (e: any) {
             console.log(e);
         }
@@ -68,6 +66,7 @@ export const SeekerProvider = ({children}: Props) => {
             setCookie("JWT_TOKEN", res.data.token);
             setCookie("seeker_id", res.data.seeker.seeker_id)
             setSeeker(res.data.seeker)
+            setLoadingSeeker(false)
             navigate("/user", {replace: true});
         } catch (e: any) {
             console.log(e)
@@ -101,7 +100,6 @@ export const SeekerProvider = ({children}: Props) => {
                     authorization: `Bearer ${cookies.JWT_TOKEN}`
                 }
             })
-            console.log(res.data)
             setSeeker(res.data.seeker)
         } catch (e : any) {
             console.log(e.message)

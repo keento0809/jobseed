@@ -10,6 +10,7 @@ import { authorization } from "../controllers/authController";
 const companyRouter = express.Router();
 
 companyRouter.route("/:seeker_id").get(authorization, getAllCompanies);
+
 companyRouter
   .route("/:seeker_id/:status")
   .get(authorization, getCompaniesWithStatus);

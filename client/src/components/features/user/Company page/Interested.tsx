@@ -1,29 +1,31 @@
-import React, {LegacyRef, MutableRefObject, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CompanyCard from "../CompanyCard";
-import {useCompanyContext} from "../../../context/companyContext";
 import {Company} from "../../../../types/Company";
 import EmptyCompany from "../EmptyCompany";
-import {useSeekerContext} from "../../../context/seekerContext";
+import {useAuthContext} from "../../../context/AuthContext";
+import {useCompaniesContext} from "../../../context/companiesContext";
 
 const Interested = () => {
 
-    const {filteredChildren, companies} = useCompanyContext();
-    const [filtered, setFiltered] = useState<Company[]>(companies);
-    const {seeker} = useSeekerContext()
+    const {companyState, filteredChildren} = useCompaniesContext();
+    const {companies} = companyState
+    const InterestedArr = companies.filter( company => company.status === "Interested")
+    const [filtered, setFiltered] = useState<Company[]>(InterestedArr);
+    const {seekerState} = useAuthContext();
 
     useEffect(() => {
-        if (companies.length > 0 && filteredChildren.length > 0) {
-            let filteredArray = companies.filter(company => company.name?.includes(filteredChildren))
+        if (InterestedArr.length > 0 && filteredChildren.length > 0) {
+            let filteredArray = InterestedArr.filter(company => company.name.includes(filteredChildren))
+            console.log(filteredArray)
             setFiltered(filteredArray)
-            return
+        } else if (filteredChildren.length === 0) {
+            setFiltered(InterestedArr)
         }
-        setFiltered(companies)
     }, [filteredChildren])
 
     return (
         <section className="interested card-container">
             {
-                companies.length !== 0 ?
                     filtered.map((company) =>
                         <CompanyCard
                             key={company.company_id}
@@ -37,8 +39,8 @@ const Interested = () => {
                             status={company.status}
                             interest={company.interest}
                             company_size={company.company_size}
-                            seeker_id={seeker!.seeker_id!}
-                        />) : < EmptyCompany/>
+                            seeker_id={seekerState.seeker.seeker_id!}
+                        />)
             }
         </section>
     );

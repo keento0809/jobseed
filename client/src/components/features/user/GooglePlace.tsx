@@ -30,8 +30,6 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
         clearSuggestions();
     });
 
-    console.log(location)
-
     const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value);
     };
@@ -45,7 +43,6 @@ const GooglePlace = ({location, companyData, setLocation, setCompanyData}: locat
                     const {lat, lng} = getLatLng(results[0]);
                     setLocation({lat: Number(lat),lng: Number(lng)})
                     setCompanyData({...companyData, location: {lat: Number(lat),lng: Number(lng)}});
-                    console.log("📍 Coordinates: ", { lat, lng });
                 });
             };
     const renderSuggestions = () =>

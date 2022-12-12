@@ -4,34 +4,29 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, {DateClickArg} from "@fullcalendar/interaction";
-import eventList from "../../data/events"
 import EventDetail from "../../components/features/user/EventDetail";
-import {Schedule} from "../../types/Schedule";
-import {useSeekerContext} from "../../components/context/seekerContext";
 import {useScheduleContext} from "../../components/context/scheduleContext";
 import axios from "axios";
-import {useCookies} from "react-cookie";
+import {useAuthContext} from "../../components/context/AuthContext";
 
 const Calendar = () => {
 
     const [selectedEvent, setSelectedEvent] = useState<EventClickArg >();
-    const {seeker} = useSeekerContext();
+    const {seekerState} = useAuthContext();
     const {events, setEvents,getSchedule} = useScheduleContext();
     const handleClick = (arg: EventClickArg) => {
         setSelectedEvent(arg)
     }
-    const [cookies] = useCookies();
 
     useEffect(() => {
-
        async function getEvent () {
             try {
                 let res = await axios({
                     method: "get",
-                    url: `http://localhost:8080/schedules/allSchedules/${seeker!.seeker_id}`,
+                    url: `http://localhost:8080/schedules/allSchedules/${seekerState.seeker.seeker_id}`,
                     withCredentials: true,
                     headers: {
-                        authorization: `Bearer ${cookies.JWT_TOKEN}`
+                        authorization: `Bearer ${seekerState.token}`
                     }
                 })
                 setEvents(res.data.schedules)
@@ -42,8 +37,6 @@ const Calendar = () => {
         }
         getEvent()
     }, [])
-
-    console.log(events)
 
     return (
         <div className="relative z-5 h-[40rem]">

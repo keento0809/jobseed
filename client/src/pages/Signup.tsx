@@ -4,11 +4,6 @@ import Button_sm from "../components/models/Button_sm";
 import {useSeekerContext} from "../components/context/seekerContext";
 import {Seeker} from "../types/Seeker";
 
-/**
- * TODO :
- *  user validation
- */
-
 const Signup: FC = () => {
     const [newUser, setNewUser] = useState<Seeker>({
         name: "",

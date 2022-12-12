@@ -24,10 +24,6 @@ const HamburgerMenu = ({isOpen, setMenuOpen}: Props) => {
         to: string;
     }
 
-    /**
-     * TODO : CHANGE ROUTE
-     */
-
     const links: link[] = [
         {
             name: "Home",
@@ -77,7 +73,7 @@ const HamburgerMenu = ({isOpen, setMenuOpen}: Props) => {
                     <IoCloseOutline color={"white"} size={30}/>
                 </div>
                 <ul>
-                    {cookies.JWT_TOKEN ?
+                    {cookies.JWT_TOKEN  ?
                         links.map(link =>
                             <li
                                 key={link.name}
