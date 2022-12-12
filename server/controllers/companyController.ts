@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { catchAsync } from "../helpers/middlewares";
 import pool from "../db/postgres";
+import { Company } from "../types/Company";
 
 export const getAllCompanies = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +12,7 @@ export const getAllCompanies = catchAsync(
       [seeker_id]
     );
     if (!companiesData) next(new Error("No company found"));
-    const companies = companiesData.rows;
+    const companies: Company[] = companiesData.rows;
     res.status(200).json({ msg: "succeeded to get companies", companies });
     next();
   }
@@ -34,7 +35,7 @@ export const getCompaniesWithStatus = catchAsync(
     );
 
     if (!companiesWithStatusInfo) next(new Error("No companies found"));
-    const companiesWithStatus = companiesWithStatusInfo.rows;
+    const companiesWithStatus: Company[] = companiesWithStatusInfo.rows;
     res.status(200).json({ companiesWithStatus });
     next();
   }
@@ -52,7 +53,7 @@ export const createNewCompany = catchAsync(
       interest,
       seeker_id,
       company_size,
-    } = req.body;
+    }: Company = req.body;
     if (!name || !jobtype) next(new Error("Invalid input values"));
     const newCompany = await pool.query(
       "INSERT INTO company (name,link,jobtype,salary,location,description,status,interest,seeker_id,company_size) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *",
@@ -90,8 +91,7 @@ export const updateCompany = catchAsync(
       status,
       seeker_id,
       company_size,
-    } = req.body;
-    console.log(req.body)
+    }: Company = req.body;
     const updatingCompany = await pool.query(
       "UPDATE company SET name = $1,link = $2,jobtype = $3,salary = $4,location = $5, description = $6,interest = $7,status = $8,seeker_id = $9,company_size = $10 WHERE company.company_id = $11 AND company.seeker_id = $9 RETURNING *",
       [
@@ -106,7 +106,6 @@ export const updateCompany = catchAsync(
         seeker_id,
         company_size,
         company_id,
-        // company_size,
       ]
     );
     if (!updatingCompany) next(new Error("Failed to update company"));
