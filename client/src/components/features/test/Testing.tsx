@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 const Testing = () => {
   const [cookies] = useCookies();
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<File | null>();
   const [avatarPath, setAvatarPath] = useState("");
+  const [isAvatarChanged, setIsAvatarChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const seeker_id = cookies.SEEKER_ID;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
     // Create form data
     const formData = new FormData();
     formData.append("image", file!);
-    const seeker_id = cookies.seeker_id;
     // send avatar to image to AWS S3
-    await axios.post(
+    const result = await axios.post(
       `http://localhost:8080/seekers/avatar/${seeker_id}`,
       formData,
       {
@@ -25,6 +27,10 @@ const Testing = () => {
         },
       }
     );
+    if (result) {
+      setIsAvatarChanged(!isAvatarChanged);
+      setFile(null);
+    }
   };
 
   const fileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +39,7 @@ const Testing = () => {
   };
 
   const fetchImageFromS3 = async () => {
-    const seeker_id = cookies.seeker_id;
+    !isLoading && setIsLoading(true);
     const seekerAvatarData = await axios.get(
       `http://localhost:8080/seekers/avatar/${seeker_id}`,
       {
@@ -44,10 +50,11 @@ const Testing = () => {
     );
     const seekerAvatarUrl = seekerAvatarData.data.avatarUrl;
     setAvatarPath(seekerAvatarUrl);
+    setIsLoading(false);
   };
   useEffect(() => {
     fetchImageFromS3();
-  }, []);
+  }, [isAvatarChanged]);
   return (
     <>
       <div>
@@ -65,12 +72,15 @@ const Testing = () => {
         </form>
         {/* displaying  */}
         <div className="">
-          <img
-            src={avatarPath && avatarPath}
-            alt="avatar"
-            width={200}
-            height={200}
-          />
+          {isLoading && <p>Loading...</p>}
+          {!isLoading && (
+            <img
+              src={avatarPath && avatarPath}
+              alt="avatar"
+              width={200}
+              height={200}
+            />
+          )}
         </div>
       </div>
     </>
