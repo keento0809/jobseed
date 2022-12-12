@@ -4,6 +4,7 @@ import pool from "../db/postgres";
 import multer from "multer";
 import sharp from "sharp";
 import { deleteFile, getObjectSignedUrl, uploadFile } from "../s3";
+import { Seeker } from "../types/Seeker";
 
 export const getSeekerInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -14,7 +15,7 @@ export const getSeekerInfo = catchAsync(
       [seeker_id]
     );
     if (!seekerInfo) next(new Error("No seeker found"));
-    const seeker = seekerInfo.rows[0];
+    const seeker: Seeker = seekerInfo.rows[0];
     res.status(200).json({ msg: "Good seeker", seeker });
     next();
   }
@@ -24,14 +25,14 @@ export const updateSeekerInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { seeker_id } = req.params;
     if (!seeker_id) next(new Error("Invalid request"));
-    const { name, email } = req.body;
+    const { name, email }: { name: string; email: string } = req.body;
     if (!name || !email) next(new Error("Invalid inputs"));
     const updatingSeekerData = await pool.query(
       "UPDATE seeker SET name = $1, email = $2 WHERE seeker.seeker_id = $3 RETURNING *",
       [name, email, seeker_id]
     );
     if (!updatingSeekerData) next(new Error("Failed to update seeker"));
-    const updatingSeeker = updatingSeekerData.rows[0];
+    const updatingSeeker: Seeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "Good seeker update", updatingSeeker });
     next();
   }
@@ -55,7 +56,7 @@ export const addAvatar = catchAsync(
       "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *",
       [fileCaption, seeker_id]
     );
-    const updatingSeeker = updatingSeekerData.rows[0];
+    const updatingSeeker: Seeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "Good new avatar", updatingSeeker });
     next();
   }
@@ -97,12 +98,11 @@ export const updateAvatar = catchAsync(
       "UPDATE seeker SET avatar = $1 WHERE seeker.seeker_id = $2 RETURNING *",
       [fileCaption, seeker_id]
     );
-    const updatingSeeker = updatingSeekerData.rows[0];
+    const updatingSeeker: Seeker = updatingSeekerData.rows[0];
     res.status(200).json({ msg: "good updating avatar", updatingSeeker });
     next();
   }
 );
-
 
 // Front side
 

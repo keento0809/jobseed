@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import pool from "../db/postgres";
 import { catchAsync } from "../helpers/middlewares";
+import { Schedule } from "../types/Schedule";
 
 export const getSchedules = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,14 +20,14 @@ export const getSchedules = catchAsync(
 
 export const getSchedulesByDate = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { date } = req.body;
+    const { date }: { date: string } = req.body;
     if (!date) next(new Error("Invalid request"));
     const schedulesData = await pool.query(
       "SELECT * FROM schedule JOIN seeker ON schedule.seeker_id = seeker.seeker_id WHERE schedule.date = $1",
       [date]
     );
     if (!schedulesData) next(new Error("No schedule found"));
-    const schedules = schedulesData.rows;
+    const schedules: Schedule[] = schedulesData.rows;
     res.status(200).json({ msg: "good schedule by date", schedules });
     next();
   }
@@ -41,7 +42,7 @@ export const getOneSchedule = catchAsync(
       [schedule_id]
     );
     if (!scheduleData) next(new Error("No schedule found"));
-    const schedule = scheduleData.rows[0];
+    const schedule: Schedule = scheduleData.rows[0];
     res.status(200).json({ msg: "good schedule", schedule });
     next();
   }
@@ -73,25 +74,16 @@ export const createSchedule = catchAsync(
       company_id,
       allday,
       enddate,
-      backendcolor,
-    } = req.body;
+      color,
+    }: Schedule = req.body;
     if (!title || !date || allday === undefined)
       next(new Error("Invalid input data"));
     const newScheduleData = await pool.query(
-      "INSERT INTO schedule (title,date,description,seeker_id,company_id,allday,enddate,backendcolor) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
-      [
-        title,
-        date,
-        description,
-        seeker_id,
-        company_id,
-        allday,
-        enddate,
-        backendcolor,
-      ]
+      "INSERT INTO schedule (title,date,description,seeker_id,company_id,allday,enddate,color) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
+      [title, date, description, seeker_id, company_id, allday, enddate, color]
     );
     if (!newScheduleData) next(new Error("Failed to create schedule"));
-    const newSchedule = newScheduleData.rows[0];
+    const newSchedule: Schedule = newScheduleData.rows[0];
     res.status(200).json({ msg: "created schedule", newSchedule });
     next();
   }
@@ -108,11 +100,11 @@ export const updateSchedule = catchAsync(
       company_id,
       allday,
       enddate,
-      backendcolor,
-    } = req.body;
+      color,
+    }: Schedule = req.body;
     if (!schedule_id) next(new Error("Invalid request"));
     const updatingScheduleData = await pool.query(
-      "UPDATE schedule SET title = $1,date = $2,description = $3,seeker_id = $4,company_id = $5,allday = $6,enddate = $7,backendcolor = $8 WHERE schedule.schedule_id = $9 RETURNING *",
+      "UPDATE schedule SET title = $1,date = $2,description = $3,seeker_id = $4,company_id = $5,allday = $6,enddate = $7,color = $8 WHERE schedule.schedule_id = $9 RETURNING *",
       [
         title,
         date,
@@ -121,12 +113,12 @@ export const updateSchedule = catchAsync(
         company_id,
         allday,
         enddate,
-        backendcolor,
+        color,
         schedule_id,
       ]
     );
     if (!updatingScheduleData) next(new Error("Failed to update schedule"));
-    const updatingSchedule = updatingScheduleData.rows[0];
+    const updatingSchedule: Schedule = updatingScheduleData.rows[0];
     res.status(200).json({ msg: "update schedule", updatingSchedule });
     next();
   }

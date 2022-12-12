@@ -55,7 +55,7 @@ exports.loginSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaite
     next();
 }));
 exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password, passwordConfirmation } = req.body;
+    const { name, email, password, passwordConfirmation, } = req.body;
     if (!name || !email || !password || !passwordConfirmation)
         next(new Error("Invalid inputs"));
     if (password !== passwordConfirmation)
