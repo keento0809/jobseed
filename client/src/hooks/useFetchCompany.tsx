@@ -16,6 +16,7 @@ export const useFetchCompany = (params: AxiosRequestConfig) => {
             const result = await axios.request(params)
             const comp : any[] = result.data.companies
             comp.forEach( c => {
+                console.log(c.location)
                 c.location = {lat: parseFloat(getLat(c.location)), lng:  parseFloat(getLng(c.location))}
             })
             dispatch({type: COMPANY_ACTIONS.SUCCESS, payload: comp})
