@@ -68,14 +68,14 @@ exports.signupSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __await
         next(new Error("Failed to register new seeker"));
     // create token
     const token = createToken(newSeekerData.rows[0].seeker_id);
-    const newSeeker = newSeekerData.rows[0];
+    const seeker = newSeekerData.rows[0];
     res
         // .cookie("access_token", token, {
         //   httpOnly: true,
         //   secure: process.env.NODE_ENV === "production",
         // })
         .status(200)
-        .json({ msg: "good signup", token, newSeeker });
+        .json({ msg: "good signup", token, seeker });
     next();
 }));
 exports.logoutSeeker = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

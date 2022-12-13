@@ -2,8 +2,6 @@ import React, {createContext, ReactNode, useContext, useState} from 'react';
 import axios from "axios";
 import {CalenderEvent, Schedule} from "../../types/Schedule";
 import {useCookies} from "react-cookie";
-import {Company} from "../../types/Company";
-
 
 type Props = {
     children: ReactNode
@@ -74,7 +72,6 @@ export const ScheduleProvider = ({children}: Props) => {
                 }
             })
             console.log(res.data)
-            window.location.reload();
             // setEvents(res.data)
         } catch (e: any) {
             console.log(e.message)

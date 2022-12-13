@@ -75,14 +75,14 @@ export const signupSeeker = catchAsync(
     if (!newSeekerData) next(new Error("Failed to register new seeker"));
     // create token
     const token = createToken(newSeekerData.rows[0].seeker_id);
-    const newSeeker = newSeekerData.rows[0];
+    const seeker = newSeekerData.rows[0];
     res
       // .cookie("access_token", token, {
       //   httpOnly: true,
       //   secure: process.env.NODE_ENV === "production",
       // })
       .status(200)
-      .json({ msg: "good signup", token, newSeeker });
+      .json({ msg: "good signup", token, seeker });
     next();
   }
 );

@@ -24,9 +24,10 @@ const Interested = () => {
     }, [filteredChildren])
 
     return (
-        <section className="interested card-container">
+
+        <section className={`${InterestedArr.length !== 0 ? "card-container" : null}`}>
             {
-                    filtered.map((company) =>
+                    InterestedArr.length !== 0 ? filtered.map((company) =>
                         <CompanyCard
                             key={company.company_id}
                             company_id={company.company_id}
@@ -40,7 +41,7 @@ const Interested = () => {
                             interest={company.interest}
                             company_size={company.company_size}
                             seeker_id={seekerState.seeker.seeker_id!}
-                        />)
+                        />) : <EmptyCompany companyStatus={"Interested"}/>
             }
         </section>
     );

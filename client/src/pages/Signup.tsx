@@ -5,6 +5,9 @@ import { useSeekerContext } from "../components/context/seekerContext";
 import { Seeker } from "../types/Seeker";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../components/context/AuthContext";
+import {SEEKER_ACTION} from "../components/context/reducer/SeekerReducer";
+import axios from "axios";
+import {useCookies} from "react-cookie";
 
 const Signup: FC = () => {
   const [newUser, setNewUser] = useState<Seeker>({
@@ -15,12 +18,30 @@ const Signup: FC = () => {
   });
   const { createSeeker } = useSeekerContext();
   const navigate = useNavigate();
+  const {seekerState, seekerDispatch} = useAuthContext();
+  const [cookies, setCookie] = useCookies();
 
   const userHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewUser({ ...newUser!, [e.target.name]: e.target.value });
   };
   const createUser = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    try{
+      seekerDispatch({type: SEEKER_ACTION.SEEKER_FETCHING, payload:{}})
+      let res = await axios({
+        method: "post",
+        url: "http://localhost:8080/auth/signup",
+        data: newUser,
+        withCredentials: true,
+      })
+      console.log(res.data)
+      seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_SEEKER, payload:res.data})
+      setCookie("JWT_TOKEN", res.data.token);
+      setCookie("SEEKER_ID", res.data.seeker.seeker_id);
+      navigate("/user", {replace: true});
+    } catch (e:any) {
+      console.log(e)
+    }
     console.log(newUser);
     await createSeeker(newUser);
     navigate("/user", { replace: true });

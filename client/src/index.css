@@ -24,6 +24,10 @@
     @apply w-[80%] h-[80%] bg-modal-bg-color rounded-lg
 }
 
+.file-modal-container{
+    @apply w-[80%] h-[50%] md:h-[80%] bg-modal-bg-color rounded-lg
+}
+
 .card-container {
     @apply grid my-4 md:grid-cols-2 gap-3
 }

@@ -1,13 +1,13 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BiEditAlt} from "react-icons/bi"
 import InputField from "../../models/InputField";
 import {Seeker} from "../../../types/Seeker";
-import {useSeekerContext} from "../../context/seekerContext";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../../context/AuthContext";
 import {SEEKER_ACTION} from "../../context/reducer/SeekerReducer";
-
+import pencil from "../../../images/pencil.png";
+import FileSetModal from "./FileSetModal";
 
 type User = {
     name: string;
@@ -19,15 +19,28 @@ const UserProfile = (props: User) => {
     const {seekerState, seekerDispatch} = useAuthContext();
     const [wannaEdit, setWannaEdit] = useState<boolean>(false);
     const [editSeeker, setEditSeeker] = useState<Seeker>({
-        name:props.name,
+        name: props.name,
         email: props.email
     })
+    const [fileSetModal, setFileSetModal] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const [avatarPath, setAvatarPath] = useState<string>("");
+
+    const uploadButton = (
+        <label
+            htmlFor="file_upload"
+            className="absolute bottom-5 right-2"
+            onClick={() => setFileSetModal(true)}
+        >
+            <img src={pencil} alt="editAvatar" className="opacity-50 w-[25px] hover:cursor-pointer hover:opacity-100"/>
+        </label>
+    )
 
     const updateUserInfoHandler = async (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         try {
-            seekerDispatch({type: SEEKER_ACTION.SEEKER_FETCHING, payload:{}})
+            seekerDispatch({type: SEEKER_ACTION.SEEKER_FETCHING, payload: {}})
             let res = await axios({
                 method: "patch",
                 url: `http://localhost:8080/seekers/${seekerState.seeker.seeker_id}`,
@@ -45,27 +58,65 @@ const UserProfile = (props: User) => {
             console.log(e.message)
         }
         setWannaEdit(false)
-        navigate("/user", { replace: true });
+        navigate("/user", {replace: true});
     }
 
+    // const fetchImageFromS3 = async () => {
+    //     try{
+    //         if(seekerState.seeker.seeker_id !== undefined) {
+    //             const seekerAvatarData = await axios({
+    //                 method: "get",
+    //                 url: `http://localhost:8080/seekers/avatar/${seekerState.seeker.seeker_id}`,
+    //                 withCredentials: true,
+    //                 headers: {
+    //                     authorization: `Bearer ${seekerState.token}`
+    //                 }
+    //             })
+    //             console.log(seekerAvatarData)
+    //             const avatarUrl = seekerAvatarData.data.avatarUrl;
+    //             setFilePath(avatarUrl)
+    //             seekerDispatch({type: SEEKER_ACTION.SUCCESS_UPDATE_SEEKER, payload: seekerAvatarData})
+    //         } else return
+    //     } catch (error: any) {
+    //         seekerDispatch({type: SEEKER_ACTION.FAILED_UPDATE_SEEKER, payload: {},error})
+    //     }
+    // }
+    //
+    // useEffect(() => {
+    //     fetchImageFromS3();
+    // }, [isAvatarChanged]);
+
+    console.log(seekerState.seeker.avatar)
+
     return (
-        <div className="user-profile my-4 flex lg:flex-col lg:col-span-1 ">
-            <img src={props.avatar} alt="" className="w-24 lg:w-52 rounded-full object-cover"/>
+        <div className="flex lg:flex-col">
+            <div className="relative w-52">
+                {/*<div*/}
+                {/*    className="rounded-full"*/}
+                {/*>*/}
+                {/*</div>*/}
+                <img src={seekerState.seeker.avatar} alt="" className="w-52 rounded-full object-cover"/>
+                {wannaEdit ? uploadButton : null}
+            </div>
             {wannaEdit ?
-                <div className="w-full">
+                <div className="w-full py-4">
                     < InputField
                         type={"name"}
                         title={""}
                         name={"name"}
                         value={editSeeker.name}
-                        onChange={(e) => {setEditSeeker({...editSeeker, [e.target.name]: e.target.value})}}
+                        onChange={(e) => {
+                            setEditSeeker({...editSeeker, [e.target.name]: e.target.value})
+                        }}
                     />
                     < InputField
                         type={"email"}
                         title={""}
                         name={"email"}
                         value={editSeeker.email}
-                        onChange={(e) => {setEditSeeker({...editSeeker, [e.target.name]: e.target.value})}}
+                        onChange={(e) => {
+                            setEditSeeker({...editSeeker, [e.target.name]: e.target.value})
+                        }}
                     />
                     <div className="flex justify-center w-full gap-2 mt-4">
                         <div
@@ -84,6 +135,7 @@ const UserProfile = (props: User) => {
                         </div>
                     </div>
                 </div> :
+
                 <div className="w-full py-4">
                     <h3 className="font-bold text-md">{seekerState.seeker.name}</h3>
                     <p className="text-sm">{seekerState.seeker.email}</p>
@@ -98,6 +150,14 @@ const UserProfile = (props: User) => {
                     </div>
                 </div>
             }
+            {fileSetModal &&
+                <FileSetModal
+                    setModal={setFileSetModal}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    avatarPath={avatarPath}
+                    setAvatarPath={setAvatarPath}
+                />}
         </div>
     );
 };
