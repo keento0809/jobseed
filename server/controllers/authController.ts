@@ -15,23 +15,23 @@ const createToken = (_id: number) => {
 
 export const loginSeeker = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    const { email, password }: { email: string; password: string } = req.body;
     if (!email || !password) next(new Error("Invalid inputs"));
     const loginSeeker = await pool.query(
       `SELECT * FROM seeker WHERE email = $1`,
       [email]
     );
     if (!loginSeeker) next(new Error("Seeker not found."));
-      const hashedPassword = loginSeeker.rows[0].password;
-      const checkPassword = await bcrypt.compare(password, hashedPassword);
-      if (!checkPassword) next(new Error("Password is not correct."));
-      // create token
-      const token = await createToken(loginSeeker.rows[0].seeker_id);
-      // retrieve seeker info form db
-      const loginSeekerName = loginSeeker.rows[0].name;
-      const loginSeekerEmail = loginSeeker.rows[0].email;
-      const loginSeekerPassword = loginSeeker.rows[0].password;
-      const loginSeekerInfo = await pool.query(
+    const hashedPassword = loginSeeker.rows[0].password;
+    const checkPassword = await bcrypt.compare(password, hashedPassword);
+    if (!checkPassword) next(new Error("Password is not correct."));
+    // create token
+    const token = await createToken(loginSeeker.rows[0].seeker_id);
+    // retrieve seeker info form db
+    const loginSeekerName = loginSeeker.rows[0].name;
+    const loginSeekerEmail = loginSeeker.rows[0].email;
+    const loginSeekerPassword = loginSeeker.rows[0].password;
+    const loginSeekerInfo = await pool.query(
       "SELECT * FROM seeker WHERE seeker.name = $1 AND seeker.email = $2 AND seeker.password = $3",
       [loginSeekerName, loginSeekerEmail, loginSeekerPassword]
     );
@@ -50,7 +50,17 @@ export const loginSeeker = catchAsync(
 
 export const signupSeeker = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, password, passwordConfirmation } = req.body;
+    const {
+      name,
+      email,
+      password,
+      passwordConfirmation,
+    }: {
+      name: string;
+      email: string;
+      password: string;
+      passwordConfirmation: string;
+    } = req.body;
     if (!name || !email || !password || !passwordConfirmation)
       next(new Error("Invalid inputs"));
     if (password !== passwordConfirmation)
@@ -65,14 +75,14 @@ export const signupSeeker = catchAsync(
     if (!newSeekerData) next(new Error("Failed to register new seeker"));
     // create token
     const token = createToken(newSeekerData.rows[0].seeker_id);
-    const newSeeker = newSeekerData.rows[0];
+    const seeker = newSeekerData.rows[0];
     res
       // .cookie("access_token", token, {
       //   httpOnly: true,
       //   secure: process.env.NODE_ENV === "production",
       // })
       .status(200)
-      .json({ msg: "good signup", token, newSeeker });
+      .json({ msg: "good signup", token, seeker });
     next();
   }
 );
