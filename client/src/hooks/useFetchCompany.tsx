@@ -25,7 +25,6 @@ export const useFetchCompany = (params: AxiosRequestConfig) => {
     };
 
     useEffect(() => {
-        console.log(cookies.JWT_TOKEN)
         fetchData(params)
     }, [])
 }

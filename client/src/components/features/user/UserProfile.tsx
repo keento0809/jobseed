@@ -8,6 +8,7 @@ import {useAuthContext} from "../../context/AuthContext";
 import {SEEKER_ACTION} from "../../context/reducer/SeekerReducer";
 import pencil from "../../../images/pencil.png";
 import FileSetModal from "./FileSetModal";
+import human from "../../../images/human.png"
 
 type User = {
     name: string;
@@ -26,6 +27,7 @@ const UserProfile = (props: User) => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [avatarPath, setAvatarPath] = useState<string>("");
+    const avatar = seekerState.seeker.avatar
 
     const uploadButton = (
         <label
@@ -61,41 +63,37 @@ const UserProfile = (props: User) => {
         navigate("/user", {replace: true});
     }
 
-    // const fetchImageFromS3 = async () => {
-    //     try{
-    //         if(seekerState.seeker.seeker_id !== undefined) {
-    //             const seekerAvatarData = await axios({
-    //                 method: "get",
-    //                 url: `http://localhost:8080/seekers/avatar/${seekerState.seeker.seeker_id}`,
-    //                 withCredentials: true,
-    //                 headers: {
-    //                     authorization: `Bearer ${seekerState.token}`
-    //                 }
-    //             })
-    //             console.log(seekerAvatarData)
-    //             const avatarUrl = seekerAvatarData.data.avatarUrl;
-    //             setFilePath(avatarUrl)
-    //             seekerDispatch({type: SEEKER_ACTION.SUCCESS_UPDATE_SEEKER, payload: seekerAvatarData})
-    //         } else return
-    //     } catch (error: any) {
-    //         seekerDispatch({type: SEEKER_ACTION.FAILED_UPDATE_SEEKER, payload: {},error})
-    //     }
-    // }
-    //
-    // useEffect(() => {
-    //     fetchImageFromS3();
-    // }, [isAvatarChanged]);
+    const fetchImageFromS3 = async () => {
+        try {
+            const seekerAvatarData = await axios({
+                method: "get",
+                url: `http://localhost:8080/seekers/avatar/${seekerState.seeker.seeker_id}`,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${seekerState.token}`
+                }
+            })
+            console.log(seekerAvatarData)
+            const avatarUrl = seekerAvatarData.data.avatarUrl;
+            seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_AVATAR, payload: avatarUrl})
+            setAvatarPath(avatarUrl);
+            setIsLoading(false)
+        } catch (error: any) {
+            seekerDispatch({type: SEEKER_ACTION.FAILED_UPDATE_SEEKER, payload: {}, error})
+        }
+    }
+
+    useEffect(() => {
+        fetchImageFromS3();
+    }, [isLoading]);
 
     console.log(seekerState.seeker.avatar)
 
     return (
-        <div className="flex lg:flex-col">
-            <div className="relative w-52">
-                {/*<div*/}
-                {/*    className="rounded-full"*/}
-                {/*>*/}
-                {/*</div>*/}
-                <img src={seekerState.seeker.avatar} alt="" className="w-52 rounded-full object-cover"/>
+        <div className="flex lg:flex-col justify-center">
+            <div className="relative">
+                <img src={avatar?.length === 0 ? human : seekerState.seeker.avatar} alt=""
+                     className="w-[150px] h-[150px] rounded-full mx-auto block"/>
                 {wannaEdit ? uploadButton : null}
             </div>
             {wannaEdit ?

@@ -48,7 +48,6 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
 
     const sendEditData =　async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-
         try {
             dispatch({type: COMPANY_ACTIONS.API_CALL, payload: []})
             let res = await axios({
