@@ -9,6 +9,7 @@ import {SEEKER_ACTION} from "../../context/reducer/SeekerReducer";
 import pencil from "../../../images/pencil.png";
 import FileSetModal from "./FileSetModal";
 import human from "../../../images/human.png"
+import {useCookies} from "react-cookie";
 
 type User = {
     name: string;
@@ -20,19 +21,20 @@ const UserProfile = (props: User) => {
     const {seekerState, seekerDispatch} = useAuthContext();
     const [wannaEdit, setWannaEdit] = useState<boolean>(false);
     const [editSeeker, setEditSeeker] = useState<Seeker>({
-        name: props.name,
-        email: props.email
+        name: seekerState.seeker.name,
+        email: seekerState.seeker.email
     })
     const [fileSetModal, setFileSetModal] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [avatarPath, setAvatarPath] = useState<string>("");
     const avatar = seekerState.seeker.avatar
+    const [cookies, setCookie] = useCookies();
 
     const uploadButton = (
         <label
             htmlFor="file_upload"
-            className="absolute bottom-5 right-2"
+            className="absolute bottom-0 right-0"
             onClick={() => setFileSetModal(true)}
         >
             <img src={pencil} alt="editAvatar" className="opacity-50 w-[25px] hover:cursor-pointer hover:opacity-100"/>
@@ -63,6 +65,36 @@ const UserProfile = (props: User) => {
         navigate("/user", {replace: true});
     }
 
+    const getSeeker = async () => {
+        try {
+            let res = await axios({
+                method: "get",
+                url: `http://localhost:8080/seekers/${cookies.SEEKER_ID}`,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`,
+                },
+            })
+            seekerDispatch({type: SEEKER_ACTION.SUCCESS_RELOAD_SEEKER, payload: res.data.seeker})
+            console.log(seekerState.seeker)
+
+            const seekerAvatarData = await axios({
+                method: "get",
+                url: `http://localhost:8080/seekers/avatar/${cookies.SEEKER_ID}`,
+                withCredentials: true,
+                headers: {
+                    authorization: `Bearer ${cookies.JWT_TOKEN}`
+                }
+            })
+            const avatarUrl = seekerAvatarData.data.avatarUrl;
+            seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_AVATAR, payload: avatarUrl})
+            setAvatarPath(avatarUrl);
+            console.log(seekerState.seeker.avatar)
+        } catch (e: any) {
+            console.log(e)
+        }
+    }
+
     const fetchImageFromS3 = async () => {
         try {
             const seekerAvatarData = await axios({
@@ -73,7 +105,6 @@ const UserProfile = (props: User) => {
                     authorization: `Bearer ${seekerState.token}`
                 }
             })
-            console.log(seekerAvatarData)
             const avatarUrl = seekerAvatarData.data.avatarUrl;
             seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_AVATAR, payload: avatarUrl})
             setAvatarPath(avatarUrl);
@@ -84,17 +115,25 @@ const UserProfile = (props: User) => {
     }
 
     useEffect(() => {
+        getSeeker();
+        console.log(seekerState.seeker.avatar)
+        }, [])
+
+
+    useEffect(() => {
         fetchImageFromS3();
     }, [isLoading]);
 
     console.log(seekerState.seeker.avatar)
 
     return (
-        <div className="flex lg:flex-col justify-center">
-            <div className="relative">
-                <img src={avatar?.length === 0 ? human : seekerState.seeker.avatar} alt=""
-                     className="w-[150px] h-[150px] rounded-full mx-auto block"/>
-                {wannaEdit ? uploadButton : null}
+        <div className="lg:flex-col justify-center lg:mt-8">
+            <div className="relative w-[200px] h-[200px] mx-auto my-4">
+                <div className="w-[200px] h-[200px] overflow-hidden rounded-full ">
+                    <img src={avatar?.length === 0 ? human : seekerState.seeker.avatar} alt=""
+                         className="w-[200px] h-[200px] object-cover object-center mx-auto scale-150"/>
+                    {wannaEdit ? uploadButton : null}
+                </div>
             </div>
             {wannaEdit ?
                 <div className="w-full py-4">

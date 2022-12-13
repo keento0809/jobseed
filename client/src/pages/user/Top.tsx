@@ -28,6 +28,8 @@ const TopPage = () => {
         setShowPage,
     } = useCompanyContext()
 
+    console.log(companies)
+
     useFetchCompany({
         method: "get",
         url: `/companies/${cookies.SEEKER_ID}`,
