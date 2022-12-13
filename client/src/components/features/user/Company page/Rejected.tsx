@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import CompanyCard from "../CompanyCard";
 import {Company} from "../../../../types/Company";
 import EmptyCompany from "../EmptyCompany";
-import {useCompanyContext} from "../../../context/companyContext";
-import {useSeekerContext} from "../../../context/seekerContext";
 import {useCompaniesContext} from "../../../context/companiesContext";
 import {useAuthContext} from "../../../context/AuthContext";
 
@@ -26,9 +24,9 @@ const Rejected = () => {
     }, [filteredChildren])
 
     return (
-        <section className="interested card-container">
+        <section className={`${rejectedArr.length !== 0 ? "card-container" : null}`}>
             {
-                filtered.map((company) =>
+                rejectedArr.length !== 0 ? filtered.map((company) =>
                     <CompanyCard
                         key={company.company_id}
                         company_id={company.company_id}
@@ -42,7 +40,7 @@ const Rejected = () => {
                         interest={company.interest}
                         company_size={company.company_size}
                         seeker_id={seekerState.seeker.seeker_id!}
-                    />)
+                    />): <EmptyCompany companyStatus={"Rejected"}/>
             }
         </section>
     );

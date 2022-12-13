@@ -5,7 +5,7 @@ import Applied from "../../components/features/user/Company page/Applied";
 import Rejected from "../../components/features/user/Company page/Rejected";
 import Interview from "../../components/features/user/Company page/Interview";
 import UserProfile from "../../components/features/user/UserProfile";
-import human from "../../images/human.png";
+import human_icon from "../../images/human_icon.png";
 import Button_sm from "../../components/models/Button_sm";
 import CompanyModal from "./CompanyModal";
 import Search from "../../components/models/Search";
@@ -61,13 +61,13 @@ const TopPage = () => {
         }
     }, [showPage])
 
-    console.log(seekerState.seeker.email, seekerState.seeker.name)
     return (
             <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
-                {seekerLoading ? <h1>Loading</h1> :                 < UserProfile
+                {seekerLoading ? <h1>Loading</h1> :
+                    < UserProfile
                     name={seekerState.seeker.name}
                     email={seekerState.seeker.email}
-                    avatar={human}
+                    avatar={seekerState.seeker.avatar ? seekerState.seeker.avatar : human_icon}
                 />}
                 <div className="lg:col-span-4">
                     <UserNav
@@ -88,7 +88,7 @@ const TopPage = () => {
                             onClick={modalHandler}
                         />
                     </div>
-                    {companyState.loading? <h1>Loading</h1> : childComponent}
+                    {companyState.loading ? <h1>Loading</h1> : childComponent}
                 </div>
                 {showModal && < CompanyModal showModal={showModal} setShowModal={setShowModal}/>}
             </div>

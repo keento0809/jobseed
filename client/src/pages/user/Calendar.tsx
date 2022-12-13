@@ -13,7 +13,7 @@ const Calendar = () => {
 
     const [selectedEvent, setSelectedEvent] = useState<EventClickArg >();
     const {seekerState} = useAuthContext();
-    const {events, setEvents,getSchedule} = useScheduleContext();
+    const {events, setEvents　,getSchedule} = useScheduleContext();
     const handleClick = (arg: EventClickArg) => {
         setSelectedEvent(arg)
     }
