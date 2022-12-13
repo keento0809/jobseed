@@ -35,22 +35,13 @@ const Hero: React.FunctionComponent = () => {
                 <img src={calender} alt="job-search" className="block max-w-[75%] mx-auto"/>
             </div>
             <div
-                className="rounded-lg lg:grid lg:grid-cols-3 bg-content-blue text-white lg:w-screen lg:mx-[calc(50%-50vw)] 2xl:px-40">
+                className="mb-8 rounded-lg lg:grid lg:grid-cols-3 bg-content-blue text-white lg:w-screen lg:mx-[calc(50%-50vw)] 2xl:px-40">
                 < Description title={"Visualize the data"}
                               detail={"Job seed supports you to organize your schedule and status of the companies you are interested in."}/>
                 < Description title={"Sort companies by its status"}
                               detail={"Use our SIM card with your unlocked Android or iPhone and get free cell phone coverage on one of the nation’s largest wireless networks. Stay connected anywhere in the U.S  without ever paying for a monthly phone bill.  "}/>
                 < Description title={"Get out of your location"}
                               detail={"Use our SIM card with your unlocked Android or iPhone and get free cell phone coverage on one of the nation’s largest wireless networks. Stay connected anywhere in the U.S  without ever paying for a monthly phone bill.  "}/>
-            </div>
-
-            <div className="flex justify-center my-12 ">
-                <select className="select select-info py-3 px-20 max-w-xs border-slate-200">
-                    <option>Select language</option>
-                    <option>English</option>
-                    <option>Japanese</option>
-                    <option>Italian</option>
-                </select>
             </div>
         </main>
     );

@@ -1,9 +1,9 @@
 import React, {FC, useState} from 'react';
-import Button_sm from "../models/Button_sm";
 import {AiOutlineRocket} from "react-icons/ai"
 import {Link, Navigate, useNavigate} from 'react-router-dom';
 import {useCookies} from "react-cookie";
 import HamburgerMenu from "./HamburgerMenu";
+import logo from "../../images/Screenshot 2022-12-13 at 11.04.29 AM.png";
 
 const Header: FC = () => {
     const [openMenu, setOpenMenu] = useState<boolean>(false)
@@ -19,8 +19,8 @@ const Header: FC = () => {
     return (
         <header className="h-24 border-b shadow-md wrapper flex justify-between items-center relative z-[1000]">
             {cookies.JWT_TOKEN ?
-                <Link to={"/user"} className="block">< AiOutlineRocket size="30"/></Link> :
-                <Link to={"/"} className="block">< AiOutlineRocket size="30"/></Link>
+                <Link to={"/user"} className="block"><img src={logo} alt="" width={60}/></Link> :
+                <Link to={"/"} className="block"><img src={logo} alt="" width={60}/></Link>
             }
             <HamburgerMenu isOpen={openMenu} setMenuOpen={setOpenMenu}/>
             {cookies.JWT_TOKEN ? <section className="flex h-full items-center">
@@ -56,7 +56,7 @@ const Header: FC = () => {
                             </Link>
                             <div
                                 onClick={logout}
-                                className="block h-full w-32 flex justify-center items-center group relative">
+                                className="cursor-pointer block h-full w-32 flex justify-center items-center group relative">
                                 <li className="">Log out</li>
                                 <span
                                     className="absolute -bottom-1 left-0 w-0 h-2 bg-content-blue transition-all group-hover:w-full">
