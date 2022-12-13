@@ -11,5 +11,6 @@
 -- SELECT * FROM seeker;
 -- DROP TABLE document;
 -- DELETE FROM company WHERE company.company_id = 7;
-DELETE FROM seeker WHERE seeker.seeker_id = 10;
+-- DELETE FROM seeker WHERE seeker.seeker_id = 10;
+-- DELETE FROM seeker WHERE seeker.seeker_id = 11;
 -- UPDATE WHERE seeker.seeker_id = 9;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAvatar = exports.updateAvatar = exports.getAvatar = exports.addAvatar = exports.updateSeekerInfo = exports.getSeekerInfo = void 0;
+exports.updateSeekerLocation = exports.deleteAvatar = exports.updateAvatar = exports.getAvatar = exports.addAvatar = exports.updateSeekerInfo = exports.getSeekerInfo = void 0;
 const middlewares_1 = require("../helpers/middlewares");
 const postgres_1 = __importDefault(require("../db/postgres"));
 const sharp_1 = __importDefault(require("sharp"));
@@ -96,26 +96,6 @@ exports.updateAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __await
     res.status(200).json({ msg: "good updating avatar", updatingSeeker });
     next();
 }));
-// Front side
-// const [file, setFile] = useState();
-// const handleSubmit = async (event) => {
-//   event.preventDefault();
-//   // Create form data
-//   const formData = new FormData();
-//   formData.append("image", file);
-//   await axios.post("http://localhost:8080/seekers/avatar/:seeker_id", formData, {
-//     headers: { "Content-Type": "multipart/form-data" },
-//   });
-//   navigate("/")
-// };
-// const fileSelected = (event) => {
-//   const file = event.target.files[0];
-//   setFile(file);
-// };
-// <form onSubmit={handleSubmit}>
-//    <input onChange={fileSelected} type="file" accept="image/*"></input>
-//    <button type="submit">Submit</button>
-// </form>
 const deleteAvatar = (seeker_id) => __awaiter(void 0, void 0, void 0, function* () {
     const deletingAvatarData = yield postgres_1.default.query("SELECT avatar FROM seeker WHERE seeker.seeker_id = $1", [seeker_id]);
     if (!deletingAvatarData.rows[0])
@@ -128,3 +108,16 @@ const deleteAvatar = (seeker_id) => __awaiter(void 0, void 0, void 0, function* 
     return resultForDeleting;
 });
 exports.deleteAvatar = deleteAvatar;
+exports.updateSeekerLocation = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { seeker_id } = req.params;
+    const { location } = req.body;
+    const currSeekerData = yield postgres_1.default.query("SELECT * FROM seeker WHERE seeker.seeker_id = $1", [seeker_id]);
+    if (!currSeekerData)
+        next(new Error("No seeker found"));
+    const currSeeker = currSeekerData.rows[0];
+    const result = yield postgres_1.default.query("UPDATE seeker SET seeker.location = $1 WHERE seeker.seeker_id = $2", [location, currSeeker.seeker_id]);
+    if (!result)
+        next(new Error("Failed to update seeker location"));
+    res.status(200).json({ msg: "good seeker location", result, location });
+    next();
+}));
