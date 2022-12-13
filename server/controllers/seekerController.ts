@@ -104,31 +104,6 @@ export const updateAvatar = catchAsync(
   }
 );
 
-// Front side
-
-// const [file, setFile] = useState();
-
-// const handleSubmit = async (event) => {
-//   event.preventDefault();
-//   // Create form data
-//   const formData = new FormData();
-//   formData.append("image", file);
-//   await axios.post("http://localhost:8080/seekers/avatar/:seeker_id", formData, {
-//     headers: { "Content-Type": "multipart/form-data" },
-//   });
-//   navigate("/")
-// };
-
-// const fileSelected = (event) => {
-//   const file = event.target.files[0];
-//   setFile(file);
-// };
-
-// <form onSubmit={handleSubmit}>
-//    <input onChange={fileSelected} type="file" accept="image/*"></input>
-//    <button type="submit">Submit</button>
-// </form>
-
 export const deleteAvatar = async (seeker_id: string) => {
   const deletingAvatarData = await pool.query(
     "SELECT avatar FROM seeker WHERE seeker.seeker_id = $1",
@@ -141,3 +116,23 @@ export const deleteAvatar = async (seeker_id: string) => {
   if (!resultForDeleting) throw new Error("Failed to delete avatar");
   return resultForDeleting;
 };
+
+export const updateSeekerLocation = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { seeker_id } = req.params;
+    const { location } = req.body;
+    const currSeekerData = await pool.query(
+      "SELECT * FROM seeker WHERE seeker.seeker_id = $1",
+      [seeker_id]
+    );
+    if (!currSeekerData) next(new Error("No seeker found"));
+    const currSeeker = currSeekerData.rows[0];
+    const result = await pool.query(
+      "UPDATE seeker SET seeker.location = $1 WHERE seeker.seeker_id = $2",
+      [location, currSeeker.seeker_id]
+    );
+    if (!result) next(new Error("Failed to update seeker location"));
+    res.status(200).json({ msg: "good seeker location", result, location });
+    next();
+  }
+);

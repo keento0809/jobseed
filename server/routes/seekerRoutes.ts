@@ -7,6 +7,7 @@ import {
   addAvatar,
   getAvatar,
   updateAvatar,
+  updateSeekerLocation,
 } from "../controllers/seekerController";
 const seekerRouter = express.Router();
 const storage = multer.memoryStorage();
@@ -20,6 +21,9 @@ seekerRouter
   .route("/avatar/:seeker_id")
   .get(authorization, getAvatar)
   .post(authorization, upload.single("image"), addAvatar)
-  .put(authorization, updateAvatar);
+  .patch(authorization, updateAvatar);
+seekerRouter
+  .route("/location/:seeker_id")
+  .patch(authorization, updateSeekerLocation);
 
 export default seekerRouter;
