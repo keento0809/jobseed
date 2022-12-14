@@ -76,6 +76,9 @@ export const createSchedule = catchAsync(
       enddate,
       color,
     }: Schedule = req.body;
+    console.log(!title);
+    console.log(!date);
+    console.log(allday === undefined);
     if (!title || !date || allday === undefined)
       next(new Error("Invalid input data"));
     const newScheduleData = await pool.query(
