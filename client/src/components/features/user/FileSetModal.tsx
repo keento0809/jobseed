@@ -53,7 +53,6 @@ const FileSetModal = ({setModal, isLoading,setIsLoading, setAvatarPath, avatarPa
                 }
             })
             const seekerAvatarUrl = seekerAvatarData.data.avatarUrl;
-            console.log(seekerAvatarUrl)
             seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_AVATAR, payload: seekerAvatarUrl})
             setAvatarPath(seekerAvatarUrl);
             setIsLoading(false)

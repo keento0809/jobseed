@@ -5,7 +5,6 @@ import Applied from "../../components/features/user/Company page/Applied";
 import Rejected from "../../components/features/user/Company page/Rejected";
 import Interview from "../../components/features/user/Company page/Interview";
 import UserProfile from "../../components/features/user/UserProfile";
-import human_icon from "../../images/human_icon.png";
 import Button_sm from "../../components/models/Button_sm";
 import CompanyModal from "./CompanyModal";
 import Search from "../../components/models/Search";
@@ -14,6 +13,7 @@ import { useCookies } from "react-cookie";
 import { useAuthContext } from "../../components/context/AuthContext";
 import { useCompaniesContext } from "../../components/context/companiesContext";
 import { useFetchCompany } from "../../hooks/useFetchCompany";
+import Loading from "../Loading";
 
 const TopPage = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -66,15 +66,9 @@ const TopPage = () => {
   return (
     <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
       {seekerLoading ? (
-        <h1>Loading</h1>
+        <Loading/>
       ) : (
-        <UserProfile
-          name={seekerState.seeker.name}
-          email={seekerState.seeker.email}
-          avatar={
-            seekerState.seeker.avatar ? seekerState.seeker.avatar : human_icon
-          }
-        />
+        <UserProfile/>
       )}
       <div className="lg:col-span-4">
         <UserNav showPage={showPage} setShowPage={setShowPage} />

@@ -3,6 +3,7 @@ import Description from "../components/features/Description";
 import hero_top from "../images/hero_top.jpg";
 import calender from "../images/calender.jpg"
 import Button_link from "../components/models/Button_link";
+import Loading from "./Loading";
 
 const Hero: React.FunctionComponent = () => {
 
