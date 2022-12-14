@@ -15,14 +15,13 @@ export const useFetchCompany = (params: AxiosRequestConfig) => {
       dispatch({ type: COMPANY_ACTIONS.API_CALL, payload: [] });
       const result = await axios.request(params);
       const comp: any[] = result.data.companies;
-      console.log(comp);
       comp.forEach((c) => {
+        console.log(c.location);
         c.location = {
           lat: parseFloat(getLat(c.location)),
           lng: parseFloat(getLng(c.location)),
         };
       });
-      console.log(comp);
       dispatch({ type: COMPANY_ACTIONS.SUCCESS, payload: comp });
     } catch (error: any) {
       dispatch({ type: COMPANY_ACTIONS.ERROR, payload: [], error });

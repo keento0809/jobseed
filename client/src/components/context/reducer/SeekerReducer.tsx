@@ -26,7 +26,8 @@ export const SEEKER_ACTION = {
     SUCCESS_UPDATE_SEEKER: "success_update_seeker",
     FAILED_UPDATE_SEEKER: "failed_update_seeker",
     FAILED_GET_SEEKER: "failed_get_seeker",
-    SUCCESS_GET_AVATAR: "success_get_avatar"
+    SUCCESS_GET_AVATAR: "success_get_avatar",
+    SUCCESS_RELOAD_SEEKER: "seeker_get_reload"
 }
 
 export const seekerReducer = (state: SeekerState, action: SeekerAction) : SeekerState => {
@@ -63,6 +64,12 @@ export const seekerReducer = (state: SeekerState, action: SeekerAction) : Seeker
                     avatar: action.payload
                 },
                 seekerLoading:false
+            }
+        case SEEKER_ACTION.SUCCESS_RELOAD_SEEKER:
+            return {
+                ...state,
+                seeker: action.payload,
+                seekerLoading: false
             }
         default:
             return state
