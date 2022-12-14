@@ -8,7 +8,7 @@ import {useAuthContext} from "../../context/AuthContext";
 import {SEEKER_ACTION} from "../../context/reducer/SeekerReducer";
 import pencil from "../../../images/pencil.png";
 import FileSetModal from "./FileSetModal";
-import human from "../../../images/human.png"
+import human_icon from "../../../images/human_icon.png"
 import {useCookies} from "react-cookie";
 
 type User = {
@@ -76,8 +76,6 @@ const UserProfile = (props: User) => {
                 },
             })
             seekerDispatch({type: SEEKER_ACTION.SUCCESS_RELOAD_SEEKER, payload: res.data.seeker})
-            console.log(seekerState.seeker)
-
             const seekerAvatarData = await axios({
                 method: "get",
                 url: `http://localhost:8080/seekers/avatar/${cookies.SEEKER_ID}`,
@@ -115,23 +113,26 @@ const UserProfile = (props: User) => {
     }
 
     useEffect(() => {
-        getSeeker();
-        console.log(seekerState.seeker.avatar)
-        }, [])
+        if (avatar !== null) {
+            getSeeker();
+        }
+    }, [])
 
 
     useEffect(() => {
-        fetchImageFromS3();
+        if (avatar !== null) {
+            fetchImageFromS3();
+        }
     }, [isLoading]);
 
-    console.log(seekerState.seeker.avatar)
+    console.log(avatar)
 
     return (
         <div className="lg:flex-col justify-center lg:mt-8">
             <div className="relative w-[200px] h-[200px] mx-auto my-4">
                 <div className="w-[200px] h-[200px] overflow-hidden rounded-full ">
-                    <img src={avatar?.length === 0 ? human : seekerState.seeker.avatar} alt=""
-                         className="w-[200px] h-[200px] object-cover object-center mx-auto scale-150"/>
+                    <img src={avatar === null ? human_icon : avatar} alt="profile"
+                         className="w-[200px] h-[200px] object-cover object-center mx-auto scale-130"/>
                     {wannaEdit ? uploadButton : null}
                 </div>
             </div>

@@ -14,6 +14,7 @@ import {useCookies} from "react-cookie";
 import {useAuthContext} from "../../components/context/AuthContext";
 import {useCompaniesContext} from "../../components/context/companiesContext";
 import {useFetchCompany} from "../../hooks/useFetchCompany";
+import Loading from "../Loading";
 
 const TopPage = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -27,9 +28,6 @@ const TopPage = () => {
         showPage,
         setShowPage,
     } = useCompanyContext()
-
-    console.log(companies)
-
     useFetchCompany({
         method: "get",
         url: `/companies/${cookies.SEEKER_ID}`,
@@ -90,7 +88,7 @@ const TopPage = () => {
                             onClick={modalHandler}
                         />
                     </div>
-                    {companyState.loading ? <h1>Loading</h1> : childComponent}
+                    {companyState.loading ? <Loading/> : childComponent}
                 </div>
                 {showModal && < CompanyModal showModal={showModal} setShowModal={setShowModal}/>}
             </div>
