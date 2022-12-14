@@ -89,9 +89,12 @@ exports.deleteCompany = (0, middlewares_1.catchAsync)((req, res, next) => __awai
     const { company_id, seeker_id } = req.params;
     if (!company_id)
         next(new Error("Invalid request"));
+    const deletingSchedulesWithCompanyId = yield postgres_1.default.query("DELETE FROM schedule WHERE schedule.company_id = $1 AND schedule.seeker_id = $2", [company_id, seeker_id]);
+    if (!deletingSchedulesWithCompanyId)
+        next(new Error("Failed to delete company"));
     const deletingCompany = yield postgres_1.default.query("SELECT * FROM company WHERE company.company_id = $1 AND company.seeker_id = $2", [company_id, seeker_id]);
     if (!deletingCompany)
-        next(new Error("Company not found"));
+        next(new Error("Failed to delete company"));
     yield postgres_1.default.query("DELETE FROM company WHERE company.company_id = $1 AND company.seeker_id = $2", [company_id, seeker_id]);
     res.status(200).json({ msg: "company deleted", deletingCompany });
     next();

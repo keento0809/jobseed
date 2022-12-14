@@ -17,7 +17,7 @@ type User = {
     email: string;
 }
 
-const UserProfile = (props: User) => {
+const UserProfile = () => {
     const {seekerState, seekerDispatch} = useAuthContext();
     const [wannaEdit, setWannaEdit] = useState<boolean>(false);
     const [editSeeker, setEditSeeker] = useState<Seeker>({
