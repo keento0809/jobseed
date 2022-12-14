@@ -118,11 +118,17 @@ export const deleteCompany = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { company_id, seeker_id } = req.params;
     if (!company_id) next(new Error("Invalid request"));
+    const deletingSchedulesWithCompanyId = await pool.query(
+      "DELETE FROM schedule WHERE schedule.company_id = $1 AND schedule.seeker_id = $2",
+      [company_id, seeker_id]
+    );
+    if (!deletingSchedulesWithCompanyId)
+      next(new Error("Failed to delete company"));
     const deletingCompany = await pool.query(
       "SELECT * FROM company WHERE company.company_id = $1 AND company.seeker_id = $2",
       [company_id, seeker_id]
     );
-    if (!deletingCompany) next(new Error("Company not found"));
+    if (!deletingCompany) next(new Error("Failed to delete company"));
     await pool.query(
       "DELETE FROM company WHERE company.company_id = $1 AND company.seeker_id = $2",
       [company_id, seeker_id]
