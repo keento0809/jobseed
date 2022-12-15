@@ -99,7 +99,8 @@ exports.authorization = (0, middlewares_1.catchAsync)((req, res, next) => __awai
             next(new Error("Invalid token"));
         return next();
     }
-    catch (_c) {
+    catch (err) {
+        console.log(err);
         return next(new Error("Invalid token"));
     }
 }));

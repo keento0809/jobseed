@@ -103,13 +103,14 @@ export const authorization = catchAsync(
       !req.headers.authorization?.startsWith("Bearer")
     )
       next(new Error("You're not authorized."));
-    const token: string | undefined = req.headers.authorization?.split(" ")[1];
+    const token: string = req.headers.authorization?.split(" ")[1]!;
     if (!token) next(new Error("No token found."));
     try {
-      const jwtData = jwt.verify(token!, JWT_SECRET_KEY);
+      const jwtData = jwt.verify(token, JWT_SECRET_KEY);
       if (!jwtData) next(new Error("Invalid token"));
       return next();
-    } catch {
+    } catch (err) {
+      console.log(err);
       return next(new Error("Invalid token"));
     }
   }
