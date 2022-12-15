@@ -53,7 +53,6 @@ export const ScheduleProvider = ({ children }: Props) => {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,
         },
       });
-      console.log(res.data);
     } catch (e: any) {
       console.log(e);
     }
@@ -70,8 +69,6 @@ export const ScheduleProvider = ({ children }: Props) => {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,
         },
       });
-      console.log(res.data);
-      // setEvents(res.data)
     } catch (e: any) {
       console.log(e.message);
     }

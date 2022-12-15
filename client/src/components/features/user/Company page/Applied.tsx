@@ -8,7 +8,6 @@ import { useAuthContext } from "../../../context/AuthContext";
 const Applied = () => {
   const { companyState, filteredChildren } = useCompaniesContext();
   const { companies } = companyState;
-  console.log("applied: ", companies);
   const AppliedArr = companies.filter(
     (company) => company.status === "Applied"
   );

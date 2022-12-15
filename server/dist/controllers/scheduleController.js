@@ -61,9 +61,6 @@ exports.getSchedulesSortedByCategory = (0, middlewares_1.catchAsync)((req, res, 
 }));
 exports.createSchedule = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, date, description, seeker_id, company_id, allday, enddate, color, } = req.body;
-    console.log(!title);
-    console.log(!date);
-    console.log(allday === undefined);
     if (!title || !date || allday === undefined)
         next(new Error("Invalid input data"));
     const newScheduleData = yield postgres_1.default.query("INSERT INTO schedule (title,date,description,seeker_id,company_id,allday,enddate,color) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *", [title, date, description, seeker_id, company_id, allday, enddate, color]);
