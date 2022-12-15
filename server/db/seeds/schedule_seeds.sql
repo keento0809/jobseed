@@ -1,0 +1,1 @@
+INSERT INTO schedule(schedule_id,title,date,description,seeker_id,company_id,bgColor,timeincluded) VALUES(1,'Phone interview','2022-12-01','Do my best',2,2,'blue',false);
