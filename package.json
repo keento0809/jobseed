@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@leecheuk/react-google-login": "^5.4.1"
+  }
+}

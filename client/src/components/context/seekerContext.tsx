@@ -51,7 +51,6 @@ export const SeekerProvider = ({ children }: Props) => {
         data: newUser,
         withCredentials: true,
       });
-      console.log(res.data);
       setCookie("JWT_TOKEN", res.data.token);
       setCookie("seeker_id", res.data.seeker_id);
       setSeeker(newUser!);
@@ -68,7 +67,6 @@ export const SeekerProvider = ({ children }: Props) => {
         data: { email, password },
         withCredentials: true,
       });
-      console.log(res.data);
       setCookie("JWT_TOKEN", res.data.token);
       setCookie("seeker_id", res.data.seeker.seeker_id);
       setSeeker(res.data.seeker);
