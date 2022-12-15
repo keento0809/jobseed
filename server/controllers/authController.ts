@@ -119,7 +119,6 @@ export const authorization = catchAsync(
 export const testHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.access_token;
-    console.log(token);
     res.json({ msg: "test is successfully done." });
     next();
   }

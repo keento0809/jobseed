@@ -28,8 +28,6 @@ const TopPage = () => {
   );
   const { showPage, setShowPage } = useCompanyContext();
 
-  console.log(companies);
-
   useFetchCompany({
     method: "get",
     url: `/companies/${cookies.SEEKER_ID}`,
@@ -65,11 +63,7 @@ const TopPage = () => {
 
   return (
     <div className="wrapper lg:grid grid-cols-5 gap-2 min-h-screen">
-      {seekerLoading ? (
-        <Loading/>
-      ) : (
-        <UserProfile/>
-      )}
+      {seekerLoading ? <Loading /> : <UserProfile />}
       <div className="lg:col-span-4">
         <UserNav showPage={showPage} setShowPage={setShowPage} />
         <div className="lg:grid lg:grid-cols-9 lg:gap-4 mt-4">

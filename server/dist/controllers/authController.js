@@ -106,7 +106,6 @@ exports.authorization = (0, middlewares_1.catchAsync)((req, res, next) => __awai
 }));
 exports.testHandler = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.cookies.access_token;
-    console.log(token);
     res.json({ msg: "test is successfully done." });
     next();
 }));

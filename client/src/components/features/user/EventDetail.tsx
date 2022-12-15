@@ -19,8 +19,6 @@ const EventDetail = ({
     useState<boolean>(false);
   const { deleteSchedule } = useScheduleContext();
 
-  console.log(selectedEvent);
-
   const getDay = (day: Date, start: boolean) => {
     const date = day.toString().slice(0, 10);
     const time = day.toLocaleTimeString().slice(0, 1);
