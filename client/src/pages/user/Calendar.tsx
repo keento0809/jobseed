@@ -18,6 +18,9 @@ const Calendar = () => {
   const handleClick = (arg: EventClickArg) => {
     setSelectedEvent(arg);
   };
+  const handleResetSelectedEvent = () => {
+    setSelectedEvent(undefined);
+  };
   const [cookies] = useCookies();
 
   useEffect(() => {
@@ -73,7 +76,10 @@ const Calendar = () => {
       />
       <div className="flex justify-center">
         {selectedEvent ? (
-          <EventDetail selectedEvent={selectedEvent} />
+          <EventDetail
+            selectedEvent={selectedEvent}
+            resetSelectedEvent={handleResetSelectedEvent}
+          />
         ) : (
           <div className="w-[80%] px-6 py-3 border mt-2 shadow-xl font-thin bg-white rounded-xl">
             <h3 className="py-10">Click event you want to see the detail</h3>
