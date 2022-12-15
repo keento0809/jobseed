@@ -38,10 +38,14 @@ const Login = () => {
                 navigate("/user", {replace: true});
                 return
             }
-        } catch (e) {
-            console.log(e)
+        } catch (e: any) {
+            const alarm = navigate("/login", {replace: true})
+            if(e.code === "ERR_BAD_RESPONSE") {
+                alert("No user try again")
+                setEmail("")
+                setPassword("")
+            }
         }
-
     }
 
     gapi.load("client:auth2", () => {
