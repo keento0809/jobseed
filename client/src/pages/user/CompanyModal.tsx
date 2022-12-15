@@ -10,6 +10,8 @@ import {useAuthContext} from "../../components/context/AuthContext";
 import {COMPANY_ACTIONS} from "../../components/context/reducer/CompanyReducer";
 import {useCompaniesContext} from "../../components/context/companiesContext";
 import {getLat, getLng} from "../../components/helper/companyHelper";
+import useDetectClickOutside from "../../hooks/useDetectClickOutside";
+import CompanySizeDropDown from "../../components/features/user/Company page/CompanySizeDropDown";
 
 
 type modalProps = {
@@ -17,10 +19,13 @@ type modalProps = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const company_size = ["1-10", "11-50", "50-200","201-500", "501-1000", "1001-"]
+
 const CompanyModal = ({showModal, setShowModal}: modalProps) => {
     const {seekerState} = useAuthContext();
     const {dispatch} = useCompaniesContext();
     const [location, setLocation] = useState<Location>({lat: 49.246292, lng: -123.116226})
+    const {ref, isComponentVisible, setIsComponentVisible} = useDetectClickOutside({initialVisible: false})
     const [companyData, setCompanyData] = useState<Company>({
         name: "",
         link: "",
@@ -69,6 +74,11 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
             console.log(e)
         }
         setShowModal(false)
+    }
+
+    const handleSetCompany = (e: React.MouseEvent<HTMLLIElement>) => {
+        setCompanyData({...companyData, company_size: e.currentTarget.innerText})
+        setIsComponentVisible(false)
     }
 
     return (
@@ -123,15 +133,14 @@ const CompanyModal = ({showModal, setShowModal}: modalProps) => {
                         setCompanyData={setCompanyData}
                     />
                 </div>
-                <div>
-                    <InputField
-                        type={"text"}
-                        title={"company size"}
-                        name={"company_size"}
-                        value={companyData.company_size}
-                        placeholder={"company size"}
-                        onChange={companyDataHandler}
-                    />
+                <div className="text-sm relative">
+                    <p>company size</p>
+                    <div
+                        className="cursor-pointer text-gray-400 text-sm font-thin shadow border rounded w-1/2 py-2 px-3 mt-2 leading-tight focus:shadow-outline"
+                        onClick={() => setIsComponentVisible(true)}>
+                        {companyData.company_size.length===0 ? "0-" : companyData.company_size}
+                    </div>
+                    {isComponentVisible && <CompanySizeDropDown onClick={handleSetCompany}/>}
                 </div>
                 <Text_field_lg
                     name={"description"}

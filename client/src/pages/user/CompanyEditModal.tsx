@@ -10,6 +10,7 @@ import {useAuthContext} from "../../components/context/AuthContext";
 import {useCompaniesContext} from "../../components/context/companiesContext";
 import {COMPANY_ACTIONS} from "../../components/context/reducer/CompanyReducer";
 import {getLat, getLng} from "../../components/helper/companyHelper";
+import useDetectClickOutside from "../../hooks/useDetectClickOutside";
 
 type modalProps = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,8 +28,10 @@ type modalProps = {
 const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,company_id, company_size,location, salary}: modalProps) => {
 
     const [searchPlace, setSearchPlace] = useState<Location>(location)
+    const [showDropDown, setShowDropDown] = useState<boolean>(false)
     const {seekerState} = useAuthContext();
     const {dispatch} = useCompaniesContext();
+    const {ref, isComponentVisible, setIsComponentVisible} = useDetectClickOutside({initialVisible: false})
     const [editCompanyData, setEditCompanyData] = useState<Company>({
         company_id,
         name,
@@ -79,9 +82,11 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
         setShowModal(false)
     }
 
+
+
     return (
         <div className="bg-modal relative z-[1001]">
-            <div className="modal-container wrapper py-6">
+            <div ref={ref} className="modal-container wrapper py-6">
                 <div className="flex items-center">
                     <BsBuilding size={20} className="mr-4"/>
                     <h1 className="text-lg font-bold">Edit company</h1>
@@ -142,6 +147,7 @@ const CompanyEditModal = ({setShowModal, status,name, jobtype,link,description,c
                         placeholder={"company size"}
                         onChange={companyDataHandler}
                     />
+
                 </div>
 
 
