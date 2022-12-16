@@ -18,7 +18,9 @@ const Testing = () => {
     formData.append("image", file!);
     // send avatar to image to AWS S3
     const result = await axios.post(
-      `http://localhost:8080/seekers/avatar/${seeker_id}`,
+      `${
+        process.env.REACT_APP_PORT || "http://localhost:8080"
+      }/seekers/avatar/${seeker_id}`,
       formData,
       {
         headers: {
@@ -41,7 +43,9 @@ const Testing = () => {
   const fetchImageFromS3 = async () => {
     !isLoading && setIsLoading(true);
     const seekerAvatarData = await axios.get(
-      `http://localhost:8080/seekers/avatar/${seeker_id}`,
+      `${
+        process.env.REACT_APP_PORT || "http://localhost:8080"
+      }/seekers/avatar/${seeker_id}`,
       {
         headers: {
           Authorization: "Bearer" + " " + cookies.JWT_TOKEN,
