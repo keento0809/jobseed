@@ -11,11 +11,17 @@ import multer from "multer";
 dotenv.config();
 
 const app: Express = express();
-const port = 8080;
+const port =
+  process.env.NODE_ENV === "production"
+    ? process.env.PORT_PRODUCTION
+    : process.env.PORT;
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin:
+    process.env.NODE_ENV === "production"
+      ? process.env.PORT_CLIENT_PRODUCTION
+      : process.env.PORT_CLIENT,
   credentials: true,
 };
 // middleware
