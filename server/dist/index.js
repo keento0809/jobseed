@@ -15,16 +15,24 @@ const scheduleRoutes_1 = __importDefault(require("./routes/scheduleRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const corsOptions = {
-    origin: process.env.PORT || "http://localhost:8080",
+    origin: true,
+    // origin: process.env.PORT || "http://localhost:8080",
     credentials: true,
 };
 // middleware
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Credentials", "true");
-    next();
-});
-app.use((0, cors_1.default)());
-// app.use(cors(corsOptions));
+// app.use((req: Request, res: Response, next: NextFunction) => {
+//   if (req.method === "OPTIONS") {
+//     res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+//     return res.status(200).json({});
+//   }
+//   next();
+// });
+// app.use((req: Request, res: Response, next: NextFunction) => {
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   next();
+// });
+// app.use(cors());
+app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
