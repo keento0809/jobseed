@@ -11,20 +11,11 @@ const companyRoutes_1 = __importDefault(require("./routes/companyRoutes"));
 const seekerRoutes_1 = __importDefault(require("./routes/seekerRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const scheduleRoutes_1 = __importDefault(require("./routes/scheduleRoutes"));
-const multer_1 = __importDefault(require("multer"));
 // import
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.NODE_ENV === "production"
-    ? process.env.PORT_PRODUCTION
-    : process.env.PORT;
-console.log(port);
-const storage = multer_1.default.memoryStorage();
-const upload = (0, multer_1.default)({ storage });
 const corsOptions = {
-    origin: process.env.NODE_ENV === "production"
-        ? process.env.PORT_CLIENT_PRODUCTION
-        : process.env.PORT_CLIENT,
+    origin: process.env.PORT || "http://localhost:8080",
     credentials: true,
 };
 // middleware
