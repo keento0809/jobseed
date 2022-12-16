@@ -15,6 +15,7 @@ const port =
   process.env.NODE_ENV === "production"
     ? process.env.PORT_PRODUCTION
     : process.env.PORT;
+console.log(port);
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const corsOptions = {
@@ -42,6 +43,6 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.listen(port, () => {
-  console.log(`[server] server is listening on port ${port}`);
+app.listen(process.env.PORT || 8080, () => {
+  console.log(`[server] server is listening on port`);
 });
