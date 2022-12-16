@@ -6,23 +6,12 @@ import companyRoutes from "./routes/companyRoutes";
 import seekerRoutes from "./routes/seekerRoutes";
 import authRoutes from "./routes/authRoutes";
 import scheduleRoutes from "./routes/scheduleRoutes";
-import multer from "multer";
 // import
 dotenv.config();
 
 const app: Express = express();
-const port =
-  process.env.NODE_ENV === "production"
-    ? process.env.PORT_PRODUCTION
-    : process.env.PORT;
-console.log(port);
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? process.env.PORT_CLIENT_PRODUCTION
-      : process.env.PORT_CLIENT,
+  origin: process.env.PORT || "http://localhost:8080",
   credentials: true,
 };
 // middleware
