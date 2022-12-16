@@ -19,7 +19,8 @@ const corsOptions = {
     credentials: true,
 };
 // middleware
-app.use((0, cors_1.default)(corsOptions));
+app.use((0, cors_1.default)());
+// app.use(cors(corsOptions));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
