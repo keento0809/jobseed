@@ -51,7 +51,9 @@ const UserProfile = () => {
       seekerDispatch({ type: SEEKER_ACTION.SEEKER_FETCHING, payload: {} });
       let res = await axios({
         method: "patch",
-        url: `http://localhost:8080/seekers/${seekerState.seeker.seeker_id}`,
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/seekers/${seekerState.seeker.seeker_id}`,
         data: editSeeker,
         withCredentials: true,
         headers: {
@@ -75,7 +77,9 @@ const UserProfile = () => {
     try {
       let res = await axios({
         method: "get",
-        url: `http://localhost:8080/seekers/${cookies.SEEKER_ID}`,
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/seekers/${cookies.SEEKER_ID}`,
         withCredentials: true,
         headers: {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,
@@ -87,7 +91,9 @@ const UserProfile = () => {
       });
       const seekerAvatarData = await axios({
         method: "get",
-        url: `http://localhost:8080/seekers/avatar/${cookies.SEEKER_ID}`,
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/seekers/avatar/${cookies.SEEKER_ID}`,
         withCredentials: true,
         headers: {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,
@@ -108,7 +114,9 @@ const UserProfile = () => {
     try {
       const seekerAvatarData = await axios({
         method: "get",
-        url: `http://localhost:8080/seekers/avatar/${seekerState.seeker.seeker_id}`,
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/seekers/avatar/${seekerState.seeker.seeker_id}`,
         withCredentials: true,
         headers: {
           authorization: `Bearer ${seekerState.token}`,

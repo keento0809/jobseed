@@ -30,7 +30,9 @@ export const ScheduleProvider = ({ children }: Props) => {
     try {
       let res = await axios({
         method: "get",
-        url: `http://localhost:8080/schedules/allSchedules/${cookies.SEEKER_ID}`,
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/schedules/allSchedules/${cookies.SEEKER_ID}`,
         withCredentials: true,
         headers: {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,
@@ -46,7 +48,9 @@ export const ScheduleProvider = ({ children }: Props) => {
     try {
       let res = await axios({
         method: "post",
-        url: `http://localhost:8080/schedules/new`,
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/schedules/new`,
         data,
         withCredentials: true,
         headers: {
@@ -62,7 +66,9 @@ export const ScheduleProvider = ({ children }: Props) => {
     try {
       let res = await axios({
         method: "put",
-        url: `http://localhost:8080/schedules/${schedule_id}`,
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/schedules/${schedule_id}`,
         data: newSchedule,
         withCredentials: true,
         headers: {
@@ -78,7 +84,9 @@ export const ScheduleProvider = ({ children }: Props) => {
     try {
       await axios({
         method: "delete",
-        url: `http://localhost:8080/schedules/${schedule_id}`,
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/schedules/${schedule_id}`,
         withCredentials: true,
         headers: {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,

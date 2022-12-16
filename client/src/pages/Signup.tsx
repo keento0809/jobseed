@@ -42,7 +42,9 @@ const Signup: FC = () => {
       seekerDispatch({ type: SEEKER_ACTION.SEEKER_FETCHING, payload: {} });
       let res = await axios({
         method: "post",
-        url: "http://localhost:8080/auth/signup",
+        url: `${
+          process.env.REACT_APP_PORT || "http://localhost:8080"
+        }/auth/signup`,
         data: newUser,
         withCredentials: true,
       });
