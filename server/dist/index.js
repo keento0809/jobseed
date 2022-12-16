@@ -18,6 +18,7 @@ const app = (0, express_1.default)();
 const port = process.env.NODE_ENV === "production"
     ? process.env.PORT_PRODUCTION
     : process.env.PORT;
+console.log(port);
 const storage = multer_1.default.memoryStorage();
 const upload = (0, multer_1.default)({ storage });
 const corsOptions = {
@@ -41,6 +42,6 @@ app.get("/", (req, res) => {
 app.all("*", (req, res, next) => {
     next();
 });
-app.listen(port, () => {
-    console.log(`[server] server is listening on port ${port}`);
+app.listen(process.env.PORT || 8080, () => {
+    console.log(`[server] server is listening on port`);
 });
