@@ -16,6 +16,9 @@ const Testing = () => {
     // Create form data
     const formData = new FormData();
     formData.append("image", file!);
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
     // send avatar to image to AWS S3
     const result = await axios.post(
       `${
