@@ -31,7 +31,6 @@ app.use("/schedules", scheduleRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + Typescript server");
 });
-
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next();
 });
