@@ -76,13 +76,7 @@ export const signupSeeker = catchAsync(
     // create token
     const token = createToken(newSeekerData.rows[0].seeker_id);
     const seeker = newSeekerData.rows[0];
-    res
-      // .cookie("access_token", token, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
-      // })
-      .status(200)
-      .json({ msg: "good signup", token, seeker });
+    res.status(200).json({ msg: "good signup", token, seeker });
     next();
   }
 );
