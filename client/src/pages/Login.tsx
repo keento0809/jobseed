@@ -42,6 +42,7 @@ const Login = () => {
         return;
       }
     } catch (e: any) {
+      console.log("エラーー〜ー、", e.response.data);
       const alarm = navigate("/login", { replace: true });
       if (e.code === "ERR_BAD_RESPONSE") {
         alert("No user try again");
