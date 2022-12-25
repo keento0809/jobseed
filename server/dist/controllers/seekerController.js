@@ -46,6 +46,7 @@ exports.addAvatar = (0, middlewares_1.catchAsync)((req, res, next) => __awaiter(
     const { seeker_id } = req.params;
     const file = req.file;
     const fileCaption = file === null || file === void 0 ? void 0 : file.originalname.split(".")[0];
+    console.log("fileha, ", file);
     if (!file)
         next(new Error("No avatar attached"));
     // fileBuffer

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { catchAsync } from "../helpers/middlewares";
 import pool from "../db/postgres";
-import multer from "multer";
 import sharp from "sharp";
 import { deleteFile, getObjectSignedUrl, uploadFile } from "../s3";
 import { Seeker } from "../types/Seeker";
@@ -43,6 +42,7 @@ export const addAvatar = catchAsync(
     const { seeker_id } = req.params;
     const file = req.file;
     const fileCaption = file?.originalname.split(".")[0];
+    console.log("fileha, ", file);
     if (!file) next(new Error("No avatar attached"));
     // fileBuffer
     const fileBuffer = await sharp(file!.buffer)

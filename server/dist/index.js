@@ -16,22 +16,9 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const corsOptions = {
     origin: true,
-    // origin: process.env.PORT || "http://localhost:8080",
     credentials: true,
 };
 // middleware
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//   if (req.method === "OPTIONS") {
-//     res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-//     return res.status(200).json({});
-//   }
-//   next();
-// });
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   next();
-// });
-// app.use(cors());
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     next();
