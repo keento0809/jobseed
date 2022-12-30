@@ -24,9 +24,7 @@ const Login = () => {
       seekerDispatch({ type: SEEKER_ACTION.SEEKER_FETCHING, payload: {} });
       let res = await axios({
         method: "post",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/auth/login`,
+        url: `${process.env.REACT_APP_PORT}/auth/login`,
         data: { email, password },
         withCredentials: true,
       });

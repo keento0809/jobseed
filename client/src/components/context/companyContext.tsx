@@ -54,15 +54,11 @@ export const CompanyProvider = ({ children }: Props) => {
     let lng2 = lng.split("}")[0];
     return lng2;
   };
-  console.log(process.env.REACT_APP_PORT);
-
   const getCompanies = async (seeker_id: string) => {
     try {
       let res = await axios({
         method: "get",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seeker_id}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seeker_id}`,
         headers: {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,
         },
@@ -86,9 +82,7 @@ export const CompanyProvider = ({ children }: Props) => {
     try {
       let res = await axios({
         method: "get",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seeker_id}/${status}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seeker_id}/${status}`,
         headers: {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,
         },
@@ -104,9 +98,7 @@ export const CompanyProvider = ({ children }: Props) => {
     try {
       let res = await axios({
         method: "post",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/new`,
+        url: `${process.env.REACT_APP_PORT}/companies/new`,
         data: company,
         withCredentials: true,
         headers: {
@@ -126,9 +118,7 @@ export const CompanyProvider = ({ children }: Props) => {
     try {
       let res = await axios({
         method: "patch",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seeker_id}/${companyId}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seeker_id}/${companyId}`,
         data: companyObj,
         withCredentials: true,
         headers: {
@@ -144,9 +134,7 @@ export const CompanyProvider = ({ children }: Props) => {
     try {
       await axios({
         method: "delete",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seeker_id}/${companyId}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seeker_id}/${companyId}`,
         withCredentials: true,
         headers: {
           authorization: `Bearer ${cookies.JWT_TOKEN}`,

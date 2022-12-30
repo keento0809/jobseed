@@ -2,9 +2,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Seeker } from "../../types/Seeker";
 
-axios.defaults.baseURL = `${
-  process.env.REACT_APP_PORT || "http://localhost:8080"
-}`;
+axios.defaults.baseURL = `${process.env.REACT_APP_PORT}`;
 
 type loginData = {
   email: string;
