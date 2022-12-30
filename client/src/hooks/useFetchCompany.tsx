@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { getLat, getLng } from "../components/helper/companyHelper";
 import { useCookies } from "react-cookie";
 
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = "https://jobseed.herokuapp.com";
 
 export const useFetchCompany = (params: AxiosRequestConfig) => {
   const [cookies] = useCookies();
