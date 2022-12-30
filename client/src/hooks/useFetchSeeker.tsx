@@ -5,9 +5,7 @@ import { SEEKER_ACTION } from "../components/context/reducer/SeekerReducer";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 
-axios.defaults.baseURL = `${
-  process.env.REACT_APP_PORT || "http://localhost:8080"
-}`;
+axios.defaults.baseURL = `${process.env.REACT_APP_PORT}`;
 
 export const useFetchUser = (params: AxiosRequestConfig) => {
   const { seekerDispatch } = useAuthContext();

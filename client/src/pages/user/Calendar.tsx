@@ -28,9 +28,7 @@ const Calendar = () => {
       try {
         let res = await axios({
           method: "get",
-          url: `${
-            process.env.REACT_APP_PORT || "http://localhost:8080"
-          }/schedules/allSchedules/${cookies.SEEKER_ID}`,
+          url: `${process.env.REACT_APP_PORT}/schedules/allSchedules/${cookies.SEEKER_ID}`,
           withCredentials: true,
           headers: {
             authorization: `Bearer ${cookies.JWT_TOKEN}`,

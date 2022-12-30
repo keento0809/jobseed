@@ -70,9 +70,7 @@ const CompanyEditModal = ({
       dispatch({ type: COMPANY_ACTIONS.API_CALL, payload: [] });
       let res = await axios({
         method: "patch",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seekerState.seeker.seeker_id}/${company_id}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seekerState.seeker.seeker_id}/${company_id}`,
         data: editCompanyData,
         withCredentials: true,
         headers: {
@@ -81,9 +79,7 @@ const CompanyEditModal = ({
       });
       let getData = await axios({
         method: "get",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seekerState.seeker.seeker_id}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seekerState.seeker.seeker_id}`,
         headers: {
           authorization: `Bearer ${seekerState.token}`,
         },

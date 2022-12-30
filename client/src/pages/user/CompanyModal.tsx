@@ -62,9 +62,7 @@ const CompanyModal = ({ showModal, setShowModal }: modalProps) => {
       dispatch({ type: COMPANY_ACTIONS.API_CALL, payload: [] });
       let res = await axios({
         method: "post",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/new`,
+        url: `${process.env.REACT_APP_PORT}/companies/new`,
         data: companyData,
         withCredentials: true,
         headers: {
@@ -74,9 +72,7 @@ const CompanyModal = ({ showModal, setShowModal }: modalProps) => {
 
       let getData = await axios({
         method: "get",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seekerState.seeker.seeker_id}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seekerState.seeker.seeker_id}`,
         headers: {
           authorization: `Bearer ${seekerState.token}`,
         },

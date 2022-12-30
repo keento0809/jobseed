@@ -63,9 +63,7 @@ const CompanyCard = ({
       dispatch({ type: COMPANY_ACTIONS.API_CALL, payload: [] });
       let res = await axios({
         method: "patch",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seekerState.seeker.seeker_id}/${company_id}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seekerState.seeker.seeker_id}/${company_id}`,
         data: editStatusCompany,
         withCredentials: true,
         headers: {
@@ -74,9 +72,7 @@ const CompanyCard = ({
       });
       let getData = await axios({
         method: "get",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seekerState.seeker.seeker_id}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seekerState.seeker.seeker_id}`,
         headers: {
           authorization: `Bearer ${seekerState.token}`,
         },
@@ -107,9 +103,7 @@ const CompanyCard = ({
       dispatch({ type: COMPANY_ACTIONS.API_CALL, payload: [] });
       let res = await axios({
         method: "delete",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seeker_id}/${company_id}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seeker_id}/${company_id}`,
         withCredentials: true,
         headers: {
           authorization: `Bearer ${seekerState.token}`,
@@ -117,9 +111,7 @@ const CompanyCard = ({
       });
       let getData = await axios({
         method: "get",
-        url: `${
-          process.env.REACT_APP_PORT || "http://localhost:8080"
-        }/companies/${seekerState.seeker.seeker_id}`,
+        url: `${process.env.REACT_APP_PORT}/companies/${seekerState.seeker.seeker_id}`,
         headers: {
           authorization: `Bearer ${seekerState.token}`,
         },
