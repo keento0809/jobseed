@@ -40,7 +40,7 @@ const Login = () => {
         return;
       }
     } catch (e: any) {
-      console.log("エラーー〜ー、", e.response.data);
+      console.log(e.response.data);
       const alarm = navigate("/login", { replace: true });
       if (e.code === "ERR_BAD_RESPONSE") {
         alert("No user try again");
@@ -62,12 +62,6 @@ const Login = () => {
       type: SEEKER_ACTION.SUCCESS_GET_SEEKER,
       payload: res.profileObj,
     });
-    // setSeeker({
-    //     seeker_id: res.profileObj.googleId,
-    //     name: res.profileObj.name,
-    //     email: res.profileObj.email,
-    //     avatar: res.profileObj.imageUrl
-    // })
     setCookie("JWT_TOKEN", res.accessToken);
     navigate("/user", { replace: true });
   };
