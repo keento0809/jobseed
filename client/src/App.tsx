@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import Header from "./components/features/Header";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Signup from "./pages/Signup";
@@ -14,39 +13,8 @@ import Rejected from "./components/features/user/Company page/Rejected";
 import CompanyMap from "./pages/user/Map";
 import ProtectRoutes from "./components/features/ProtectRoutes";
 import Testing from "./components/features/test/Testing";
-import { useCompaniesContext } from "./components/context/companiesContext";
-import { useFetchCompany } from "./hooks/useFetchCompany";
-import { useAuthContext } from "./components/context/AuthContext";
-import { useCookies } from "react-cookie";
-import { useFetchUser } from "./hooks/useFetchSeeker";
-import axios from "axios";
-import { SEEKER_ACTION } from "./components/context/reducer/SeekerReducer";
 
 function App() {
-  const { companyState } = useCompaniesContext();
-  const { companies } = companyState;
-  const { seekerState, seekerDispatch } = useAuthContext();
-  const [cookies] = useCookies();
-
-  // const getSeekerData = async (seeker_id: string) => {
-  //     try {
-  //         seekerDispatch({type: SEEKER_ACTION.SEEKER_FETCHING, payload:{}})
-  //         let res = await axios({
-  //             method: "get",
-  //             url: `http://localhost:8080/seekers/${seeker_id}`,
-  //             withCredentials: true,
-  //             headers: {
-  //                 authorization: `Bearer ${cookies.JWT_TOKEN}`
-  //             }
-  //         })
-  //         seekerDispatch({type: SEEKER_ACTION.SUCCESS_GET_SEEKER, payload: res.data})
-  //     } catch (error : any) {
-  //         seekerDispatch({type: SEEKER_ACTION.FAILED_GET_SEEKER, payload: {}, error})
-  //     }
-  // }
-  //
-  // // cookies.JWT_TOKEN ? getSeekerData(cookies.SEEKER_ID) : null
-
   return (
     <div className="App">
       <Header />
