@@ -29,7 +29,6 @@ const CompanyMap = () => {
     const {isLoaded} = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_APIKEY!
     })
-
     const renderMap = () => (
         <GoogleMap
             mapContainerStyle={mapStyles}

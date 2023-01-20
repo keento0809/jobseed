@@ -89,36 +89,37 @@ const FileSetModal = ({
     <div className="bg-modal relative z-[1001]">
       <div className="file-modal-container wrapper py-6">
         <div className="pt-12">
-          {file ? (
-            <div className="w-[70%] m-auto" ref={imageContainerRef}></div>
-          ) : (
-            <div className="w-full flex justify-center">
-              <img className="block opacity-50 w-4/5" src={photo} alt="" />
-            </div>
-          )}
-          <div className="w-full flex justify-center">
-            <div className="mt-8">
-              <label htmlFor="file" className="mr-12 cursor-pointer">
+
+          <div className="flex items-center">
+            {file ? (
+                <div className="w-[50%] md:w-[30%] m-auto" ref={imageContainerRef}></div>
+            ) : (
+                <div className="w-full flex justify-center">
+                  <img className="block opacity-50 w-4/5" src={photo} alt="" />
+                </div>
+            )}
+          </div>
+          <div className="flex items-center justify-center w-1/2 mx-auto mt-12">
+              <label htmlFor="file" className="block mr-12 cursor-pointer font-bold border-2 py-2.5 px-2 rounded-md">
                 Change avatar
                 <input
-                  className="hidden"
-                  id="file"
-                  type="file"
-                  accept="image/*"
-                  onChange={selectedFileHandler}
+                    className="hidden"
+                    id="file"
+                    type="file"
+                    accept="image/*"
+                    onChange={selectedFileHandler}
                 />
               </label>
               <Button_sm
-                title={"Cancel"}
-                color={"bg-content-blue"}
-                bg_color={"bg-white"}
-                width={"w-24"}
-                onClick={() => {
-                  setModal(false);
-                }}
-                className={"border-2"}
+                  title={"Cancel"}
+                  color={"bg-content-blue"}
+                  bg_color={"bg-white"}
+                  width={"w-24 block"}
+                  onClick={() => {
+                    setModal(false);
+                  }}
+                  className={"border-2"}
               />
-            </div>
           </div>
         </div>
         {file ? (

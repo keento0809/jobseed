@@ -40,9 +40,9 @@ const Hero: React.FunctionComponent = () => {
                 < Description title={"Visualize the data"}
                               detail={"Job seed supports you to organize your schedule and status of the companies you are interested in."}/>
                 < Description title={"Sort companies by its status"}
-                              detail={"Use our SIM card with your unlocked Android or iPhone and get free cell phone coverage on one of the nation’s largest wireless networks. Stay connected anywhere in the U.S  without ever paying for a monthly phone bill.  "}/>
-                < Description title={"Get out of your location"}
-                              detail={"Use our SIM card with your unlocked Android or iPhone and get free cell phone coverage on one of the nation’s largest wireless networks. Stay connected anywhere in the U.S  without ever paying for a monthly phone bill.  "}/>
+                              detail={"This application allow you to sort out all companies from you are interested in to you already applied or got rejected unfortunately by its status. And easy to maintain by changing status on your user page."}/>
+                < Description title={"Make sure company's location before your interview"}
+                              detail={"You can utilize this application when you get lost before interview by checking MAP page"}/>
             </div>
         </main>
     );
