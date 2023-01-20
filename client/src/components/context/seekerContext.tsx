@@ -39,6 +39,8 @@ export const SeekerProvider = ({ children }: Props) => {
   const [cookies, setCookie] = useCookies();
   const navigate = useNavigate();
 
+  console.log(process.env.REACT_APP_PORT)
+
   const createSeeker = async (newUser: Seeker) => {
     if (newUser === null) {
       console.log("no user");
